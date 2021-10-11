@@ -1,0 +1,2 @@
+[global.databases]
+postgres = { url = "postgres://127.0.0.1/openlessor" }
