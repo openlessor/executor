@@ -1,0 +1,18 @@
+{
+  "ppx-flags": ["rescript-embed-lang/ppx"],
+  "dependencies": ["pgtyped-rescript", "rescript-bun"],
+  "compiler-flags": ["-open RescriptBun", "-open RescriptBun.Globals"],
+  "uncurried": true,
+  "name": "executor",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    }
+  ],
+  "package-specs": {
+    "module": "esmodule",
+    "in-source": true
+  },
+  "suffix": ".js"
+}

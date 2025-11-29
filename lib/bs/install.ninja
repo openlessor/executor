@@ -1,0 +1,22 @@
+rescript = 1
+rule cp
+  command = cp $i $out
+rule touch
+ command = touch $out
+o Index.cmi : cp ../bs/src/Index.cmi
+o Index.cmj : cp ../bs/src/Index.cmj
+o Index.cmt : cp ../bs/src/Index.cmt
+o Index.res : cp ../../src/Index.res
+o Inventory.cmi : cp ../bs/src/Database/Inventory.cmi
+o Inventory.cmj : cp ../bs/src/Database/Inventory.cmj
+o Inventory.cmt : cp ../bs/src/Database/Inventory.cmt
+o Inventory.res : cp ../../src/Database/Inventory.res
+o Connection.cmi : cp ../bs/src/Database/Connection.cmi
+o Connection.cmj : cp ../bs/src/Database/Connection.cmj
+o Connection.cmt : cp ../bs/src/Database/Connection.cmt
+o Connection.res : cp ../../src/Database/Connection.res
+o Inventory__sql.cmi : cp ../bs/src/Database/Inventory__sql.cmi
+o Inventory__sql.cmj : cp ../bs/src/Database/Inventory__sql.cmj
+o Inventory__sql.cmt : cp ../bs/src/Database/Inventory__sql.cmt
+o Inventory__sql.res : cp ../../src/Database/Inventory__sql.res
+build install.stamp : touch Index.cmi Index.cmj Inventory.cmi Inventory.cmj Connection.cmi Connection.cmj Inventory__sql.cmi Inventory__sql.cmj 
