@@ -2,8 +2,10 @@
 
 import * as Pg from "pg";
 
-function getClient() {
-  return new Pg.Client("postgres://executor:executor-password@localhost/executor_db");
+async function getClient() {
+  let client = new Pg.Client("postgres://executor:executor-password@localhost/executor_db");
+  await client.connect();
+  return client;
 }
 
 export {
