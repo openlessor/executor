@@ -6,7 +6,9 @@ import * as Inventory__sql from "./Inventory__sql.js";
 async function getInventoryList() {
   let query = Inventory__sql.Query1.many;
   let client = await Connection.getClient();
-  return await query(client, undefined);
+  let result = await query(client, undefined);
+  await client.end();
+  return result;
 }
 
 export {

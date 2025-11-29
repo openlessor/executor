@@ -4,5 +4,6 @@ let getInventoryList = async () => {
   `)
   let client = await Connection.getClient()
   let result = await client->query()
+  await client->PgTyped.Pg.Client.end
   result
 }
