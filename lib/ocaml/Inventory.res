@@ -1,5 +1,3 @@
-open PgTyped
-
 let getInventoryList = async () => {
   let query = %sql.many(`
   SELECT * FROM inventory

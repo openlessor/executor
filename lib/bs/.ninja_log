@@ -1,7 +1,0 @@
-# ninja log v6
-1	252	1764412570031998467	src/Database/Inventory.ast	f4e5e5ba411da416
-1	252	1764412570032099510	src/Database/Connection.ast	b5a149860e194b5f
-1	252	1764412570032114552	src/Database/Inventory__sql.ast	4f69f6af9b454fff
-252	386	1764412570166432038	src/Database/Inventory.d	a991e979f01a1d23
-252	386	1764412570166372579	src/Database/Connection.d	a511778a5c221117
-252	386	1764412570166553206	src/Database/Inventory__sql.d	c36cfb4d3a4e599b

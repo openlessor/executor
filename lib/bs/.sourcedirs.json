@@ -1,1 +1,0 @@
-{ "dirs" : [ "src" , "src/lib" , "src/Database" ] , "pkgs" : [ [ "rescript-embed-lang" , "/Users/briankaplan/dev/executor/node_modules/rescript-embed-lang" ] ] , "generated" : [] }
