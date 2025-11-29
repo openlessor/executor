@@ -22,8 +22,7 @@ This backend will drive most of the frontend components. The idea is that you se
 
 OpenLessor Executor uses a multi-tenancy model. Each database item is scoped to a tenant ID. You can find the Postgres schemas in the schemas directory of this repository.
 
-The parent database table is the tenant table. All data in the database is a child of the tenant table. Currently, a tenant has inventory assigned to it. Eventually the following child data will be associated with a tenant:
-- 
+The parent database table is the tenant table. All data in the database is a child of the tenant table. Currently, a tenant has inventory assigned to it.
 
 Inventory will have child data as well. This child data will dictate: Time model, Billing model, and Provisioning model. Here's an example, we will mostly use a familiar concept of renting housing:
 - Create a tenant called "Fair Lane Apartments"
