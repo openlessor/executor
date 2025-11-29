@@ -4,7 +4,7 @@ import * as Stdlib from "@rescript/runtime/lib/es6/Stdlib.js";
 import * as Stdlib_Option from "@rescript/runtime/lib/es6/Stdlib_Option.js";
 import * as PgtypedRescriptRuntime from "pgtyped-rescript-runtime";
 
-let query1IR = {"usedParamSet":{},"params":[],"statement":"SELECT * FROM inventory"};
+let query1IR = {"usedParamSet":{"tenantId":true},"params":[{"name":"tenantId","required":false,"transform":{"type":"scalar"},"locs":[{"a":41,"b":49}]}],"statement":"SELECT * FROM inventory WHERE tenantId = :tenantId"};
 
 let query = new PgtypedRescriptRuntime.PreparedQuery(query1IR);
 

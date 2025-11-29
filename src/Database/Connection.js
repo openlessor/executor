@@ -2,13 +2,23 @@
 
 import * as Pg from "pg";
 
+let dbConfig = "postgres://executor:executor-password@localhost/executor_db";
+
 async function getClient() {
-  let client = new Pg.Client("postgres://executor:executor-password@localhost/executor_db");
+  let client = new Pg.Client(dbConfig);
   await client.connect();
   return client;
 }
 
+async function withClient(fn) {
+  let client = await getClient();
+  let result = fn(client);
+  return await result.then(result => client.end().then(() => Promise.resolve(result)));
+}
+
 export {
+  dbConfig,
   getClient,
+  withClient,
 }
 /* pg Not a pure module */

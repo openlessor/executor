@@ -4,7 +4,9 @@ open PgTyped
 
 /** 'Query1' parameters type */
 @gentype
-type query1Params = unit
+type query1Params = {
+  tenantId?: string,
+}
 
 /** 'Query1' return type */
 @gentype
@@ -13,6 +15,7 @@ type query1Result = {
   id: int,
   name: string,
   quantity: int,
+  tenantid: string,
 }
 
 /** 'Query1' query type */
@@ -22,12 +25,12 @@ type query1Query = {
   result: query1Result,
 }
 
-%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{},"params":[],"statement":"SELECT * FROM inventory"}`))
+%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{"tenantId":true},"params":[{"name":"tenantId","required":false,"transform":{"type":"scalar"},"locs":[{"a":41,"b":49}]}],"statement":"SELECT * FROM inventory WHERE tenantId = :tenantId"}`))
 
 /**
  Runnable query:
  ```sql
-SELECT * FROM inventory
+SELECT * FROM inventory WHERE tenantId = $1
  ```
 
  */

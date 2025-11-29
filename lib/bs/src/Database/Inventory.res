@@ -1,9 +1,7 @@
-let getInventoryList = async () => {
+let getInventoryList = async (~client, tenantId: string) => {
   let query = %sql.many(`
-  SELECT * FROM inventory
+  SELECT * FROM inventory WHERE tenantId = :tenantId
   `)
-  let client = await Connection.getClient()
-  let result = await client->query()
-  await client->PgTyped.Pg.Client.end
+  let result = await client->query({tenantId: tenantId})
   result
 }

@@ -1,6 +1,6 @@
 {
   "name": "executor",
-  "module": "index.ts",
+  "module": "src/Index.js",
   "type": "module",
   "private": true,
   "devDependencies": {
