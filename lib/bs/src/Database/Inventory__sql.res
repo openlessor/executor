@@ -14,6 +14,7 @@ type query1Result = {
   description: string,
   id: int,
   name: string,
+  period_list: option<Connection.json_items>,
   premise_id: string,
   quantity: int,
 }
@@ -25,12 +26,16 @@ type query1Query = {
   result: query1Result,
 }
 
-%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{"premise_id":true},"params":[{"name":"premise_id","required":false,"transform":{"type":"scalar"},"locs":[{"a":43,"b":53}]}],"statement":"SELECT * FROM inventory WHERE premise_id = :premise_id"}`))
+%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{"premise_id":true},"params":[{"name":"premise_id","required":false,"transform":{"type":"scalar"},"locs":[{"a":186,"b":196}]}],"statement":"SELECT i.*, JSONB_AGG(TO_JSONB(p.*)) as period_list FROM inventory i\n  JOIN inventory_period_map pm ON pm.inventory_id = i.id\n  JOIN period p ON p.id = pm.period_id\n  WHERE premise_id = :premise_id\n  GROUP BY i.id, i.premise_id, i.name, i.description, i.quantity"}`))
 
 /**
  Runnable query:
  ```sql
-SELECT * FROM inventory WHERE premise_id = $1
+SELECT i.*, JSONB_AGG(TO_JSONB(p.*)) as period_list FROM inventory i
+  JOIN inventory_period_map pm ON pm.inventory_id = i.id
+  JOIN period p ON p.id = pm.period_id
+  WHERE premise_id = $1
+  GROUP BY i.id, i.premise_id, i.name, i.description, i.quantity
  ```
 
  */

@@ -1,8 +1,10 @@
 open PgTyped
 
+type json_items = array<{.}>
+
 external env: {..} = "process.env"
 
-let dbConfig = "postgres://executor:executor-password@localhost/executor_db"
+let dbConfig = env["DB_URL"]
 //let pool = Pg.Pool.make(ConnectionString(dbConfig))
 
 let getClient = async () => {

@@ -4,7 +4,7 @@ import * as Stdlib from "@rescript/runtime/lib/es6/Stdlib.js";
 import * as Stdlib_Option from "@rescript/runtime/lib/es6/Stdlib_Option.js";
 import * as PgtypedRescriptRuntime from "pgtyped-rescript-runtime";
 
-let query1IR = {"usedParamSet":{"premise_id":true},"params":[{"name":"premise_id","required":false,"transform":{"type":"scalar"},"locs":[{"a":43,"b":53}]}],"statement":"SELECT * FROM inventory WHERE premise_id = :premise_id"};
+let query1IR = {"usedParamSet":{"premise_id":true},"params":[{"name":"premise_id","required":false,"transform":{"type":"scalar"},"locs":[{"a":186,"b":196}]}],"statement":"SELECT i.*, JSONB_AGG(TO_JSONB(p.*)) as period_list FROM inventory i\n  JOIN inventory_period_map pm ON pm.inventory_id = i.id\n  JOIN period p ON p.id = pm.period_id\n  WHERE premise_id = :premise_id\n  GROUP BY i.id, i.premise_id, i.name, i.description, i.quantity"};
 
 let query = new PgtypedRescriptRuntime.PreparedQuery(query1IR);
 

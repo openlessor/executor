@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS inventory;
 CREATE TABLE inventory (
-  id serial,
+  id serial primary key,
   premise_id uuid not null,
   name varchar not null,
   description varchar not null,
@@ -13,7 +13,12 @@ INSERT INTO inventory (premise_id, name, description, quantity) VALUES ((SELECT 
 DROP TABLE IF EXISTS inventory_period_map;
 CREATE TABLE inventory_period_map (
   inventory_id integer not null,
-  period_id integer not null
+  period_id integer not null,
+  FOREIGN KEY (inventory_id) REFERENCES inventory(id),
+  FOREIGN KEY (period_id) REFERENCES period(id),
+  PRIMARY KEY (inventory_id, period_id)
 );
 
-INSERT INTO inventory_period_map VALUES (1, (SELECT id FROM period LIMIT 1));
+INSERT INTO inventory_period_map (inventory_id, period_id)
+SELECT 1, id
+FROM period;

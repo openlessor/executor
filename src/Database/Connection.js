@@ -2,7 +2,7 @@
 
 import * as Pg from "pg";
 
-let dbConfig = "postgres://executor:executor-password@localhost/executor_db";
+let dbConfig = process.env.DB_URL;
 
 async function getClient() {
   let client = new Pg.Client(dbConfig);
@@ -21,4 +21,4 @@ export {
   getClient,
   withClient,
 }
-/* pg Not a pure module */
+/* dbConfig Not a pure module */
