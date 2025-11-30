@@ -2,17 +2,18 @@ module Route = {
   module Config = {
     type output = {
       inventory: array<Inventory__sql.query1Result>,
-      tenant: Nullable.t<Tenant__sql.query1Result>,
+      premise: Nullable.t<Premise__sql.query1Result>,
     }
     let get = Bun.Handler(
       async (req: Bun.BunRequest.t, _) => {
         let headers = Headers.make()
         headers->Headers.set("content-type", "application/json")
         let response: output = await Connection.withClient(async client => {
-          let tenantId: string = req->Bun.BunRequest.params->Dict.get("tenant")->Option.getUnsafe
-          let tenant = await Tenant.getTenant(~client, tenantId)
-          let inventory = await Inventory.getInventoryList(~client, tenantId)
-          {inventory, tenant}
+          let premise_id: string =
+            req->Bun.BunRequest.params->Dict.get("premise_id")->Option.getUnsafe
+          let premise = await Premise.getPremise(~client, premise_id)
+          let inventory = await Inventory.getInventoryList(~client, premise_id)
+          {inventory, premise}
         })
         Response.makeWithJsonUnsafe(response, ~options={headers, status: 200})
       },
@@ -23,7 +24,7 @@ module Route = {
 
 let server = Bun.serve({
   port: 8899,
-  routes: Dict.fromArray([("/config/:tenant", Route.Config.handler)]),
+  routes: Dict.fromArray([("/config/:premise_id", Route.Config.handler)]),
   fetch: async (_, _) => {
     Response.make("Not Found")
   },

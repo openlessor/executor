@@ -1,5 +1,11 @@
 # executor
 
+## Prototype Phase
+
+This software is currently in the prototype phase and is not ready to be used in production. The software design, APIs, and database schemas may completely change by a beta release.
+
+## Running with Bun runtime
+
 To install dependencies:
 
 ```bash
