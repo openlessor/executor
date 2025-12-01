@@ -6,7 +6,7 @@ let deriveState = store => {
   let inventory = config.inventory->Belt.Array.copy
   inventory
   ->Belt.Array.flatMap(inv => {
-    inv.period_list->Js.Array2.map((pl: Pricing.period) => {
+    inv.period_list->Array.map((pl: Pricing.period) => {
       if seen_units->Set.has(pl["unit"]) {
         None
       } else {
@@ -15,11 +15,11 @@ let deriveState = store => {
       }
     })
   })
-  ->Js.Array2.filter(pl =>
+  ->Array.filter(pl =>
     switch pl {
     | Some(_) => true
     | _ => false
     }
   )
-  ->Js.Array2.map(pl => Belt.Option.getUnsafe(pl))
+  ->Array.map(pl => Belt.Option.getUnsafe(pl))
 }

@@ -7,14 +7,20 @@ module IntCmp = Belt.Id.MakeComparable({
 })
 
 @react.component
-let make = leaf((~openDate: option<Js.Date.t>=?, ~closeDate: option<Js.Date.t>=?) => {
+let make = leaf((~openDate: option<Date.t>=?, ~closeDate: option<Date.t>=?) => {
   let config: PremiseContainer.Config.t = main_store["config"]
   let unit: State.Unit.t = main_store["unit"]
   let items = config.inventory
   let filterType = "all"
-  let now = Js.Date.make()
-  let today = Js.Date.fromFloat(
-    Js.Date.setHoursMSMs(now, ~hours=0.0, ~minutes=0.0, ~seconds=0.0, ~milliseconds=0.0, ()),
+  let now = Date.make()
+  let today = Date.fromTime(
+    Date.setHoursMSMs(
+      now,
+      ~hours=Float.toInt(0.0),
+      ~minutes=Float.toInt(0.0),
+      ~seconds=Float.toInt(0.0),
+      ~milliseconds=Float.toInt(0.0),
+    ),
   )
   let openDate = switch openDate {
   | Some(date) => date
@@ -30,16 +36,16 @@ let make = leaf((~openDate: option<Js.Date.t>=?, ~closeDate: option<Js.Date.t>=?
       "Showing " ++
       filterType ++
       " equipment available from " ++
-      Js.Date.toLocaleDateString(openDate) ++
+      Date.toLocaleDateString(openDate) ++
       " to " ++
-      Js.Date.toLocaleDateString(closeDate)
+      Date.toLocaleDateString(closeDate)
     } else {
       "Showing " ++
       filterType ++
       " equipment available " ++
       switch openDate == today {
       | true => "today"
-      | false => Js.Date.toLocaleDateString(openDate)
+      | false => Date.toLocaleDateString(openDate)
       }
     }
   }
