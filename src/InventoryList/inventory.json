@@ -1,0 +1,46 @@
+[
+    {
+        "id": 1,
+        "name": "Cisco 8000 Router",
+        "description": "Core network infrastructure router for testing and development"
+    },
+    {
+        "id": 2,
+        "name": "Cisco 8000 Router",
+        "description": "Core network infrastructure router for testing and development"
+    },
+    {
+        "id": 3,
+        "name": "Cisco 8001 Router",
+        "description": "Core network infrastructure router for testing and development"
+    },
+    {
+        "id": 4,
+        "name": "Cisco 8001 Router",
+        "description": "Core network infrastructure router for testing and development"
+    },
+    {
+        "id": 5,
+        "name": "Cisco 8001 Router",
+        "description": "Core network infrastructure router for testing and development"
+    },
+    {
+        "name": "Cisco 8002 Router",
+        "description": "Core network infrastructure router for testing and development"
+    },
+    {
+        "id": 6,
+        "name": "Cisco 8002 Router",
+        "description": "Core network infrastructure router for testing and development"
+    },
+    {
+        "id": 7,
+        "name": "Cisco 8002 Router",
+        "description": "Core network infrastructure router for testing and development"
+    },
+    {
+        "id": 8,
+        "name": "Cisco 8002 Router",
+        "description": "Core network infrastructure router for testing and development"
+    }
+]

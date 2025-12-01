@@ -1,7 +1,8 @@
 {
+  "jsx": { "version": 4 },
   "ppx-flags": ["rescript-embed-lang/ppx"],
-  "dependencies": ["pgtyped-rescript", "rescript-bun"],
-  "compiler-flags": ["-open RescriptBun", "-open RescriptBun.Globals"],
+  "dependencies": ["rescript-webapi", "@rescript/react", "@tilia/tilia", "@tilia/react", "pgtyped-rescript", "rescript-bun"],
+  "compiler-flags": ["-open Tilia", "-open TiliaReact", "-open RescriptBun", "-open RescriptBun.Globals"],
   "uncurried": true,
   "name": "executor",
   "sources": [

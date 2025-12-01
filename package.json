@@ -4,15 +4,23 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "tailwindcss": "^4.1.17"
   },
   "peerDependencies": {
     "rescript": "^12.0.0"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@rescript/react": "^0.14.0",
+    "@tilia/react": "file:../tilia/react",
+    "@tilia/tilia": "/Users/briankaplan/dev-current/tilia/tilia",
     "pg": "^8.16.3",
     "pgtyped-rescript": "^2.6.0",
+    "react": "^19.2.0",
+    "react-datepicker": "^8.10.0",
     "rescript-bun": "^2.1.0",
-    "rescript-embed-lang": "^0.5.5"
+    "rescript-embed-lang": "^0.5.5",
+    "rescript-webapi": "^0.10.0"
   }
 }

@@ -1,40 +1,12 @@
-module Route = {
-  module Config = {
-    type output = {
-      inventory: array<Inventory__sql.query1Result>,
-      premise: Nullable.t<Premise__sql.query1Result>,
-    }
-    let get = Bun.Handler(
-      async (req: Bun.BunRequest.t, _) => {
-        let headers = Headers.make()
-        headers->Headers.set("content-type", "application/json")
-        let response: output = await Connection.withClient(async client => {
-          let premise_id: string =
-            req->Bun.BunRequest.params->Dict.get("premise_id")->Option.getUnsafe
-          let premise = await Premise.getPremise(~client, premise_id)
-          let inventory = await Inventory.getInventoryList(~client, premise_id)
-          {inventory, premise}
-        })
-        Response.makeWithJsonUnsafe(response, ~options={headers, status: 200})
-      },
-    )
-    let handler: Bun.routeHandlerObject = {get: get}
-  }
+// Entry point
+%%raw(`import "./tailwind.css"`)
+%%raw(`import "react-datepicker/dist/react-datepicker.css"`)
+
+open ReactDOM.Client
+
+let rootElement = ReactDOM.querySelector("#root")
+
+switch rootElement {
+| Some(domNode) => hydrateRoot(domNode, <App />)->ignore
+| None => Js.log("No root element found")
 }
-
-let server = Bun.serve({
-  port: 8899,
-  routes: Dict.fromArray([("/config/:premise_id", Route.Config.handler)]),
-  fetch: async (_, _) => {
-    Response.make("Not Found")
-  },
-})
-
-let port =
-  server
-  ->Bun.Server.port
-  ->Int.toString
-
-let hostName = server->Bun.Server.hostname
-
-Console.log(`Server listening on http://${hostName}:${port}!`)
