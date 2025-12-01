@@ -12,12 +12,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@jihchi/vite-plugin-rescript": "^8.0.0-beta.2",
     "@types/bun": "latest",
-    "@vitejs/plugin-react": "^5.1.1",
     "rescript-embed-lang": "^0.5.5",
-    "tailwindcss": "^4.1.17",
-    "vite": "^7.2.6"
+    "tailwindcss": "^4.1.17"
   },
   "peerDependencies": {
     "rescript": "12.0.0"
