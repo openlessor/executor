@@ -1,5 +1,9 @@
 # executor
 
+## Important Note
+
+This project will not run currently since I've upgraded to ReScript v12. I've forked the dependencies `tilia` and `@tilia/react` to work with ReScript v12. I haven't published the fork in hopes the developer will release a new version soon.
+
 ## Prototype Phase
 
 This software is currently in the prototype phase and is not ready to be used in production. The software design, APIs, and database schemas may completely change by a beta release.
