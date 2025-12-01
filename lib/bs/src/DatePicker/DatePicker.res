@@ -7,7 +7,7 @@ module Raw = {
     ~className: string,
     ~isOpen: bool,
     ~minDate: Date.t,
-    ~onChange: Js.Nullable.t<Js.Date.t> => unit,
+    ~onChange: Nullable.t<Date.t> => unit,
     ~selected: Date.t,
   ) => React.element = "default"
 }
@@ -18,7 +18,7 @@ let make = (
   ~className: string,
   ~isOpen: bool,
   ~minDate: Date.t,
-  ~onChange: Js.Nullable.t<Js.Date.t> => unit,
+  ~onChange: Nullable.t<Date.t> => unit,
   ~selected: Date.t,
 ) => {
   let (isClient, setIsClient) = React.useState(() => false)

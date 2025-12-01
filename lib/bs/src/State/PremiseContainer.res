@@ -34,11 +34,11 @@ module SSR = {
 
 // XXX: For now we hardcode the premise ID
 let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410"
-let domExecutorConfig: Js.Nullable.t<Config.t> = %raw(
+let domExecutorConfig: Nullable.t<Config.t> = %raw(
   "(typeof window !== 'undefined' ? window.__EXECUTOR_CONFIG__ ?? null : null)"
 )
 //let ctx = React.useContext(SSR.context)
-let initialExecutorConfig: Config.t = switch Js.Nullable.toOption(domExecutorConfig) {
+let initialExecutorConfig: Config.t = switch Nullable.toOption(domExecutorConfig) {
 | Some(config) => config
 | None => SSR.empty
 }

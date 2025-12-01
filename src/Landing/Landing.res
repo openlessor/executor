@@ -19,16 +19,8 @@ let removeFromCart = (state: Cart.t, id) => {
 @react.component
 let make = leaf(() => {
   let unit = main_store["unit"]
-  let now = Date.make()
-  let today = Date.fromTime(
-    Date.setHoursMSMs(
-      now,
-      ~hours=Float.toInt(0.0),
-      ~minutes=Float.toInt(0.0),
-      ~seconds=Float.toInt(0.0),
-      ~milliseconds=Float.toInt(0.0),
-    ),
-  )
+  let today = Date.make()
+  today->Date.setHoursMSMs(~hours=0, ~minutes=0, ~seconds=0, ~milliseconds=0)
 
   let (openDate, setOpenDate) = React.useState(() => today)
   let (closeDate, setCloseDate) = React.useState(() => today)

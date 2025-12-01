@@ -20,8 +20,8 @@ let make = leaf((~item: t) => {
   //let cartState = React.useContext(Cart.StateContext.context)
   //let {path} = RescriptReactRouter.useUrl()
   let matches = [] // Js.Array.filter(cart_item => cart_item == item.id, cartState.cart)
-  let matchCount = Js.Array.length(matches)
-  let _quantity = matchCount > 0 ? Belt.Int.toString(Js.Array.length(matches)) : "0"
+  let matchCount = Array.length(matches)
+  let _quantity = matchCount > 0 ? Belt.Int.toString(Array.length(matches)) : "0"
   let _available = Belt.Int.toString(item.quantity - matchCount)
   // Find matching unit in period_list
 

@@ -19,22 +19,20 @@ let removeFromCart = (state: Cart.t, id) => {
 @react.component
 let make = leaf(() => {
   let unit = main_store["unit"]
-  let now = Js.Date.make()
-  let today = Js.Date.fromFloat(
-    Js.Date.setHoursMSMs(now, ~hours=0.0, ~minutes=0.0, ~seconds=0.0, ~milliseconds=0.0, ()),
-  )
+  let today = Date.make()
+  today->Date.setHoursMSMs(~hours=0, ~minutes=0, ~seconds=0, ~milliseconds=0)
 
   let (openDate, setOpenDate) = React.useState(() => today)
   let (closeDate, setCloseDate) = React.useState(() => today)
   React.useEffect(() => {
-    Js.Console.log("Open Date:")
-    Js.Console.log(openDate)
-    Js.Console.log("Close Date:")
-    Js.Console.log(closeDate)
+    Console.log("Open Date:")
+    Console.log(openDate)
+    Console.log("Close Date:")
+    Console.log(closeDate)
     Some(() => ())
   }, [openDate, closeDate])
 
-  let updateOpenDate = (openDate: Js.Nullable.t<Js.Date.t>) => {
+  let updateOpenDate = (openDate: Nullable.t<Date.t>) => {
     setOpenDate(_prev =>
       switch openDate {
       | Js.Nullable.Value(date) => date
@@ -43,7 +41,7 @@ let make = leaf(() => {
     )
     //setCloseDate(openDate)
   }
-  let updateCloseDate = (closeDate: Js.Nullable.t<Js.Date.t>) => {
+  let updateCloseDate = (closeDate: Nullable.t<Date.t>) => {
     setCloseDate(_prev =>
       switch closeDate {
       | Js.Nullable.Value(date) => date
@@ -53,13 +51,13 @@ let make = leaf(() => {
   }
 
   let (state, dispatch) = React.useReducer((state, action) => {
-    Js.Console.log("calling reducer")
-    Js.Console.log({"state": state, "action": action})
+    Console.log("calling reducer")
+    Console.log({"state": state, "action": action})
     let result = switch action {
     | Cart.DispatchContext.AddToCart({id}) => addToCart(state, id)
     | Cart.DispatchContext.RemoveFromCart({id}) => removeFromCart(state, id)
     }
-    Js.Console.log({"nextState": result})
+    Console.log({"nextState": result})
     result
   }, {items: [], selected_item: None, cart: []})
   let cartCount = Belt.Array.length(state.cart)

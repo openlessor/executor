@@ -12,16 +12,8 @@ let make = leaf((~openDate: option<Date.t>=?, ~closeDate: option<Date.t>=?) => {
   let unit: State.Unit.t = main_store["unit"]
   let items = config.inventory
   let filterType = "all"
-  let now = Date.make()
-  let today = Date.fromTime(
-    Date.setHoursMSMs(
-      now,
-      ~hours=Float.toInt(0.0),
-      ~minutes=Float.toInt(0.0),
-      ~seconds=Float.toInt(0.0),
-      ~milliseconds=Float.toInt(0.0),
-    ),
-  )
+  let today = Date.make()
+  Date.make()->Date.setHoursMSMs(~hours=0, ~minutes=0, ~seconds=0, ~milliseconds=0)
   let openDate = switch openDate {
   | Some(date) => date
   | _ => today
