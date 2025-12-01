@@ -3,26 +3,22 @@ module Route = {
     external env: {..} = "process.env"
     let html_placeholder = `<!--app-html-->`
     let get = Bun.Handler(
-      async (_req: Bun.BunRequest.t, _) => {
-        //
-        //let headers = HeadersInit.FromDict(dict{"content-type": "text/html"})
-        //let url = `http://localhost:8899/`
-        //let f = Bun.file("./public/index.html")
-        //let template = await f->Bun.BunFile.text
-        //let {html: appHtml, executorConfig} = await render()
-        //let stateJson = executorConfig->JSON.stringifyAny->Option.getUnsafe
-        //Console.log("JSON: " ++ stateJson)
-        //let html =
-        //  template
-        //  ->String.replace(html_placeholder, appHtml)
-        //  ->String.replace(
-        //    "</body>",
-        //    `<script>window.__EXECUTOR_CONFIG__=${stateJson};</script></body>`,
-        //  )
-        //Response.make(html, ~options={headers, status: 200})
-        ///
+      async (req: Bun.BunRequest.t, _) => {
+        let url = req->Request.url->Webapi.Url.make->Webapi.Url.href
+        let headers = HeadersInit.FromDict(dict{"content-type": "text/html"})
         let f = Bun.file("./public/index.html")
-        Response.makeFromFile(f)
+        let template = await f->Bun.BunFile.text
+        let {html: appHtml, executorConfig} = await EntryServer.render(url)
+        let stateJson = executorConfig->JSON.stringifyAny->Option.getUnsafe
+        Console.log("JSON: " ++ stateJson)
+        let html =
+          template
+          ->String.replace(html_placeholder, appHtml)
+          ->String.replace(
+            "</body>",
+            `<script>window.__EXECUTOR_CONFIG__=${stateJson};</script></body>`,
+          )
+        Response.make(html, ~options={headers, status: 200})
       },
     )
     let handler: Bun.routeHandlerObject = {get: get}

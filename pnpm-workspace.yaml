@@ -3,3 +3,6 @@ ignoredBuiltDependencies:
   - esbuild
   - rescript
   - rescript-embed-lang
+
+onlyBuiltDependencies:
+  - bun

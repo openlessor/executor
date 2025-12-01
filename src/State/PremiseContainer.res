@@ -4,10 +4,10 @@ module Config = {
   @scope("JSON") @val
   external parseJSON: string => t = "parse"
 
-  external env: {..} = "import.meta.env"
+  external env: {..} = "process.env"
   // XXX @todo Make this base URL configurable from an env var
   // window.location.origin is not SSR friendly
-  let base_url: string = env["VITE_API_BASE_URL"]
+  let base_url: string = env["API_BASE_URL"]
   let fetch = async (premiseId: string) => {
     let response = await Webapi.Fetch.fetchWithInit(
       `${base_url}/config/${premiseId}`,

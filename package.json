@@ -13,7 +13,6 @@
   },
   "devDependencies": {
     "@jihchi/vite-plugin-rescript": "^8.0.0-beta.2",
-    "@tailwindcss/vite": "^4.1.17",
     "@types/bun": "latest",
     "@vitejs/plugin-react": "^5.1.1",
     "rescript-embed-lang": "^0.5.5",
@@ -21,21 +20,23 @@
     "vite": "^7.2.6"
   },
   "peerDependencies": {
-    "rescript": "^12.0.0"
+    "rescript": "12.0.0"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
     "@rescript/react": "^0.14.0",
     "@tilia/react": "file:../tilia/react",
     "@tilia/tilia": "/Users/briankaplan/dev-current/tilia/tilia",
+    "bun-plugin-tailwind": "^0.1.2",
     "compression": "^1.8.1",
     "express": "^5.2.1",
     "lucide-react": "^0.555.0",
     "pg": "^8.16.3",
     "pgtyped-rescript": "^2.6.0",
-    "react": "^19.2.0",
+    "react": "19.2.0",
     "react-datepicker": "^8.10.0",
     "rescript-bun": "^2.1.0",
-    "rescript-webapi": "^0.10.0"
+    "rescript-webapi": "^0.10.0",
+    "tailwindcss": "^4.1.17"
   }
 }

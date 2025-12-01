@@ -1,6 +1,5 @@
 await Bun.build({
-  entrypoints: ["./index.html"],
+  entrypoints: ["./index.html", "./src/Index.mjs"],
   outdir: "./public",
-  env: "inline",
-  target: "browser"
+  env: "inline"
 });

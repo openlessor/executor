@@ -4,7 +4,7 @@ import * as Tilia from "@tilia/tilia/src/Tilia.mjs";
 import * as React from "react";
 import * as Webapi__Fetch from "rescript-webapi/src/Webapi/Webapi__Fetch.mjs";
 
-let base_url = import.meta.env.VITE_API_BASE_URL;
+let base_url = process.env.API_BASE_URL;
 
 async function fetch$1(premiseId) {
   let response = await fetch(base_url + `/config/` + premiseId, Webapi__Fetch.RequestInit.make("Get", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined));

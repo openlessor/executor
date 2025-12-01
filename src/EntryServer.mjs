@@ -6,8 +6,8 @@ import * as Server from "react-dom/server";
 import * as JsxRuntime from "react/jsx-runtime";
 import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mjs";
 
-function render() {
-  let appUrl = RescriptReactRouter.dangerouslyGetInitialUrl(`http://localhost:8899/`, undefined);
+function render(url) {
+  let appUrl = RescriptReactRouter.dangerouslyGetInitialUrl(url, undefined);
   return PremiseContainer.Config.fetch("a55351b1-1b78-4b6c-bd13-6859dc9ad410").then(config => {
     console.log("Fetched config: ");
     console.log(config);
