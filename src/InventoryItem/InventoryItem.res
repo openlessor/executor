@@ -32,7 +32,8 @@ let make = leaf((~item: t) => {
       RescriptReactRouter.replace("/item/" ++ Belt.Int.toString(id))
     }}
     href={"/item/" ++ Belt.Int.toString(id)}
-    className="flex flex-1 flex-col flex-grow border-2">
+    className="flex flex-1 flex-col flex-grow border-2"
+  >
     <button className="relative m-[1.5] flex flex-1 flex-col flex-grow max-w-40">
       <div className="rounded-sm shadow-sm m-0 p-0">
         <img className="p-[1.5] w-40 h-40" src={image} style={Obj.magic({"width": "100%"})} />
@@ -41,7 +42,8 @@ let make = leaf((~item: t) => {
         <h2 className="tracking-wider text-xs px-2"> {name->str} </h2>
       </div>
       <div
-        className="flex flex-col flex-grow flex-1 w-full bg-white/40 rounded-sm m-[1.5] justify-between items-end">
+        className="flex flex-col flex-grow flex-1 w-full bg-white/40 rounded-sm m-[1.5] justify-between items-end"
+      >
         <p className="text-xs text-left m-2"> {description->str} </p>
         <Pricing period_list={period_list} />
       </div>

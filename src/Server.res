@@ -1,8 +1,28 @@
 module Route = {
   module Frontend = {
+    external env: {..} = "process.env"
+    let html_placeholder = `<!--app-html-->`
     let get = Bun.Handler(
       async (_req: Bun.BunRequest.t, _) => {
-        Response.make("hello")
+        //
+        //let headers = HeadersInit.FromDict(dict{"content-type": "text/html"})
+        //let url = `http://localhost:8899/`
+        //let f = Bun.file("./public/index.html")
+        //let template = await f->Bun.BunFile.text
+        //let {html: appHtml, executorConfig} = await render()
+        //let stateJson = executorConfig->JSON.stringifyAny->Option.getUnsafe
+        //Console.log("JSON: " ++ stateJson)
+        //let html =
+        //  template
+        //  ->String.replace(html_placeholder, appHtml)
+        //  ->String.replace(
+        //    "</body>",
+        //    `<script>window.__EXECUTOR_CONFIG__=${stateJson};</script></body>`,
+        //  )
+        //Response.make(html, ~options={headers, status: 200})
+        ///
+        let f = Bun.file("./public/index.html")
+        Response.makeFromFile(f)
       },
     )
     let handler: Bun.routeHandlerObject = {get: get}
@@ -50,8 +70,11 @@ let server = Bun.serve({
     ("/config/:premise_id", Route.Config.handler),
     ("/inventory/:premise_id", Route.Inventory.handler),
   ]),
-  fetch: async (_, _) => {
-    Response.make("Not Found")
+  fetch: async (req, _) => {
+    let url = req->Request.url->Webapi.Url.make->Webapi.Url.pathname
+    let filePath = `./public/${url}`
+    let file = Bun.file(filePath)
+    Response.makeFromFile(file)
   },
 })
 

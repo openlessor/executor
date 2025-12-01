@@ -1,3 +1,5 @@
+%raw(`"use client"`)
+
 let getActiveId = (url: RescriptReactRouter.url) => {
   switch url.path {
   | list{"item", id, ..._} => Some(id)
@@ -28,11 +30,13 @@ let make = (
   | Some(value) => value
   | None => PremiseContainer.SSR.empty
   }
+  Console.log("Path:")
+  Console.log(url.path)
 
   <PremiseContainer.SSR.Provider value={executorConfigValue}>
     {switch url.path {
     | list{"item", ..._} | list{} => <Landing />
-    | _ => <ErrorView />
+    | _ => <Landing />
     }}
   </PremiseContainer.SSR.Provider>
 }

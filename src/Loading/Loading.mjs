@@ -8,14 +8,14 @@ function str(prim) {
 
 function Loading(props) {
   return JsxRuntime.jsx("h1", {
-              children: "Loading..."
-            });
+    children: "Loading..."
+  });
 }
 
-var make = Loading;
+let make = Loading;
 
 export {
-  str ,
-  make ,
+  str,
+  make,
 }
 /* react/jsx-runtime Not a pure module */

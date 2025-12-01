@@ -3,49 +3,49 @@
 import * as LucideReact from "lucide-react";
 import * as JsxRuntime from "react/jsx-runtime";
 
-var Calendar = {
+let Calendar = {
   make: LucideReact.Calendar
 };
 
-var Clock = {
+let Clock = {
   make: LucideReact.Clock
 };
 
-var MonitorCloud = {
+let MonitorCloud = {
   make: LucideReact.MonitorCloud
 };
 
-var Cloud = {
+let Cloud = {
   make: LucideReact.Cloud
 };
 
-var SearchIcon = {
+let SearchIcon = {
   make: LucideReact.SearchIcon
 };
 
 function Icon$IconButton(props) {
   return JsxRuntime.jsx("button", {
-              children: JsxRuntime.jsx(props.icon.make, {
-                    size: 16,
-                    color: "white"
-                  })
-            });
+    children: JsxRuntime.jsx(props.icon.make, {
+      size: 16,
+      color: "white"
+    })
+  });
 }
 
-var IconButton = {
+let IconButton = {
   make: Icon$IconButton
 };
 
 JsxRuntime.jsx(Icon$IconButton, {
-      icon: Cloud
-    });
+  icon: Cloud
+});
 
 export {
-  Calendar ,
-  Clock ,
-  MonitorCloud ,
-  Cloud ,
-  SearchIcon ,
-  IconButton ,
+  Calendar,
+  Clock,
+  MonitorCloud,
+  Cloud,
+  SearchIcon,
+  IconButton,
 }
 /* Calendar Not a pure module */

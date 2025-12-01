@@ -1,3 +1,5 @@
+@@directive(`"use client"`)
+
 open State
 let str = React.string
 
@@ -5,7 +7,7 @@ let str = React.string
 let make = leaf(() => {
   <div className="my-auto">
     {main_store["period_list"]
-    ->Js.Array2.map(period => {
+    ->Array.map(period => {
       <label className="block" key={period["unit"]} htmlFor={`type_${period["unit"]}`}>
         <input
           className="m-1"

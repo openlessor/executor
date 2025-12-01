@@ -7,40 +7,36 @@ import ReactDatePickerShimMjs from "../shims/reactDatePickerShim.mjs";
 import "react-datepicker/dist/react-datepicker.css"
 ;
 
-var make = ReactDatePickerShimMjs;
+let make = ReactDatePickerShimMjs;
 
-var Raw = {
+let Raw = {
   make: make
 };
 
 function DatePicker(props) {
-  var match = React.useState(function () {
-        return false;
-      });
-  var setIsClient = match[1];
-  React.useEffect((function () {
-          setIsClient(function (param) {
-                return true;
-              });
-        }), []);
+  let match = React.useState(() => false);
+  let setIsClient = match[1];
+  React.useEffect(() => {
+    setIsClient(param => true);
+  }, []);
   if (match[0]) {
     return JsxRuntime.jsx(make, {
-                calendarClassName: props.calendarClassName,
-                className: props.className,
-                isOpen: props.isOpen,
-                minDate: props.minDate,
-                onChange: props.onChange,
-                selected: props.selected
-              });
+      calendarClassName: props.calendarClassName,
+      className: props.className,
+      isOpen: props.isOpen,
+      minDate: props.minDate,
+      onChange: props.onChange,
+      selected: props.selected
+    });
   } else {
     return null;
   }
 }
 
-var make$1 = DatePicker;
+let make$1 = DatePicker;
 
 export {
-  Raw ,
+  Raw,
   make$1 as make,
 }
 /*  Not a pure module */

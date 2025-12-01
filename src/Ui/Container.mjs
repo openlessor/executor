@@ -4,14 +4,14 @@ import * as JsxRuntime from "react/jsx-runtime";
 
 function Container(props) {
   return JsxRuntime.jsx("div", {
-              children: props.children,
-              className: "m-1.5 p-1 bg-slate-100 border-hairline border-b-2 border-slate-200 shadow-sm shadow-slate-200/70"
-            });
+    children: props.children,
+    className: "m-1.5 p-1 bg-slate-100 border-hairline border-b-2 border-slate-200 shadow-sm shadow-slate-200/70"
+  });
 }
 
-var make = Container;
+let make = Container;
 
 export {
-  make ,
+  make,
 }
 /* react/jsx-runtime Not a pure module */

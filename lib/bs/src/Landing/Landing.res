@@ -1,3 +1,5 @@
+@@directive(`"use client"`)
+
 open State
 let str = React.string
 
@@ -118,7 +120,8 @@ let make = leaf(() => {
     </Cart.StateContext.Provider>
     <div className="w-full">
       <button
-        className="mx-auto mt-4 bg-slate-500 hover:bg-slate-700 text-white py-2 px-4 rounded-sm">
+        className="mx-auto mt-4 bg-slate-500 hover:bg-slate-700 text-white py-2 px-4 rounded-sm"
+      >
         {"Book Reservation"->str}
       </button>
     </div>
