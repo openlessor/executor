@@ -14,6 +14,9 @@ importers:
       '@rescript/react':
         specifier: ^0.14.0
         version: 0.14.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@rescript/webapi':
+        specifier: 0.1.0-experimental-ca5db29
+        version: 0.1.0-experimental-ca5db29(rescript@12.0.0)
       '@tilia/react':
         specifier: file:../tilia/react
         version: file:../tilia/react
@@ -50,9 +53,6 @@ importers:
       rescript-bun:
         specifier: ^2.1.0
         version: 2.1.0(rescript@12.0.0)
-      rescript-webapi:
-        specifier: ^0.10.0
-        version: 0.10.0
       tailwindcss:
         specifier: ^4.1.17
         version: 4.1.17
@@ -307,6 +307,11 @@ packages:
   '@rescript/tools@0.6.4':
     resolution: {integrity: sha512-A7RdEEiMnBAN+6FYVseSTP9DPK2jR0Yo0DjZew7Sv4ey88+mwn7lHXTU9cmBlfZBoCPmnnr1e4V2MDbLEX0GUA==}
     hasBin: true
+
+  '@rescript/webapi@0.1.0-experimental-ca5db29':
+    resolution: {integrity: sha512-ljByn633TQr+FomdiU1GwgpXunrqg92x++sDzIjWRwgDpiDW92cFtHSAb4vJYsT5NNsYZnhVNQsdh18VF4rkpQ==}
+    peerDependencies:
+      rescript: '>=12.0.0 <13'
 
   '@rescript/win32-x64@12.0.0':
     resolution: {integrity: sha512-kkqj4kQGbni5YglWoPm76M6hUuzKJHDEiLce5EZxW2Q4FrkS9dNRgm02c2Ck1cz/uKCS3m+ZoKQGIMMXTvo5Jw==}
@@ -897,9 +902,6 @@ packages:
   rescript-embed-lang@0.5.5:
     resolution: {integrity: sha512-XImHvK8bUsRmoalwlcVTHeUGN7frcs4PO5Dkj0xAcKkXC5HN2jepJ3sJbdVRhFyKIpzRt3w+MmaAbOi3Q085Dg==}
 
-  rescript-webapi@0.10.0:
-    resolution: {integrity: sha512-QgwMMQO7INz0SK8TX91ibGDrOCRAteOuOxhQi3CIR8FMx0wykbp2rRU/TF4GyfKagk2Nby8snPhQnstSxnmm/g==}
-
   rescript@11.1.4:
     resolution: {integrity: sha512-0bGU0bocihjSC6MsE3TMjHjY0EUpchyrREquLS8VsZ3ohSMD+VHUEwimEfB3kpBI1vYkw3UFZ3WD8R28guz/Vw==}
     engines: {node: '>=10'}
@@ -1251,6 +1253,10 @@ snapshots:
   '@rescript/tools@0.6.4':
     dependencies:
       rescript: 11.1.4
+
+  '@rescript/webapi@0.1.0-experimental-ca5db29(rescript@12.0.0)':
+    dependencies:
+      rescript: 12.0.0
 
   '@rescript/win32-x64@12.0.0':
     optional: true
@@ -1859,8 +1865,6 @@ snapshots:
       rescript: 12.0.0
 
   rescript-embed-lang@0.5.5: {}
-
-  rescript-webapi@0.10.0: {}
 
   rescript@11.1.4: {}
 

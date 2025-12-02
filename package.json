@@ -22,6 +22,7 @@
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
     "@rescript/react": "^0.14.0",
+    "@rescript/webapi": "0.1.0-experimental-ca5db29",
     "@tilia/react": "file:../tilia/react",
     "@tilia/tilia": "/Users/briankaplan/dev-current/tilia/tilia",
     "bun-plugin-tailwind": "^0.1.2",
@@ -33,7 +34,6 @@
     "react": "19.2.0",
     "react-datepicker": "^8.10.0",
     "rescript-bun": "^2.1.0",
-    "rescript-webapi": "^0.10.0",
     "tailwindcss": "^4.1.17"
   }
 }
