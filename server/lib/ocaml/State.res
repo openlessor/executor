@@ -3,7 +3,7 @@
 module Unit = {
   type t = [#second | #minute | #hour | #day | #week | #month | #year]
   // XXX: This default state should come from the server
-  let defaultState: t = #hour
+  let defaultState: t = #month
   let (signal, set) = signal(defaultState)
 }
 let main_store = carve(({derived}) => {

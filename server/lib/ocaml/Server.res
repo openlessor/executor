@@ -57,12 +57,6 @@ module Route = {
     )
     let handler: Bun.routeHandlerObject = {post: post}
   }
-  module EventSocket = {
-    let handler = async (req: Bun.BunRequest.t, server: Bun.Server.t) => {
-      server->Bun.Server.upgrade(req)->ignore
-      ()
-    }
-  }
 }
 
 module Clients = {
@@ -95,20 +89,23 @@ let server = Bun.serveWithWebSocket({
         )
       }
       let premise_id = url.searchParams->WebAPI.URLSearchParams.get("premise_id")
-      ws->Globals.WebSocket.subscribe(~topic=premise_id)->ignore
-      ws->Globals.WebSocket.publish(
-        ~topic=premise_id,
-        ~data=Belt.Option.getUnsafe(State.main_store["config"].inventory->JSON.stringifyAny),
+      Console.log("Subscribing to premise_id:" ++ premise_id)
+      ws->Globals.WebSocket.subscribe(~topic=premise_id)
+      let fetchPremiseAndPublish = (premise_id: string, payload) => {
+        Connection.withClient(client => Promise.resolve(Premise.getConfig(~client, premise_id)))
+        ->Promise.then(config => {
+          Console.log("Got config")
+          ws->Globals.WebSocket.publish(
+            ~topic=premise_id,
+            ~data=config->JSON.stringifyAny->Option.getUnsafe,
+          )
+          config
+        })
+        ->ignore
+      }
+      Listener.withListener(premise_id, ~onMessage=message =>
+        fetchPremiseAndPublish(message.channel, message.payload)
       )
-      /* switch premise_id {
-      | Some(premise_id) =>
-        if Clients.connections["subscriptions"]->Belt.Set.String.has(premise_id) == false {
-          Clients.connections["subscriptions"]->Belt.Set.String.add(premise_id)->ignore
-        }
- */
-
-      //| None =>
-      //}
     },
     message: (_ws, message) => {
       Console.log("Message received:" ++ message)
@@ -120,13 +117,16 @@ let server = Bun.serveWithWebSocket({
   fetch: async (req, server) => {
     let url = WebAPI.URL.make(~url=req->Request.url)
     if url.pathname == "/events" {
-      await Route.EventSocket.handler(req, server)
+      if server->Bun.Server.upgrade(req) == false {
+        JsError.throwWithMessage("Error")
+      }
+      ()
     }
     let filePath = `./public/${url.pathname}`
     let file = Bun.file(filePath)
-    if await file->Bun.BunFile.exists {
-      Response.makeFromFile(file)
-    } else {
+    switch await file->Bun.BunFile.exists {
+    | true => Response.makeFromFile(file)
+    | false =>
       switch Route.Frontend.get {
       | Bun.Handler(handler) => await handler(req, server)
       | _ => Response.make("")
@@ -138,7 +138,7 @@ let server = Bun.serveWithWebSocket({
 // I think this state will be wrong because it can potentially be another user's state?
 // So this store should probably be something like a HashMap of the data from the database
 // For testing purposes it will suffice
-observe(() => {
+/* observe(() => {
   Console.log("Publishing premiseId: " ++ PremiseContainer.premiseId)
   server->Bun.Server.publish(
     ~topic=PremiseContainer.premiseId,
@@ -146,7 +146,7 @@ observe(() => {
     ->JSON.stringifyAny
     ->Belt.Option.getUnsafe,
   )
-})
+})*/
 
 let port =
   server

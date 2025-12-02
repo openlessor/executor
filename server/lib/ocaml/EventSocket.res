@@ -11,6 +11,7 @@ module Event = {
 
 module Client = {
   let subscribe = (premise_id: string) => {
+    Console.log("Connecting to WebSocket server")
     let url = WebAPI.URL.make(~url=`${env["API_BASE_URL"]}/events?premise_id=${premise_id}`)
     url.protocol = "ws"
 

@@ -25,6 +25,33 @@ module Config = {
     let json = await WebAPI.Response.json(response)
     parseJSON(json->JSON.stringify)
   }
+
+  module Client = {
+    let subscribe = (premise_id: string, set) => {
+      Console.log("Connecting to WebSocket server")
+      let url = WebAPI.URL.make(~url=`${env["API_BASE_URL"]}/events?premise_id=${premise_id}`)
+      url.protocol = "ws"
+
+      let ws = WebAPI.WebSocket.make2(~url=url.href)
+      ws->WebAPI.WebSocket.addEventListener(Message, event => {
+        let jsonR: string = event.data->Option.getUnsafe
+        let json = jsonR->JSON.parseOrThrow
+        let config: t = {
+          inventory: json
+          ->JSON.Decode.object
+          ->Option.flatMap(d => d->Dict.get("inventory"))
+          ->Option.flatMap(JSON.Decode.array)
+          ->Option.getOr([])
+          ->Array.map(itemJson => {
+            // ... decode item ...
+            Obj.magic(itemJson) // or proper decoding
+          }),
+        }
+        set(config)
+        // set(json)
+      })
+    }
+  }
 }
 
 module SSR = {
@@ -55,7 +82,7 @@ let initialExecutorConfig: Config.t = switch Nullable.toOption(domExecutorConfig
 
 let state = source(initialExecutorConfig, async (_prev, set) => {
   switch GlobalThis.window_->Nullable.toOption {
-  | Some(_) => EventSocket.Client.subscribe(premiseId)
+  | Some(_) => Config.Client.subscribe(premiseId, set)
   | None => Console.log("Not connecting to WebSocket")
   }
   // This shouldn't fetch on the server, it should just call the database.

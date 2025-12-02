@@ -12,20 +12,8 @@ import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mj
 function render(url) {
   let appUrl = RescriptReactRouter.dangerouslyGetInitialUrl(url, undefined);
   let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410";
-  let toInventoryItem = row => {
-    let periods = row.period_list;
-    let period_list = periods !== undefined ? periods : [];
-    return {
-      description: row.description,
-      id: row.id,
-      name: row.name,
-      quantity: row.quantity,
-      premise_id: row.premise_id,
-      period_list: period_list
-    };
-  };
   return Connection.withClient(client => Premise.getPremise(client, premiseId).then(result => Inventory.getInventoryList(client, premiseId)).then(inventoryRows => {
-    let inventory = Belt_Array.map(inventoryRows, toInventoryItem);
+    let inventory = Belt_Array.map(inventoryRows, Inventory.toInventoryItem);
     let config = {
       inventory: inventory
     };

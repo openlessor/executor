@@ -9,7 +9,21 @@ async function getInventoryList(client, premise_id) {
   });
 }
 
+function toInventoryItem(row) {
+  let periods = row.period_list;
+  let period_list = periods !== undefined ? periods : [];
+  return {
+    description: row.description,
+    id: row.id,
+    name: row.name,
+    quantity: row.quantity,
+    premise_id: row.premise_id,
+    period_list: period_list
+  };
+}
+
 export {
   getInventoryList,
+  toInventoryItem,
 }
 /* Inventory__sql Not a pure module */

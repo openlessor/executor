@@ -3,7 +3,7 @@
 
 import * as Tilia from "@tilia/tilia/src/Tilia.mjs";
 import * as React from "react";
-import * as EventSocket from "../Server/EventSocket.mjs";
+import * as EventSocket from "../Event/EventSocket.mjs";
 
 let base_url = process.env.API_BASE_URL;
 
@@ -36,7 +36,15 @@ let domExecutorConfig = ((typeof window !== 'undefined' ? window.__EXECUTOR_CONF
 
 let initialExecutorConfig = (domExecutorConfig == null) ? empty : domExecutorConfig;
 
-let state = Tilia.source(initialExecutorConfig, async (_prev, set) => EventSocket.Client.subscribe(premiseId));
+let state = Tilia.source(initialExecutorConfig, async (_prev, set) => {
+  let match = globalThis.window;
+  if (match == null) {
+    console.log("Not connecting to WebSocket");
+    return;
+  } else {
+    return EventSocket.Client.subscribe(premiseId);
+  }
+});
 
 let Config = {
   fetch: fetch$1

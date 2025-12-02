@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import * as Landing from "../Landing/Landing.mjs";
+import * as NotFound from "../NotFound/NotFound.mjs";
 import * as PremiseContainer from "../State/PremiseContainer.mjs";
 import * as JsxRuntime from "react/jsx-runtime";
 import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mjs";
@@ -26,18 +27,16 @@ function App(props) {
   let match = React.useState(() => initialUrl);
   let setUrl = match[1];
   React.useEffect(() => {
-    let watcherID = RescriptReactRouter.watchUrl(newUrl => {
-      console.log("URL changed to:", newUrl.path);
-      setUrl(param => newUrl);
-    });
+    let watcherID = RescriptReactRouter.watchUrl(newUrl => setUrl(param => newUrl));
     return () => RescriptReactRouter.unwatchUrl(watcherID);
   }, []);
   let executorConfigValue = initialExecutorConfig !== undefined ? initialExecutorConfig : PremiseContainer.SSR.empty;
-  console.log("Path:");
-  console.log(match[0].path);
+  let match$1 = match[0].path;
+  let tmp;
+  tmp = match$1 !== 0 && match$1.hd !== "item" ? JsxRuntime.jsx(NotFound.make, {}) : JsxRuntime.jsx(Landing.make, {});
   return JsxRuntime.jsx(PremiseContainer.SSR.Provider.make, {
     value: executorConfigValue,
-    children: JsxRuntime.jsx(Landing.make, {})
+    children: tmp
   });
 }
 

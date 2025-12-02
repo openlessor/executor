@@ -3,7 +3,8 @@
 
 import * as Tilia from "@tilia/tilia/src/Tilia.mjs";
 import * as React from "react";
-import * as EventSocket from "../Server/EventSocket.mjs";
+import * as Stdlib_JSON from "@rescript/runtime/lib/es6/Stdlib_JSON.js";
+import * as Stdlib_Option from "@rescript/runtime/lib/es6/Stdlib_Option.js";
 
 let base_url = process.env.API_BASE_URL;
 
@@ -42,7 +43,18 @@ let state = Tilia.source(initialExecutorConfig, async (_prev, set) => {
     console.log("Not connecting to WebSocket");
     return;
   } else {
-    return EventSocket.Client.subscribe(premiseId);
+    console.log("Connecting to WebSocket server");
+    let url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + premiseId);
+    url.protocol = "ws";
+    let ws = new WebSocket(url.href);
+    ws.addEventListener("message", event => {
+      let jsonR = event.data;
+      let json = JSON.parse(jsonR);
+      set({
+        inventory: Stdlib_Option.getOr(Stdlib_Option.flatMap(Stdlib_Option.flatMap(Stdlib_JSON.Decode.object(json), d => d["inventory"]), Stdlib_JSON.Decode.array), []).map(itemJson => itemJson)
+      });
+    });
+    return;
   }
 });
 

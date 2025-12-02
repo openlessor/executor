@@ -5,14 +5,14 @@ import * as Tilia from "@tilia/tilia/src/Tilia.mjs";
 import * as PeriodList from "./PeriodList.mjs";
 import * as PremiseContainer from "./PremiseContainer.mjs";
 
-let match = Tilia.signal("hour");
+let match = Tilia.signal("month");
 
 let signal = match[0];
 
 let Unit_set = match[1];
 
 let Unit = {
-  defaultState: "hour",
+  defaultState: "month",
   signal: signal,
   set: Unit_set
 };
