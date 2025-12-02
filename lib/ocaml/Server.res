@@ -60,17 +60,26 @@ module Route = {
 }
 
 let server = Bun.serve({
+  development: true,
   port: 8899,
   routes: Dict.fromArray([
     ("/", Route.Frontend.handler),
     ("/config/:premise_id", Route.Config.handler),
     ("/inventory/:premise_id", Route.Inventory.handler),
   ]),
-  fetch: async (req, _) => {
+  fetch: async (req, server) => {
     let url = req->Request.url->Webapi.Url.make->Webapi.Url.pathname
     let filePath = `./public/${url}`
     let file = Bun.file(filePath)
-    Response.makeFromFile(file)
+    if await file->Bun.BunFile.exists {
+      Response.makeFromFile(file)
+    } else {
+      let handler = switch Route.Frontend.get {
+      | Bun.Handler(handler) => handler
+      | _ => failwith("Unreachable")
+      }
+      await handler(req, server)
+    }
   },
 })
 

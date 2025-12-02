@@ -4,6 +4,7 @@ import * as Premise from "./Database/Premise.mjs";
 import * as MockData from "./MockData/MockData.mjs";
 import * as Inventory from "./Database/Inventory.mjs";
 import * as Connection from "./Database/Connection.mjs";
+import * as Pervasives from "@rescript/runtime/lib/es6/Pervasives.js";
 import * as EntryServer from "./EntryServer.mjs";
 import * as Primitive_option from "@rescript/runtime/lib/es6/Primitive_option.js";
 
@@ -91,11 +92,18 @@ let Route = {
 };
 
 let server = Bun.serve({
+  development: true,
   port: 8899,
-  fetch: async (req, param) => {
+  fetch: async (req, server) => {
     let url = new URL(req.url).pathname;
     let filePath = `./public/` + url;
-    return new Response(Bun.file(filePath));
+    let file = Bun.file(filePath);
+    if (await file.exists()) {
+      return new Response(file);
+    }
+    let handler;
+    handler = typeof get === "object" ? Pervasives.failwith("Unreachable") : get;
+    return await handler(req, server);
   },
   routes: Object.fromEntries([
     [

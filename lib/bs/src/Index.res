@@ -1,6 +1,6 @@
 // Entry point
 // Kind of a crappy workaround to get TailwindCSS working with Bun...
-%%raw(`import "../public/dist.css"`)
+%%raw(`import "../tailwind.css"`)
 %%raw(`import "react-datepicker/dist/react-datepicker.css"`)
 
 open ReactDOM.Client
