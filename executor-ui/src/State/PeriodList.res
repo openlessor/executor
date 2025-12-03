@@ -1,7 +1,5 @@
 let deriveState = store => {
   let seen_units = Set.make()
-  Console.log("Config from store: ")
-  Console.log(store["config"])
   let config: PremiseContainer.Config.t = store["config"]
   let inventory = config.inventory->Belt.Array.copy
   inventory

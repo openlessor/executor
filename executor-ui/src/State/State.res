@@ -16,8 +16,6 @@ let makeServerStore = (
   switch window {
   | Some(_) => JsError.throwWithMessage("This function should never run in the client context")
   | None => {
-      Console.log("makeServerStore initialConfig:")
-      Console.log(initialExecutorConfig)
       let store = carve(({derived}) => {
         {
           "config": initialExecutorConfig,
@@ -35,7 +33,8 @@ let getServerStore = () => {
 }
 
 // This store needs to be isomorphic so that it's in the context of the user's session on the server
-// Otherwise, when we add more Premises I think that it will have the wrong state.
+// There may be a better way to do this, but for now I make main_store an option.
+// Then I use getStore in my components to get the store based on the execution context.
 let main_store = switch window {
 | Some(_) =>
   Some(
