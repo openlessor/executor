@@ -21,7 +21,7 @@ module Config = {
     )
 
     let json = await WebAPI.Response.json(response)
-    parseJSON(json->JSON.stringify)
+    Obj.magic(json)
   }
 
   module Client = {
@@ -76,19 +76,26 @@ module SSR = {
 // For server we need a "session store"
 // For client we can use the client side store
 let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410"
-let domExecutorConfig: Nullable.t<Config.t> = %raw(
-  "(typeof window !== 'undefined' ? window.__EXECUTOR_CONFIG__ ?? null : null)"
-)
-//let ctx = React.useContext(SSR.context)
+let window = switch globalThis["window"]->Nullable.toOption {
+| Some(window) => window
+| None => {"__EXECUTOR_CONFIG__": Nullable.null}
+}
+let domExecutorConfig = switch window["__EXECUTOR_CONFIG__"]->Nullable.toOption {
+| Some(config) => config
+| None => Nullable.null
+}
 let initialExecutorConfig: Config.t = switch Nullable.toOption(domExecutorConfig) {
 | Some(config) => config
 | None => SSR.empty
 }
 
 let state = source(initialExecutorConfig, async (_prev, set) => {
-  switch Js.globalThis["window"]->Nullable.toOption {
+  switch globalThis["window"]->Nullable.toOption {
   | Some(_) => Config.Client.subscribe(premiseId, set)
   // I want to query PostgreSQL here, but I have to separate out the database logic into a separate module first.
-  | None => set(await Config.fetch(premiseId))
+  | None => {
+      let config: Config.t = await Config.fetch(premiseId)
+      set(config)
+    }
   }
 })

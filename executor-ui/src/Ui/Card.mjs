@@ -5,13 +5,11 @@ import * as Stdlib_Option from "@rescript/runtime/lib/es6/Stdlib_Option.js";
 import * as JsxRuntime from "react/jsx-runtime";
 
 function Card(props) {
-  let className = props.className;
-  console.log("classes:" + Stdlib_Option.getOr(className, ""));
   return JsxRuntime.jsx("div", {
     children: props.children,
     className: Cx$ExecutorUi.cx([
       "m-1 p-1 bg-slate-100/70 border-hairline border-b-2 border-slate-200 shadow-sm shadow-slate-200/70 rounded-lg",
-      Stdlib_Option.getOr(className, "")
+      Stdlib_Option.getOr(props.className, "")
     ])
   });
 }

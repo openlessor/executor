@@ -11,8 +11,7 @@ async function fetch$1(premiseId) {
   let response = await fetch(base_url + `/config/` + premiseId, {
     method: "get"
   });
-  let json = await response.json();
-  return JSON.parse(JSON.stringify(json));
+  return await response.json();
 }
 
 let empty = {
@@ -32,7 +31,15 @@ function PremiseContainer$SSR$Provider(props) {
 
 let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410";
 
-let domExecutorConfig = ((typeof window !== 'undefined' ? window.__EXECUTOR_CONFIG__ ?? null : null));
+let window = globalThis.window;
+
+let window$1 = (window == null) ? ({
+    __EXECUTOR_CONFIG__: null
+  }) : window;
+
+let config = window$1.__EXECUTOR_CONFIG__;
+
+let domExecutorConfig = (config == null) ? null : config;
 
 let initialExecutorConfig = (domExecutorConfig == null) ? empty : domExecutorConfig;
 

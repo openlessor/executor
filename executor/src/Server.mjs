@@ -19,7 +19,6 @@ let html_placeholder = `<!--app-html-->`;
 
 let get = async (req, param) => {
   let url = new URL(req.url);
-  console.log(url);
   let headers = {
     "content-type": "text/html"
   };

@@ -7,10 +7,10 @@
       "in-source": true
     }
   ],
-  "bs-dev-dependencies": [
+  "dev-dependencies": [
     "@rescript/react"
   ],
-  "bs-dependencies": [
+  "dependencies": [
     "executor-ui",
     "executor"
   ],
