@@ -1,8 +1,11 @@
 ignoredBuiltDependencies:
-  - '@scarf/scarf'
+  - "@scarf/scarf"
   - esbuild
   - rescript
   - rescript-embed-lang
 
 onlyBuiltDependencies:
   - bun
+packages:
+  - "executor"
+  - "executor-ui"

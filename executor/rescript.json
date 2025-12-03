@@ -1,0 +1,34 @@
+{
+  "namespace": true,
+  "jsx": { "version": 4 },
+  "ppx-flags": ["rescript-embed-lang/ppx"],
+  "dependencies": [
+    "@rescript/webapi",
+    "tilia",
+    "@tilia/react",
+    "pgtyped-rescript",
+    "rescript-bun",
+    "executor-ui",
+    "@rescript/react"
+  ],
+  "pinned-dependencies": ["executor-ui"],
+  "compiler-flags": [
+    "-open Tilia",
+    "-open RescriptBun",
+    "-open RescriptBun.Globals",
+    "-open ExecutorUi"
+  ],
+  "uncurried": true,
+  "name": "executor",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    }
+  ],
+  "package-specs": {
+    "module": "esmodule",
+    "in-source": true
+  },
+  "suffix": ".mjs"
+}
