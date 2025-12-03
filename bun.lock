@@ -10,7 +10,11 @@
         "executor": "link:executor",
         "executor-ui": "link:executor-ui",
         "react": "19.2.0",
+        "rescript": "12.0.0",
         "rescript-embed-lang": "^0.5.5",
+      },
+      "devDependencies": {
+        "@rescript/core": "^1.6.1",
       },
     },
   },
@@ -18,9 +22,21 @@
     "rescript-embed-lang",
   ],
   "packages": {
+    "@rescript/core": ["@rescript/core@1.6.1", "", { "peerDependencies": { "rescript": ">=11.1.0" } }, "sha512-vyb5k90ck+65Fgui+5vCja/mUfzKaK3kOPT4Z6aAJdHLH1eljEi1zKhXroCiCtpNLSWp8k4ulh1bdB5WS0hvqA=="],
+
+    "@rescript/darwin-arm64": ["@rescript/darwin-arm64@12.0.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-N2zNj/Uh0zrg8BJGWxdQjYTDf0d2ZV8D+Vmct8xORaUcEZvAkvZb+xA66UxP2QGhWmATcHmBth7oJ48xpWz/Vg=="],
+
+    "@rescript/darwin-x64": ["@rescript/darwin-x64@12.0.0", "", { "os": "darwin", "cpu": "x64" }, "sha512-Qx/ao3Fl2lx3rF8mbRsyRK5HGAx8pmzyCdpSIAaUun5wLBnsJbNqgvqUH7VeI2TwaczHvcIljrYmnB7T5LJdFQ=="],
+
+    "@rescript/linux-arm64": ["@rescript/linux-arm64@12.0.0", "", { "os": "linux", "cpu": "arm64" }, "sha512-H65csj/0uqqjYy235m0h5CFxbrsas6RoVfjy5Xjf91Vyg/r5R/QIGQvhMtFvl4QojYsa1wXzXGcujwXh+S15xQ=="],
+
+    "@rescript/linux-x64": ["@rescript/linux-x64@12.0.0", "", { "os": "linux", "cpu": "x64" }, "sha512-WizQwyfMadxF096foZYU3I4zxcnNIc9XP7TP4fqdfe0v6OvQ5yHMI/uIfOsJ1GfNALce2UxvgS0pn67uxc55uA=="],
+
     "@rescript/react": ["@rescript/react@0.14.0", "", { "peerDependencies": { "react": ">=19.0.0", "react-dom": ">=19.0.0" } }, "sha512-ncOHWK7ujQmff+QMYKRmtwETvJVolzkwRpDa0MFenEXdUz9ZYywNbq+xH9F9RDQeSwC3/4s9JeUQVyTu4fMpHw=="],
 
     "@rescript/runtime": ["@rescript/runtime@12.0.0", "", {}, "sha512-STRbYHT5rnW61vWn2+Bdtj620XaprnoBSbPbkvOYZ+Zs8nfqtpBjhNw+JNpGQLXf73crk6MhxFGPxL2o5vb8TQ=="],
+
+    "@rescript/win32-x64": ["@rescript/win32-x64@12.0.0", "", { "os": "win32", "cpu": "x64" }, "sha512-kkqj4kQGbni5YglWoPm76M6hUuzKJHDEiLce5EZxW2Q4FrkS9dNRgm02c2Ck1cz/uKCS3m+ZoKQGIMMXTvo5Jw=="],
 
     "executor": ["executor@link:executor", {}],
 
@@ -29,6 +45,8 @@
     "react": ["react@19.2.0", "", {}, "sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ=="],
 
     "react-dom": ["react-dom@19.2.0", "", { "dependencies": { "scheduler": "^0.27.0" }, "peerDependencies": { "react": "^19.2.0" } }, "sha512-UlbRu4cAiGaIewkPyiRGJk0imDN2T3JjieT6spoL2UeSf5od4n5LB/mQ4ejmxhCFT1tYe8IvaFulzynWovsEFQ=="],
+
+    "rescript": ["rescript@12.0.0", "", { "dependencies": { "@rescript/runtime": "12.0.0" }, "optionalDependencies": { "@rescript/darwin-arm64": "12.0.0", "@rescript/darwin-x64": "12.0.0", "@rescript/linux-arm64": "12.0.0", "@rescript/linux-x64": "12.0.0", "@rescript/win32-x64": "12.0.0" }, "bin": { "bsc": "cli/bsc.js", "rescript": "cli/rescript.js", "bstracing": "cli/bstracing.js", "rescript-tools": "cli/rescript-tools.js", "rescript-legacy": "cli/rescript-legacy.js" } }, "sha512-DGcZI2L5W0c6FuEnspLE0MIe1UtTt1VsW/vQfzBFCEBxSsQtoA6YRHUB8Puwnb30PHqZiFK1ADhn6UgA8LWK0A=="],
 
     "rescript-embed-lang": ["rescript-embed-lang@0.5.5", "", {}, "sha512-XImHvK8bUsRmoalwlcVTHeUGN7frcs4PO5Dkj0xAcKkXC5HN2jepJ3sJbdVRhFyKIpzRt3w+MmaAbOi3Q085Dg=="],
 
