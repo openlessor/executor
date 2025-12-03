@@ -2,7 +2,7 @@
 
 import * as Belt_Array from "@rescript/runtime/lib/es6/Belt_Array.js";
 import * as App$ExecutorUi from "executor-ui/src/App/App.mjs";
-import * as State$ExecutorUi from "executor-ui/src/State/State.mjs";
+import * as Store$ExecutorUi from "executor-ui/src/State/Store.mjs";
 import * as Server from "react-dom/server";
 import * as JsxRuntime from "react/jsx-runtime";
 import * as Inventory$Executor from "./Database/Inventory.mjs";
@@ -16,17 +16,13 @@ function render(url) {
     let config = {
       inventory: inventory
     };
-    return State$ExecutorUi.makeServerStore(config, _storage => {
-      console.log("Configuration: ");
-      console.log(config);
-      return Promise.resolve({
-        executorConfig: config,
-        html: Server.renderToString(JsxRuntime.jsx(App$ExecutorUi.make, {
-          initialExecutorConfig: config,
-          serverUrl: appUrl
-        }))
-      });
-    });
+    return Store$ExecutorUi.makeServerStore(config, _storage => Promise.resolve({
+      executorConfig: config,
+      html: Server.renderToString(JsxRuntime.jsx(App$ExecutorUi.make, {
+        initialExecutorConfig: config,
+        serverUrl: appUrl
+      }))
+    }));
   }));
 }
 

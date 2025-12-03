@@ -12,11 +12,9 @@ let render = (url): promise<renderResult> => {
         Inventory.toInventoryItem,
       )
       let config: ExecutorUi.PremiseContainer.Config.t = {inventory: inventory}
-      ExecutorUi.State.makeServerStore(
+      ExecutorUi.Store.makeServerStore(
         config,
         _storage => {
-          Console.log("Configuration: ")
-          Console.log(config)
           Promise.resolve({
             html: ReactDOMServer.renderToString(
               <ExecutorUi.App initialExecutorConfig={config} serverUrl={appUrl} />,

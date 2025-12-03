@@ -7,7 +7,7 @@ import * as TiliaReact from "@tilia/react/src/TiliaReact.mjs";
 import * as Card$ExecutorUi from "../Ui/Card.mjs";
 import * as Cart$ExecutorUi from "../Cart/Cart.mjs";
 import * as Icon$ExecutorUi from "../Ui/Icon.mjs";
-import * as State$ExecutorUi from "../State/State.mjs";
+import * as Store$ExecutorUi from "../State/Store.mjs";
 import * as JsxRuntime from "react/jsx-runtime";
 import * as Container$ExecutorUi from "../Ui/Container.mjs";
 import * as InventoryList$ExecutorUi from "../InventoryList/InventoryList.mjs";
@@ -34,35 +34,23 @@ function removeFromCart(state, id) {
 }
 
 let make = TiliaReact.leaf(props => {
-  State$ExecutorUi.getStore();
+  Store$ExecutorUi.getStore();
   let today = new Date();
   today.setHours(0, 0, 0, 0);
   let match = React.useState(() => today);
   let openDate = match[0];
   let match$1 = React.useState(() => today);
   let closeDate = match$1[0];
-  React.useEffect(() => {
-    console.log("Open Date:");
-    console.log(openDate);
-    console.log("Close Date:");
-    console.log(closeDate);
-    return () => {};
-  }, [
+  React.useEffect(() => (() => {}), [
     openDate,
     closeDate
   ]);
   let match$2 = React.useReducer((state, action) => {
-    console.log("calling reducer");
-    console.log({
-      state: state,
-      action: action
-    });
-    let result;
-    result = action.TAG === "AddToCart" ? addToCart(state, action.id) : removeFromCart(state, action.id);
-    console.log({
-      nextState: result
-    });
-    return result;
+    if (action.TAG === "AddToCart") {
+      return addToCart(state, action.id);
+    } else {
+      return removeFromCart(state, action.id);
+    }
   }, {
     cart: [],
     selected_item: undefined,

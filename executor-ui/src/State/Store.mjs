@@ -7,44 +7,26 @@ import * as Nodeasync_hooks from "node:async_hooks";
 import * as PeriodList$ExecutorUi from "./PeriodList.mjs";
 import * as PremiseContainer$ExecutorUi from "./PremiseContainer.mjs";
 
-let match = Tilia.signal("month");
-
-let signal = match[0];
-
-let Unit_set = match[1];
-
-let Unit = {
-  defaultState: "month",
-  signal: signal,
-  set: Unit_set
-};
-
-let storage = new Nodeasync_hooks.AsyncLocalStorage();
-
 let window = globalThis.window;
+
+let storage = !(window == null) ? Primitive_option.some(new Nodeasync_hooks.AsyncLocalStorage()) : undefined;
 
 function makeServerStore(initialExecutorConfig, callback) {
   if (!(window == null)) {
     return Stdlib_JsError.throwWithMessage("This function should never run in the client context");
   }
-  console.log("makeServerStore initialConfig:");
-  console.log(initialExecutorConfig);
   let store = Tilia.carve(param => ({
     config: initialExecutorConfig,
     period_list: param.derived(PeriodList$ExecutorUi.deriveState),
-    unit: Tilia.lift(signal)
+    unit: Tilia.lift(PeriodList$ExecutorUi.Unit.signal)
   }));
   return storage.run(store, callback);
-}
-
-function getServerStore() {
-  return storage.getStore();
 }
 
 let main_store = !(window == null) ? Primitive_option.some(Tilia.carve(param => ({
     config: PremiseContainer$ExecutorUi.state,
     period_list: param.derived(PeriodList$ExecutorUi.deriveState),
-    unit: Tilia.lift(signal)
+    unit: Tilia.lift(PeriodList$ExecutorUi.Unit.signal)
   }))) : undefined;
 
 function getStore() {
@@ -55,15 +37,8 @@ function getStore() {
   }
 }
 
-let window$1 = (window == null) ? undefined : Primitive_option.some(window);
-
 export {
-  Unit,
-  storage,
-  window$1 as window,
-  makeServerStore,
-  getServerStore,
-  main_store,
   getStore,
+  makeServerStore,
 }
-/* match Not a pure module */
+/* window Not a pure module */

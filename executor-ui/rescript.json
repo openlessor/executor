@@ -3,7 +3,6 @@
   "jsx": { "version": 4 },
   "ppx-flags": ["rescript-embed-lang/ppx"],
   "dependencies": [
-    "executor",
     "@rescript/webapi",
     "@rescript/react",
     "tilia",

@@ -15,7 +15,7 @@ let removeFromCart = (state: Cart.t, id) => {
 
 @react.component
 let make = leaf(() => {
-  let main_store = State.getStore()
+  let main_store = Store.getStore()
   let unit = main_store["unit"]
   let today = Date.make()
   today->Date.setHoursMSMs(~hours=0, ~minutes=0, ~seconds=0, ~milliseconds=0)
@@ -23,10 +23,6 @@ let make = leaf(() => {
   let (openDate, setOpenDate) = React.useState(() => today)
   let (closeDate, setCloseDate) = React.useState(() => today)
   React.useEffect(() => {
-    Console.log("Open Date:")
-    Console.log(openDate)
-    Console.log("Close Date:")
-    Console.log(closeDate)
     Some(() => ())
   }, [openDate, closeDate])
 
@@ -49,13 +45,10 @@ let make = leaf(() => {
   }
 
   let (state, dispatch) = React.useReducer((state, action) => {
-    Console.log("calling reducer")
-    Console.log({"state": state, "action": action})
     let result = switch action {
     | Cart.DispatchContext.AddToCart({id}) => addToCart(state, id)
     | Cart.DispatchContext.RemoveFromCart({id}) => removeFromCart(state, id)
     }
-    Console.log({"nextState": result})
     result
   }, {items: [], selected_item: None, cart: []})
   let cartCount = Belt.Array.length(state.cart)

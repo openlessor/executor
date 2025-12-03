@@ -48,14 +48,9 @@ let state = Tilia.source(initialExecutorConfig, async (_prev, set) => {
   if (match == null) {
     return set(await fetch$1(premiseId));
   } else {
-    console.log("Connecting to WebSocket server");
     let url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + premiseId);
     url.protocol = "ws";
     let ws = new WebSocket(url.href);
-    ws.addEventListener("open", event => {
-      console.log("Connected to WebSocket");
-      console.log(event);
-    });
     ws.addEventListener("message", event => {
       let jsonR = event.data;
       let json = JSON.parse(jsonR);

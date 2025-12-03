@@ -43,7 +43,7 @@ function Pricing(props) {
       }),
       Belt_Array.map(props.period_list, map_period)
     ],
-    className: "rounded-lg border-1 border-slate-200/50 grid grid-cols-2 bg-white"
+    className: "w-full rounded-lg border-1 border-slate-200/50 grid grid-cols-2 bg-white"
   });
 }
 

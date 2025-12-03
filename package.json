@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "rescript clean",
+    "watch": "rescript watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,6 +25,8 @@
     "rescript-embed-lang"
   ],
   "devDependencies": {
-    "@rescript/core": "^1.6.1"
+    "@rescript/core": "^1.6.1",
+    "bun-plugin-tailwind": "^0.1.2",
+    "tailwindcss": "^4.1.17"
   }
 }

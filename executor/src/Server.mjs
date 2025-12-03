@@ -147,7 +147,6 @@ let server = Bun.serve({
     },
     open: ws => {
       let websocketUrl = ws["WebSocket.url"];
-      console.log("Client connected");
       let url;
       let exit = 0;
       if (websocketUrl == null) {
@@ -159,7 +158,6 @@ let server = Bun.serve({
         url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + PremiseContainer$ExecutorUi.premiseId);
       }
       let premise_id = url.searchParams.get("premise_id");
-      console.log("Subscribing to premise_id:" + premise_id);
       ws.subscribe(premise_id);
       Listener$Executor.withListener(premise_id, message => {
         let premise_id = message.channel;

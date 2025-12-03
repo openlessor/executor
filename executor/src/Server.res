@@ -80,7 +80,6 @@ let server = Bun.serveWithWebSocket({
   websocket: {
     open_: ws => {
       let websocketUrl: Nullable.t<'a> = ws->url
-      Console.log("Client connected")
       let url = switch websocketUrl {
       | Value(unwrapped) => WebAPI.URL.make(~url=unwrapped)
       | _ =>
@@ -89,7 +88,6 @@ let server = Bun.serveWithWebSocket({
         )
       }
       let premise_id = url.searchParams->WebAPI.URLSearchParams.get("premise_id")
-      Console.log("Subscribing to premise_id:" ++ premise_id)
       ws->Globals.WebSocket.subscribe(~topic=premise_id)
       let fetchPremiseAndPublish = (premise_id: string, payload) => {
         Connection.withClient(client => Promise.resolve(Premise.getConfig(~client, premise_id)))

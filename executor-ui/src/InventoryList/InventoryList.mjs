@@ -6,7 +6,7 @@ import * as TiliaReact from "@tilia/react/src/TiliaReact.mjs";
 import * as Card$ExecutorUi from "../Ui/Card.mjs";
 import * as Icon$ExecutorUi from "../Ui/Icon.mjs";
 import * as Primitive_object from "@rescript/runtime/lib/es6/Primitive_object.js";
-import * as State$ExecutorUi from "../State/State.mjs";
+import * as Store$ExecutorUi from "../State/Store.mjs";
 import * as JsxRuntime from "react/jsx-runtime";
 import * as InventoryItem$ExecutorUi from "../InventoryItem/InventoryItem.mjs";
 
@@ -23,7 +23,7 @@ let IntCmp = Belt_Id.MakeComparable({
 let make = TiliaReact.leaf(props => {
   let closeDate = props.closeDate;
   let openDate = props.openDate;
-  let main_store = State$ExecutorUi.getStore();
+  let main_store = Store$ExecutorUi.getStore();
   let config = main_store.config;
   let unit = main_store.unit;
   let items = config.inventory;

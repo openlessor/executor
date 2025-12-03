@@ -23,7 +23,7 @@ let make = (~period_list: period_list) => {
       </div>
     </React.Fragment>
   }
-  <div className="rounded-lg border-1 border-slate-200/50 grid grid-cols-2 bg-white">
+  <div className="w-full rounded-lg border-1 border-slate-200/50 grid grid-cols-2 bg-white">
     <div className="border-1 border-slate-200/50 bg-black/30 text-white p-1">
       <p className="font-bold text-left"> {"Unit"->React.string} </p>
     </div>

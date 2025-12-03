@@ -45,10 +45,9 @@ module StateContext = {
 let make = (~count) => {
   let cartState = React.useContext(StateContext.context)
   let _dispatch = React.useContext(DispatchContext.context)
-  let main_store = State.getStore()
+  let main_store = Store.getStore()
   let config: PremiseContainer.Config.t = main_store["config"]
   let _items = config.inventory
-  Console.log({"CartState": cartState})
 
   <h1 className="block font-bold align-middle text-gray-700 text-base m-2 text-3xl">
     <span className="m-2 align-middle text-3xl font-light">

@@ -26,15 +26,10 @@ module Config = {
 
   module Client = {
     let subscribe = (premise_id: string, set) => {
-      Console.log("Connecting to WebSocket server")
       let url = WebAPI.URL.make(~url=`${env["API_BASE_URL"]}/events?premise_id=${premise_id}`)
       url.protocol = "ws"
 
       let ws = WebAPI.WebSocket.make2(~url=url.href)
-      ws->WebAPI.WebSocket.addEventListener(Custom("open"), event => {
-        Console.log("Connected to WebSocket")
-        Console.log(event)
-      })
       ws->WebAPI.WebSocket.addEventListener(Message, event => {
         let jsonR: string = event.data->Option.getUnsafe
         let json = jsonR->JSON.parseOrThrow

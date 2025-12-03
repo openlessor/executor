@@ -2,8 +2,7 @@ let str = React.string
 
 @react.component
 let make = leaf(() => {
-  Console.log(State.main_store)
-  let main_store = State.getStore()
+  let main_store = Store.getStore()
   <div className="my-auto">
     {main_store["period_list"]
     ->Array.map(period => {
@@ -18,14 +17,14 @@ let make = leaf(() => {
             let inputEl = e->ReactEvent.Form.currentTarget
             if inputEl["checked"] == true {
               switch period["unit"] {
-              | "year" => State.Unit.set(#year)
-              | "month" => State.Unit.set(#month)
-              | "week" => State.Unit.set(#week)
-              | "day" => State.Unit.set(#day)
-              | "hour" => State.Unit.set(#hour)
-              | "minute" => State.Unit.set(#minute)
-              | "second" => State.Unit.set(#second)
-              | _ => State.Unit.set(State.Unit.defaultState)
+              | "year" => PeriodList.Unit.set(#year)
+              | "month" => PeriodList.Unit.set(#month)
+              | "week" => PeriodList.Unit.set(#week)
+              | "day" => PeriodList.Unit.set(#day)
+              | "hour" => PeriodList.Unit.set(#hour)
+              | "minute" => PeriodList.Unit.set(#minute)
+              | "second" => PeriodList.Unit.set(#second)
+              | _ => PeriodList.Unit.set(PeriodList.Unit.defaultState)
               }
             }
           }}
