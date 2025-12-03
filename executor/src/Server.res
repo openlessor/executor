@@ -86,7 +86,7 @@ let server = Bun.serveWithWebSocket({
       | Value(unwrapped) => WebAPI.URL.make(~url=unwrapped)
       | _ =>
         WebAPI.URL.make(
-          ~url=`${env["API_BASE_URL"]}/events?premise_id=${PremiseContainer.premiseId}`,
+          ~url=`${env["API_BASE_URL"]}/events?premise_id=${ExecutorUi.PremiseContainer.premiseId}`,
         )
       }
       let premise_id = url.searchParams->WebAPI.URLSearchParams.get("premise_id")

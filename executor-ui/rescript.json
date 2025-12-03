@@ -10,7 +10,12 @@
     "@tilia/react",
     "rescript-bun"
   ],
-  "compiler-flags": ["-open Tilia", "-open TiliaReact"],
+  "compiler-flags": [
+    "-open RescriptBun",
+    "-open RescriptBun.Globals",
+    "-open Tilia",
+    "-open TiliaReact"
+  ],
   "uncurried": true,
   "name": "executor-ui",
   "sources": [

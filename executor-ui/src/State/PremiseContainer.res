@@ -72,6 +72,9 @@ module SSR = {
 }
 
 // XXX: For now we hardcode the premise ID
+// We need to figure out how to scope this to the correct context in client and server environment.
+// For server we need a "session store"
+// For client we can use the client side store
 let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410"
 let domExecutorConfig: Nullable.t<Config.t> = %raw(
   "(typeof window !== 'undefined' ? window.__EXECUTOR_CONFIG__ ?? null : null)"
@@ -83,15 +86,9 @@ let initialExecutorConfig: Config.t = switch Nullable.toOption(domExecutorConfig
 }
 
 let state = source(initialExecutorConfig, async (_prev, set) => {
-  switch GlobalThis.window_->Nullable.toOption {
+  switch Js.globalThis["window"]->Nullable.toOption {
   | Some(_) => Config.Client.subscribe(premiseId, set)
-  | None => {
-      // Fetch config for now, until we contrive a better way to pass the value here.
-      let config = await Config.fetch(premiseId)
-      set(config)
-    }
+  // I want to query PostgreSQL here, but I have to separate out the database logic into a separate module first.
+  | None => set(await Config.fetch(premiseId))
   }
-  //setInterval(() => {
-  //  Config.fetch(premiseId)->Promise.then(config => Promise.resolve(set(config)))->ignore
-  //}, 5000)
 })

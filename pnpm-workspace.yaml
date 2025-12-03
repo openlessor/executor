@@ -1,12 +1,13 @@
-workspaces:
-  - "executor/*"
-  - "executor-ui/*"
-
 ignoredBuiltDependencies:
-  - "@scarf/scarf"
+  - '@scarf/scarf'
   - esbuild
   - rescript
   - rescript-embed-lang
 
 onlyBuiltDependencies:
+  - '@rolandpeelen/rewatch'
   - bun
+
+workspaces:
+  - executor/*
+  - executor-ui/*

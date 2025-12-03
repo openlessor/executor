@@ -16,9 +16,13 @@
     "executor": "link:executor",
     "executor-ui": "link:executor-ui",
     "react": "19.2.0",
+    "rescript": "12.0.0",
     "rescript-embed-lang": "^0.5.5"
   },
   "trustedDependencies": [
     "rescript-embed-lang"
-  ]
+  ],
+  "devDependencies": {
+    "@rescript/core": "^1.6.1"
+  }
 }

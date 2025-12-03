@@ -1,4 +1,4 @@
-type renderResult = {executorConfig: PremiseContainer.Config.t, html: string}
+type renderResult = {executorConfig: ExecutorUi.PremiseContainer.Config.t, html: string}
 
 let render = (url): promise<renderResult> => {
   let appUrl = RescriptReactRouter.dangerouslyGetInitialUrl(~serverUrlString=url, ())
@@ -12,14 +12,14 @@ let render = (url): promise<renderResult> => {
       Inventory.getInventoryList(~client, premiseId)
     })
     ->Promise.then(inventoryRows => {
-      let inventory: array<InventoryItem.t> = Belt.Array.map(
+      let inventory: array<ExecutorUi.InventoryItem.t> = Belt.Array.map(
         inventoryRows,
         Inventory.toInventoryItem,
       )
-      let config: PremiseContainer.Config.t = {inventory: inventory}
+      let config: ExecutorUi.PremiseContainer.Config.t = {inventory: inventory}
       Promise.resolve({
         html: ReactDOMServer.renderToString(
-          <App initialExecutorConfig={config} serverUrl={appUrl} />,
+          <ExecutorUi.App initialExecutorConfig={config} serverUrl={appUrl} />,
         ),
         executorConfig: config,
       })

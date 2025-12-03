@@ -11,12 +11,10 @@
     "executor-ui",
     "@rescript/react"
   ],
-  "pinned-dependencies": ["executor-ui"],
   "compiler-flags": [
     "-open Tilia",
     "-open RescriptBun",
-    "-open RescriptBun.Globals",
-    "-open ExecutorUi"
+    "-open RescriptBun.Globals"
   ],
   "uncurried": true,
   "name": "executor",

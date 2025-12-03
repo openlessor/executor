@@ -6,7 +6,7 @@ let getPremise = async (~client, premise_id: string) => {
   result->Nullable.fromOption
 }
 
-let getConfig = async (~client, premise_id: string): PremiseContainer.Config.t => {
+let getConfig = async (~client, premise_id: string): ExecutorUi.PremiseContainer.Config.t => {
   //let premise = Nullable.toOption(await getPremise(~client, premise_id))->Belt.Option.getUnsafe
   let inventoryRows = await Inventory.getInventoryList(~client, premise_id)
   let inventory: array<ExecutorUi.InventoryItem.t> = Belt.Array.map(

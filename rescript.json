@@ -1,0 +1,23 @@
+{
+  "name": "executor-full-stack",
+  "sources": [],
+  "package-specs": [
+    {
+      "module": "esmodule",
+      "in-source": true
+    }
+  ],
+  "bs-dev-dependencies": [
+    "@rescript/react"
+  ],
+  "bs-dependencies": [
+    "executor-ui",
+    "executor"
+  ],
+  "suffix": ".mjs",
+  "jsx": {
+    "version": 4,
+    "mode": "automatic"
+  },
+  "pinned-dependencies": ["executor-ui", "executor"]
+}
