@@ -1,3 +1,5 @@
+executor/lib
+executor-ui/lib
 public
 .env
 pgtyped.config.json
