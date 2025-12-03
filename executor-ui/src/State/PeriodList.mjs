@@ -5,6 +5,8 @@ import * as Primitive_option from "@rescript/runtime/lib/es6/Primitive_option.js
 
 function deriveState(store) {
   let seen_units = new Set();
+  console.log("Config from store: ");
+  console.log(store.config);
   let config = store.config;
   let inventory = config.inventory.slice(0);
   return Belt_Array.flatMap(inventory, inv => inv.period_list.map(pl => {

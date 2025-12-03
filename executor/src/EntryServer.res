@@ -6,23 +6,25 @@ let render = (url): promise<renderResult> => {
   let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410"
 
   Connection.withClient(client =>
-    Premise.getPremise(~client, premiseId)
-    ->Promise.then(result => {
-      let premise = Nullable.toOption(result)->Belt.Option.getUnsafe
-      Inventory.getInventoryList(~client, premiseId)
-    })
-    ->Promise.then(inventoryRows => {
+    Inventory.getInventoryList(~client, premiseId)->Promise.then(inventoryRows => {
       let inventory: array<ExecutorUi.InventoryItem.t> = Belt.Array.map(
         inventoryRows,
         Inventory.toInventoryItem,
       )
       let config: ExecutorUi.PremiseContainer.Config.t = {inventory: inventory}
-      Promise.resolve({
-        html: ReactDOMServer.renderToString(
-          <ExecutorUi.App initialExecutorConfig={config} serverUrl={appUrl} />,
-        ),
-        executorConfig: config,
-      })
+      ExecutorUi.State.makeServerStore(
+        config,
+        _storage => {
+          Console.log("Configuration: ")
+          Console.log(config)
+          Promise.resolve({
+            html: ReactDOMServer.renderToString(
+              <ExecutorUi.App initialExecutorConfig={config} serverUrl={appUrl} />,
+            ),
+            executorConfig: config,
+          })
+        },
+      )
     })
   )
 }

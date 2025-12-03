@@ -2,7 +2,7 @@
 
 import * as Belt_Array from "@rescript/runtime/lib/es6/Belt_Array.js";
 import * as App$ExecutorUi from "executor-ui/src/App/App.mjs";
-import * as Premise$Executor from "./Database/Premise.mjs";
+import * as State$ExecutorUi from "executor-ui/src/State/State.mjs";
 import * as Server from "react-dom/server";
 import * as JsxRuntime from "react/jsx-runtime";
 import * as Inventory$Executor from "./Database/Inventory.mjs";
@@ -11,18 +11,21 @@ import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mj
 
 function render(url) {
   let appUrl = RescriptReactRouter.dangerouslyGetInitialUrl(url, undefined);
-  let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410";
-  return Connection$Executor.withClient(client => Premise$Executor.getPremise(client, premiseId).then(result => Inventory$Executor.getInventoryList(client, premiseId)).then(inventoryRows => {
+  return Connection$Executor.withClient(client => Inventory$Executor.getInventoryList(client, "a55351b1-1b78-4b6c-bd13-6859dc9ad410").then(inventoryRows => {
     let inventory = Belt_Array.map(inventoryRows, Inventory$Executor.toInventoryItem);
     let config = {
       inventory: inventory
     };
-    return Promise.resolve({
-      executorConfig: config,
-      html: Server.renderToString(JsxRuntime.jsx(App$ExecutorUi.make, {
-        initialExecutorConfig: config,
-        serverUrl: appUrl
-      }))
+    return State$ExecutorUi.makeServerStore(config, _storage => {
+      console.log("Configuration: ");
+      console.log(config);
+      return Promise.resolve({
+        executorConfig: config,
+        html: Server.renderToString(JsxRuntime.jsx(App$ExecutorUi.make, {
+          initialExecutorConfig: config,
+          serverUrl: appUrl
+        }))
+      });
     });
   }));
 }
