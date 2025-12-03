@@ -41,11 +41,19 @@ function getServerStore() {
   return storage.getStore();
 }
 
-let main_store = (window == null) ? storage.getStore() : Tilia.carve(param => ({
+let main_store = !(window == null) ? Primitive_option.some(Tilia.carve(param => ({
     config: PremiseContainer$ExecutorUi.state,
     period_list: param.derived(PeriodList$ExecutorUi.deriveState),
     unit: Tilia.lift(signal)
-  }));
+  }))) : undefined;
+
+function getStore() {
+  if (main_store !== undefined) {
+    return Primitive_option.valFromOption(main_store);
+  } else {
+    return storage.getStore();
+  }
+}
 
 let window$1 = (window == null) ? undefined : Primitive_option.some(window);
 
@@ -56,5 +64,6 @@ export {
   makeServerStore,
   getServerStore,
   main_store,
+  getStore,
 }
 /* match Not a pure module */

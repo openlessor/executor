@@ -1,4 +1,3 @@
-open State
 let str = React.string
 
 module IntCmp = Belt.Id.MakeComparable({
@@ -8,6 +7,7 @@ module IntCmp = Belt.Id.MakeComparable({
 
 @react.component
 let make = leaf((~openDate: option<Date.t>=?, ~closeDate: option<Date.t>=?) => {
+  let main_store = State.getStore()
   let config: PremiseContainer.Config.t = main_store["config"]
   let unit: State.Unit.t = main_store["unit"]
   let items = config.inventory

@@ -1,4 +1,3 @@
-open State
 let str = React.string
 
 let addToCart = (state: Cart.t, id) => {
@@ -16,6 +15,7 @@ let removeFromCart = (state: Cart.t, id) => {
 
 @react.component
 let make = leaf(() => {
+  let main_store = State.getStore()
   let unit = main_store["unit"]
   let today = Date.make()
   today->Date.setHoursMSMs(~hours=0, ~minutes=0, ~seconds=0, ~milliseconds=0)

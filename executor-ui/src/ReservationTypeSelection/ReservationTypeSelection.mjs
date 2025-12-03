@@ -8,53 +8,57 @@ function str(prim) {
   return prim;
 }
 
-let make = TiliaReact.leaf(props => JsxRuntime.jsx("div", {
-  children: State$ExecutorUi.main_store.period_list.map(period => JsxRuntime.jsxs("label", {
-    children: [
-      JsxRuntime.jsx("input", {
-        className: "m-1",
-        id: `type_` + period.unit,
-        autoComplete: "off",
-        checked: State$ExecutorUi.main_store.unit === period.unit,
-        name: "type",
-        type: "radio",
-        value: "hour",
-        onChange: e => {
-          let inputEl = e.currentTarget;
-          if (inputEl.checked !== true) {
-            return;
+let make = TiliaReact.leaf(props => {
+  console.log(State$ExecutorUi.main_store);
+  let main_store = State$ExecutorUi.getStore();
+  return JsxRuntime.jsx("div", {
+    children: main_store.period_list.map(period => JsxRuntime.jsxs("label", {
+      children: [
+        JsxRuntime.jsx("input", {
+          className: "m-1",
+          id: `type_` + period.unit,
+          autoComplete: "off",
+          checked: main_store.unit === period.unit,
+          name: "type",
+          type: "radio",
+          value: "hour",
+          onChange: e => {
+            let inputEl = e.currentTarget;
+            if (inputEl.checked !== true) {
+              return;
+            }
+            let match = period.unit;
+            switch (match) {
+              case "day" :
+                return State$ExecutorUi.Unit.set("day");
+              case "hour" :
+                return State$ExecutorUi.Unit.set("hour");
+              case "minute" :
+                return State$ExecutorUi.Unit.set("minute");
+              case "month" :
+                return State$ExecutorUi.Unit.set("month");
+              case "second" :
+                return State$ExecutorUi.Unit.set("second");
+              case "week" :
+                return State$ExecutorUi.Unit.set("week");
+              case "year" :
+                return State$ExecutorUi.Unit.set("year");
+              default:
+                return State$ExecutorUi.Unit.set(State$ExecutorUi.Unit.defaultState);
+            }
           }
-          let match = period.unit;
-          switch (match) {
-            case "day" :
-              return State$ExecutorUi.Unit.set("day");
-            case "hour" :
-              return State$ExecutorUi.Unit.set("hour");
-            case "minute" :
-              return State$ExecutorUi.Unit.set("minute");
-            case "month" :
-              return State$ExecutorUi.Unit.set("month");
-            case "second" :
-              return State$ExecutorUi.Unit.set("second");
-            case "week" :
-              return State$ExecutorUi.Unit.set("week");
-            case "year" :
-              return State$ExecutorUi.Unit.set("year");
-            default:
-              return State$ExecutorUi.Unit.set(State$ExecutorUi.Unit.defaultState);
-          }
-        }
-      }),
-      JsxRuntime.jsx("span", {
-        children: period.label,
-        className: "p-1 pl-0"
-      })
-    ],
-    className: "block",
-    htmlFor: `type_` + period.unit
-  }, period.unit)),
-  className: "my-auto"
-}));
+        }),
+        JsxRuntime.jsx("span", {
+          children: period.label,
+          className: "p-1 pl-0"
+        })
+      ],
+      className: "block",
+      htmlFor: `type_` + period.unit
+    }, period.unit)),
+    className: "my-auto"
+  });
+});
 
 export {
   str,

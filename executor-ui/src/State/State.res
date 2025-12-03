@@ -18,10 +18,10 @@ let makeServerStore = (
   | None => {
       Console.log("makeServerStore initialConfig:")
       Console.log(initialExecutorConfig)
-      let store = carved(({derived}) => {
+      let store = carve(({derived}) => {
         {
           "config": initialExecutorConfig,
-          "period_list": ExecutorUi.PeriodList.deriveState(store),
+          "period_list": derived(ExecutorUi.PeriodList.deriveState),
           "unit": Unit.signal->lift,
         }
       })
@@ -38,12 +38,20 @@ let getServerStore = () => {
 // Otherwise, when we add more Premises I think that it will have the wrong state.
 let main_store = switch window {
 | Some(_) =>
-  carve(({derived}) => {
-    {
-      "config": PremiseContainer.state,
-      "period_list": derived(PeriodList.deriveState),
-      "unit": Unit.signal->lift,
-    }
-  })
-| None => getServerStore()
+  Some(
+    carve(({derived}) => {
+      {
+        "config": PremiseContainer.state,
+        "period_list": derived(PeriodList.deriveState),
+        "unit": Unit.signal->lift,
+      }
+    }),
+  )
+| None => None
 }
+
+let getStore = () =>
+  switch main_store {
+  | Some(main_store) => main_store
+  | None => getServerStore()
+  }

@@ -1,8 +1,9 @@
-open State
 let str = React.string
 
 @react.component
 let make = leaf(() => {
+  Console.log(State.main_store)
+  let main_store = State.getStore()
   <div className="my-auto">
     {main_store["period_list"]
     ->Array.map(period => {

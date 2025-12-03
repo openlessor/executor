@@ -68,6 +68,7 @@ let StateContext = {
 function Cart(props) {
   let cartState = React.useContext(context$1);
   React.useContext(context);
+  State$ExecutorUi.getStore();
   console.log({
     CartState: cartState
   });

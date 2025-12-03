@@ -23,8 +23,9 @@ let IntCmp = Belt_Id.MakeComparable({
 let make = TiliaReact.leaf(props => {
   let closeDate = props.closeDate;
   let openDate = props.openDate;
-  let config = State$ExecutorUi.main_store.config;
-  let unit = State$ExecutorUi.main_store.unit;
+  let main_store = State$ExecutorUi.getStore();
+  let config = main_store.config;
+  let unit = main_store.unit;
   let items = config.inventory;
   let filterType = "all";
   let today = new Date();

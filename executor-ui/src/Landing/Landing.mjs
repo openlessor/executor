@@ -34,6 +34,7 @@ function removeFromCart(state, id) {
 }
 
 let make = TiliaReact.leaf(props => {
+  State$ExecutorUi.getStore();
   let today = new Date();
   today.setHours(0, 0, 0, 0);
   let match = React.useState(() => today);
