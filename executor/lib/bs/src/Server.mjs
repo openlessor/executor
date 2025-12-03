@@ -22,7 +22,7 @@ let get = async (req, param) => {
   let headers = {
     "content-type": "text/html"
   };
-  let f = Bun.file("../../public/index.html");
+  let f = Bun.file("../public/index.html");
   let template = await f.text();
   let match = await EntryServer$Executor.render(url.href);
   let stateJson = JSON.stringify(match.executorConfig);
@@ -117,7 +117,7 @@ let server = Bun.serve({
         Stdlib_JsError.throwWithMessage("Error");
       }
     }
-    let filePath = `../../public/` + url.pathname;
+    let filePath = `../public/` + url.pathname;
     let file = Bun.file(filePath);
     if (await file.exists()) {
       return new Response(file);

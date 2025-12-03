@@ -9,7 +9,7 @@ module Route = {
       async (req: Bun.BunRequest.t, _) => {
         let url = WebAPI.URL.make(~url=req->Request.url)
         let headers = HeadersInit.FromDict(dict{"content-type": "text/html"})
-        let f = Bun.file("../../public/index.html")
+        let f = Bun.file("../public/index.html")
         let template = await f->Bun.BunFile.text
         let {html: appHtml, executorConfig} = await EntryServer.render(url.href)
         let stateJson = executorConfig->JSON.stringifyAny->Option.getUnsafe
@@ -122,7 +122,7 @@ let server = Bun.serveWithWebSocket({
       }
       ()
     }
-    let filePath = `../../public/${url.pathname}`
+    let filePath = `../public/${url.pathname}`
     let file = Bun.file(filePath)
     switch await file->Bun.BunFile.exists {
     | true => Response.makeFromFile(file)

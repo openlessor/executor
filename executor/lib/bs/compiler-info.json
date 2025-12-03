@@ -1,8 +1,8 @@
 {
   "version": "12.0.0",
-  "bsc_path": "/Users/briankaplan/dev-current/executor-full-stack/executor/node_modules/@rescript/darwin-arm64/bin/bsc.exe",
+  "bsc_path": "/Users/briankaplan/dev-current/executor-full-stack/node_modules/.pnpm/@rescript+darwin-arm64@12.0.0/node_modules/@rescript/darwin-arm64/bin/bsc.exe",
   "bsc_hash": "b9ee425ca842260e47bee75b5d05fce7c14e3fa37f1206b07efd3c889bad3b33",
   "rescript_config_hash": "8b115b216d80de59ab288aefca307037275c3b03e70736a6e1fd084d0a4cb4c5",
-  "runtime_path": "/Users/briankaplan/dev-current/executor-full-stack/executor/node_modules/@rescript/runtime",
-  "generated_at": "1764729184001"
+  "runtime_path": "/Users/briankaplan/dev-current/executor-full-stack/node_modules/.pnpm/@rescript+runtime@12.0.0/node_modules/@rescript/runtime",
+  "generated_at": "1764731254003"
 }

@@ -20,103 +20,91 @@ let html_placeholder = `<!--app-html-->`;
 let get = async (req, param) => {
   let url = new URL(req.url);
   let headers = {
-    "content-type": "text/html",
+    "content-type": "text/html"
   };
-  console.log();
-  let f = Bun.file(import.meta.dir + "/../../public/index.html");
+  let f = Bun.file("../public/index.html");
   let template = await f.text();
   let match = await EntryServer$Executor.render(url.href);
   let stateJson = JSON.stringify(match.executorConfig);
-  let html = template
-    .replace(html_placeholder, match.html)
-    .replace(
-      "</body>",
-      `<script>window.__EXECUTOR_CONFIG__=` + stateJson + `;</script></body>`,
-    );
+  let html = template.replace(html_placeholder, match.html).replace("</body>", `<script>window.__EXECUTOR_CONFIG__=` + stateJson + `;</script></body>`);
   return new Response(html, {
     status: 200,
-    headers: headers,
+    headers: headers
   });
 };
 
 let handler_GET = get;
 
 let handler = {
-  GET: handler_GET,
+  GET: handler_GET
 };
 
 let Frontend = {
   html_placeholder: html_placeholder,
   get: get,
-  handler: handler,
+  handler: handler
 };
 
 let get$1 = async (req, param) => {
   let headers = new Headers();
   headers.set("content-type", "application/json");
-  let response = await Connection$Executor.withClient(async (client) => {
+  let response = await Connection$Executor.withClient(async client => {
     let premise_id = req.params["premise_id"];
     let premise = await Premise$Executor.getPremise(client, premise_id);
-    let inventory = await Inventory$Executor.getInventoryList(
-      client,
-      premise_id,
-    );
+    let inventory = await Inventory$Executor.getInventoryList(client, premise_id);
     return {
       inventory: inventory,
-      premise: premise,
+      premise: premise
     };
   });
   return Response.json(response, {
     status: 200,
-    headers: Primitive_option.some(headers),
+    headers: Primitive_option.some(headers)
   });
 };
 
 let handler_GET$1 = get$1;
 
 let handler$1 = {
-  GET: handler_GET$1,
+  GET: handler_GET$1
 };
 
 let Config = {
   get: get$1,
-  handler: handler$1,
+  handler: handler$1
 };
 
 let post = async (req, param) => {
   let premise_id = req.params["premise_id"];
-  await Connection$Executor.withClient(
-    async (client) =>
-      await MockData$Executor.createMockData(client, premise_id),
-  );
+  await Connection$Executor.withClient(async client => await MockData$Executor.createMockData(client, premise_id));
   return new Response("");
 };
 
 let handler_POST = post;
 
 let handler$2 = {
-  POST: handler_POST,
+  POST: handler_POST
 };
 
 let Inventory = {
   post: post,
-  handler: handler$2,
+  handler: handler$2
 };
 
 let Route = {
   getPremiseId: getPremiseId,
   Frontend: Frontend,
   Config: Config,
-  Inventory: Inventory,
+  Inventory: Inventory
 };
 
 let connections = Tilia.tilia({
-  subscriptions: undefined,
+  subscriptions: undefined
 });
 
 let Clients = {
   subscriptions: undefined,
-  connections: connections,
+  connections: connections
 };
 
 let server = Bun.serve({
@@ -129,7 +117,7 @@ let server = Bun.serve({
         Stdlib_JsError.throwWithMessage("Error");
       }
     }
-    let filePath = `public/` + url.pathname;
+    let filePath = `../public/` + url.pathname;
     let file = Bun.file(filePath);
     if (await file.exists()) {
       return new Response(file);
@@ -140,15 +128,24 @@ let server = Bun.serve({
     }
   },
   routes: Object.fromEntries([
-    ["/", handler],
-    ["/config/:premise_id", handler$1],
-    ["/inventory/:premise_id", handler$2],
+    [
+      "/",
+      handler
+    ],
+    [
+      "/config/:premise_id",
+      handler$1
+    ],
+    [
+      "/inventory/:premise_id",
+      handler$2
+    ]
   ]),
   websocket: {
     message: (_ws, message) => {
       console.log("Message received:" + message);
     },
-    open: (ws) => {
+    open: ws => {
       let websocketUrl = ws["WebSocket.url"];
       console.log("Client connected");
       let url;
@@ -159,20 +156,14 @@ let server = Bun.serve({
         url = new URL(websocketUrl);
       }
       if (exit === 1) {
-        url = new URL(
-          process.env.API_BASE_URL +
-            `/events?premise_id=` +
-            PremiseContainer$ExecutorUi.premiseId,
-        );
+        url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + PremiseContainer$ExecutorUi.premiseId);
       }
       let premise_id = url.searchParams.get("premise_id");
       console.log("Subscribing to premise_id:" + premise_id);
       ws.subscribe(premise_id);
-      Listener$Executor.withListener(premise_id, (message) => {
+      Listener$Executor.withListener(premise_id, message => {
         let premise_id = message.channel;
-        Connection$Executor.withClient((client) =>
-          Promise.resolve(Premise$Executor.getConfig(client, premise_id)),
-        ).then((config) => {
+        Connection$Executor.withClient(client => Promise.resolve(Premise$Executor.getConfig(client, premise_id))).then(config => {
           console.log("Got config");
           ws.publish(premise_id, JSON.stringify(config));
           return config;
@@ -181,8 +172,8 @@ let server = Bun.serve({
     },
     close: (_ws, param, param$1) => {
       console.log("Client disconnected");
-    },
-  },
+    }
+  }
 });
 
 let port = server.port.toString();
@@ -191,5 +182,11 @@ let hostName = server.hostname;
 
 console.log(`Server listening on http://` + hostName + `:` + port + `!`);
 
-export { Route, Clients, server, port, hostName };
+export {
+  Route,
+  Clients,
+  server,
+  port,
+  hostName,
+}
 /* connections Not a pure module */
