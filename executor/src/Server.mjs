@@ -19,12 +19,13 @@ let html_placeholder = `<!--app-html-->`;
 
 let get = async (req, param) => {
   let url = new URL(req.url);
+  console.log(url);
   let headers = {
     "content-type": "text/html"
   };
   let f = Bun.file("../public/index.html");
   let template = await f.text();
-  let match = await EntryServer$Executor.render(url.href);
+  let match = await EntryServer$Executor.render(url.pathname);
   let stateJson = JSON.stringify(match.executorConfig);
   let html = template.replace(html_placeholder, match.html).replace("</body>", `<script>window.__EXECUTOR_CONFIG__=` + stateJson + `;</script></body>`);
   return new Response(html, {

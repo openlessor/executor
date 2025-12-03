@@ -1,4 +1,4 @@
-/** Types generated for queries found in "server/src/MockData/MockData.res" */
+/** Types generated for queries found in "src/MockData/MockData.res" */
 open PgTyped
 
 

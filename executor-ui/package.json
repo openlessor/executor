@@ -5,7 +5,6 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development node server.mjs",
-    "build": "rescript build && vite build --outDir dist/client && vite build --ssr src/EntryServer.mjs --outDir dist/server",
     "preview": "NODE_ENV=production node server.mjs",
     "start": "NODE_ENV=production node server.mjs",
     "clean": "rescript clean",

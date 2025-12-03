@@ -1,5 +1,3 @@
-@@directive(`"use client"`)
-
 module Unit = {
   type t = [#second | #minute | #hour | #day | #week | #month | #year]
   // XXX: This default state should come from the server

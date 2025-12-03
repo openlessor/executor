@@ -1,5 +1,3 @@
-@@directive(`"use client"`)
-
 module GlobalThis = {
   @scope("globalThis") @val
   external window_: Nullable.t<WebAPI.DOMAPI.window> = "window"
@@ -87,11 +85,12 @@ let initialExecutorConfig: Config.t = switch Nullable.toOption(domExecutorConfig
 let state = source(initialExecutorConfig, async (_prev, set) => {
   switch GlobalThis.window_->Nullable.toOption {
   | Some(_) => Config.Client.subscribe(premiseId, set)
-  | None => Console.log("Not connecting to WebSocket")
+  | None => {
+      // Fetch config for now, until we contrive a better way to pass the value here.
+      let config = await Config.fetch(premiseId)
+      set(config)
+    }
   }
-  // This shouldn't fetch on the server, it should just call the database.
-  //let config = await Config.fetch(premiseId)
-  //set(config)
   //setInterval(() => {
   //  Config.fetch(premiseId)->Promise.then(config => Promise.resolve(set(config)))->ignore
   //}, 5000)

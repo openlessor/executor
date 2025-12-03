@@ -8,10 +8,11 @@ module Route = {
     let get = Bun.Handler(
       async (req: Bun.BunRequest.t, _) => {
         let url = WebAPI.URL.make(~url=req->Request.url)
+        Js.Console.log(url)
         let headers = HeadersInit.FromDict(dict{"content-type": "text/html"})
         let f = Bun.file("../public/index.html")
         let template = await f->Bun.BunFile.text
-        let {html: appHtml, executorConfig} = await EntryServer.render(url.href)
+        let {html: appHtml, executorConfig} = await EntryServer.render(url.pathname)
         let stateJson = executorConfig->JSON.stringifyAny->Option.getUnsafe
         let html =
           template

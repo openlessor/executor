@@ -10,7 +10,7 @@ let getInventoryList = async (~client, premise_id: string) => {
   result
 }
 
-let toInventoryItem = (row: Inventory__sql.query1Result): InventoryItem.t => {
+let toInventoryItem = (row: Inventory__sql.query1Result): ExecutorUi.InventoryItem.t => {
   let period_list: Pricing.period_list = switch row.period_list {
   | Some(periods) => Obj.magic(periods)
   | None => []

@@ -1,4 +1,4 @@
-/** Types generated for queries found in "server/src/Database/Inventory.res" */
+/** Types generated for queries found in "src/Database/Inventory.res" */
 open PgTyped
 
 

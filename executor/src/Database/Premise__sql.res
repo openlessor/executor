@@ -1,4 +1,4 @@
-/** Types generated for queries found in "server/src/Database/Premise.res" */
+/** Types generated for queries found in "src/Database/Premise.res" */
 open PgTyped
 
 

@@ -1,5 +1,3 @@
-@@directive(`"use client"`)
-
 open State
 let str = React.string
 

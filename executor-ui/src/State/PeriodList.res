@@ -1,5 +1,3 @@
-// I had trouble deriving the state in TiliaJS, so as a woarkaround I just pass the value directly into this function.
-
 let deriveState = store => {
   let seen_units = Set.make()
   let config: PremiseContainer.Config.t = store["config"]
