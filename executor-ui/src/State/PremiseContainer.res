@@ -81,16 +81,12 @@ let domExecutorConfig = switch window["__EXECUTOR_CONFIG__"]->Nullable.toOption 
 }
 let initialExecutorConfig: Config.t = switch Nullable.toOption(domExecutorConfig) {
 | Some(config) => config
-| None => SSR.empty
+| None => SSR.empty // This value is actually not going to be used on the server
 }
 
 let state = source(initialExecutorConfig, async (_prev, set) => {
   switch globalThis["window"]->Nullable.toOption {
   | Some(_) => Config.Client.subscribe(premiseId, set)
-  // I want to query PostgreSQL here, but I have to separate out the database logic into a separate module first.
-  | None => {
-      let config: Config.t = await Config.fetch(premiseId)
-      set(config)
-    }
+  | None => () // PremiseContainer.state is only used on the client
   }
 })

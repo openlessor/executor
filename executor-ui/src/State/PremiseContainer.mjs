@@ -45,9 +45,7 @@ let initialExecutorConfig = (domExecutorConfig == null) ? empty : domExecutorCon
 
 let state = Tilia.source(initialExecutorConfig, async (_prev, set) => {
   let match = globalThis.window;
-  if (match == null) {
-    return set(await fetch$1(premiseId));
-  } else {
+  if (!(match == null)) {
     let url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + premiseId);
     url.protocol = "ws";
     let ws = new WebSocket(url.href);
