@@ -15,17 +15,23 @@ function render(url) {
   let appUrl = RescriptReactRouter.dangerouslyGetInitialUrl(url, undefined);
   let root_route = Belt_List.length(appUrl.path) === 0 ? "/" : Belt_List.head(appUrl.path);
   console.log("root route:" + root_route);
-  return Connection$Executor.withClient(client => Route$Executor.getMatchingPremise(client, root_route).then(premise_id => Inventory$Executor.getInventoryList(client, premise_id).then(inventoryRows => {
+  return Connection$Executor.withClient(client => Route$Executor.getMatchingPremise(client, root_route).then(premise => Inventory$Executor.getInventoryList(client, premise.id).then(inventoryRows => {
     let inventory = Belt_Array.map(inventoryRows, Inventory$Executor.toInventoryItem);
     let config_appUrl = appUrl.path;
+    let config_premise = {
+      id: premise.id,
+      name: premise.name,
+      description: premise.description,
+      updated_at: premise.updated_at
+    };
     let config = {
       inventory: inventory,
-      appUrl: config_appUrl
+      appUrl: config_appUrl,
+      premise: config_premise
     };
     return Store$ExecutorUi.makeServerStore(config, param => Promise.resolve({
       executorConfig: config,
       html: Server.renderToString(JsxRuntime.jsx(App$ExecutorUi.make, {
-        initialExecutorConfig: config,
         serverUrl: appUrl
       }))
     }));

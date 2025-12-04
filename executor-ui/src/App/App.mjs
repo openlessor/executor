@@ -5,7 +5,6 @@ import * as JsxRuntime from "react/jsx-runtime";
 import * as Landing$ExecutorUi from "../Landing/Landing.mjs";
 import * as NotFound$ExecutorUi from "../NotFound/NotFound.mjs";
 import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mjs";
-import * as PremiseContainer$ExecutorUi from "../State/PremiseContainer.mjs";
 
 function getActiveId(url) {
   let match = url.path;
@@ -22,7 +21,6 @@ function getActiveId(url) {
 }
 
 function App(props) {
-  let initialExecutorConfig = props.initialExecutorConfig;
   let initialUrl = RescriptReactRouter.useUrl(props.serverUrl, undefined);
   let match = React.useState(() => initialUrl);
   let setUrl = match[1];
@@ -30,12 +28,10 @@ function App(props) {
     let watcherID = RescriptReactRouter.watchUrl(newUrl => setUrl(param => newUrl));
     return () => RescriptReactRouter.unwatchUrl(watcherID);
   }, []);
-  let executorConfigValue = initialExecutorConfig !== undefined ? initialExecutorConfig : PremiseContainer$ExecutorUi.SSR.empty;
   let match$1 = match[0].path;
   let tmp;
   tmp = match$1 !== 0 && match$1.hd !== "item" ? JsxRuntime.jsx(NotFound$ExecutorUi.make, {}) : JsxRuntime.jsx(Landing$ExecutorUi.make, {});
-  return JsxRuntime.jsx(PremiseContainer$ExecutorUi.SSR.Provider.make, {
-    value: executorConfigValue,
+  return JsxRuntime.jsx(JsxRuntime.Fragment, {
     children: tmp
   });
 }

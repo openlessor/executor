@@ -11,7 +11,6 @@ import * as Belt_HashSetString from "@rescript/runtime/lib/es6/Belt_HashSetStrin
 import * as Inventory$Executor from "./Database/Inventory.mjs";
 import * as Connection$Executor from "./Database/Connection.mjs";
 import * as EntryServer$Executor from "./EntryServer.mjs";
-import * as PremiseContainer$ExecutorUi from "executor-ui/src/State/PremiseContainer.mjs";
 
 function getPremiseId(req) {
   return req.params["premise_id"];
@@ -24,7 +23,7 @@ let get = async (req, param) => {
   let headers = {
     "content-type": "text/html"
   };
-  let f = Bun.file("../public/index.html");
+  let f = Bun.file(process.env.DOC_ROOT + `/index.html`);
   let template = await f.text();
   let match = await EntryServer$Executor.render(url.pathname);
   let stateJson = JSON.stringify(match.executorConfig);
@@ -138,7 +137,7 @@ let server = storage.run(store, param => Bun.serve({
         Stdlib_JsError.throwWithMessage("Error");
       }
     }
-    let filePath = `../public/` + url.pathname;
+    let filePath = process.env.DOC_ROOT + `/` + url.pathname;
     let file = Bun.file(filePath);
     if (await file.exists()) {
       return new Response(file);
@@ -182,13 +181,12 @@ let server = storage.run(store, param => Bun.serve({
         url = new URL(websocketUrl);
       }
       if (exit === 1) {
-        url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + PremiseContainer$ExecutorUi.premiseId);
+        url = new URL(process.env.API_BASE_URL + `/events`);
       }
-      console.log(url);
-      let value = url.searchParams.get("premise_id");
-      let premise_id;
-      premise_id = value === null ? PremiseContainer$ExecutorUi.premiseId : value;
-      console.log(premise_id);
+      let premise_id = url.searchParams.get("premise_id");
+      if (premise_id === null) {
+        return;
+      }
       ws.subscribe(premise_id);
       let store = storage.getStore();
       if (Belt_HashSetString.has(store.published, premise_id) === false) {

@@ -10,8 +10,8 @@ let render = (url: string): promise<renderResult> => {
   Console.log("root route:" ++ root_route)
 
   Connection.withClient(client =>
-    Route.getMatchingPremise(~client, root_route)->Promise.then(premise_id =>
-      Inventory.getInventoryList(~client, premise_id)->Promise.then(
+    Route.getMatchingPremise(~client, root_route)->Promise.then(premise =>
+      Inventory.getInventoryList(~client, premise.id)->Promise.then(
         inventoryRows => {
           let inventory: array<ExecutorUi.InventoryItem.t> = Belt.Array.map(
             inventoryRows,
@@ -20,14 +20,18 @@ let render = (url: string): promise<renderResult> => {
           let config: ExecutorUi.PremiseContainer.Config.t = {
             inventory,
             appUrl: appUrl.path,
+            premise: Some({
+              id: premise.id,
+              name: premise.name,
+              description: premise.description,
+              updated_at: premise.updated_at,
+            }),
           }
           ExecutorUi.Store.makeServerStore(
             config,
             _ => {
               Promise.resolve({
-                html: ReactDOMServer.renderToString(
-                  <ExecutorUi.App initialExecutorConfig={config} serverUrl={appUrl} />,
-                ),
+                html: ReactDOMServer.renderToString(<ExecutorUi.App serverUrl={appUrl} />),
                 executorConfig: config,
               })
             },

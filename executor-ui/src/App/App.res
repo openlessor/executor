@@ -7,7 +7,7 @@ let getActiveId = (url: RescriptReactRouter.url) => {
 
 @react.component
 let make = (
-  ~initialExecutorConfig: option<PremiseContainer.Config.t>=?,
+  //~initialExecutorConfig: option<PremiseContainer.Config.t>=?,
   ~serverUrl: option<RescriptReactRouter.url>=?,
 ) => {
   let initialUrl = RescriptReactRouter.useUrl(~serverUrl?, ())
@@ -21,15 +21,10 @@ let make = (
     Some(() => RescriptReactRouter.unwatchUrl(watcherID))
   })
 
-  let executorConfigValue = switch initialExecutorConfig {
-  | Some(value) => value
-  | None => PremiseContainer.SSR.empty
-  }
-
-  <PremiseContainer.SSR.Provider value={executorConfigValue}>
+  <>
     {switch url.path {
     | list{"item", ..._} | list{} => <Landing />
     | _ => <NotFound />
     }}
-  </PremiseContainer.SSR.Provider>
+  </>
 }

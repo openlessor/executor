@@ -14,6 +14,7 @@ type query1Result = {
   description: string,
   id: string,
   name: string,
+  updated_at: Date.t,
 }
 
 /** 'Query1' query type */

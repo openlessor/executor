@@ -9,7 +9,7 @@ module Route = {
       async (req: Bun.BunRequest.t, _) => {
         let url = WebAPI.URL.make(~url=req->Request.url)
         let headers = HeadersInit.FromDict(dict{"content-type": "text/html"})
-        let f = Bun.file("../public/index.html")
+        let f = Bun.file(`${env["DOC_ROOT"]}/index.html`)
         let template = await f->Bun.BunFile.text
         let {html: appHtml, executorConfig} = await EntryServer.render(url.pathname)
         let stateJson = executorConfig->JSON.stringifyAny->Option.getUnsafe
@@ -93,41 +93,39 @@ let server = SocketState.storage->RescriptBun.AsyncHooks.AsyncLocalStorage.run(
           let websocketUrl: Nullable.t<'a> = ws->url
           let url = switch websocketUrl {
           | Value(unwrapped) => WebAPI.URL.make(~url=unwrapped)
-          | _ =>
-            WebAPI.URL.make(
-              ~url=`${env["API_BASE_URL"]}/events?premise_id=${ExecutorUi.PremiseContainer.premiseId}`,
-            )
+          | _ => WebAPI.URL.make(~url=`${env["API_BASE_URL"]}/events`)
           }
-          Console.log(url)
-          let premise_id = switch url.searchParams->WebAPI.URLSearchParams.get("premise_id") {
-          | Value(value) => value
-          | Null => ExecutorUi.PremiseContainer.premiseId
+          // Only do the thing if initial premise_id is provided
+          // XXX: This logic needs to be factored out so we can also call it from the message handler
+          switch url.searchParams->WebAPI.URLSearchParams.get("premise_id") {
+          | Null.Value(premise_id) => {
+              ws->Globals.WebSocket.subscribe(~topic=premise_id)
+              let fetchPremiseAndPublish = (premise_id: string, _payload) => {
+                Connection.withClient(client =>
+                  Promise.resolve(Premise.getConfig(~client, premise_id, url))
+                )
+                ->Promise.then(config => {
+                  Console.log("Got config:")
+                  Console.log(config)
+                  ws->Globals.WebSocket.publish(
+                    ~topic=premise_id,
+                    ~data=config->JSON.stringifyAny->Option.getUnsafe,
+                  )
+                  config
+                })
+                ->ignore
+              }
+              let store = SocketState.getStore()
+              if store["published"]->Belt.HashSet.String.has(premise_id) == false {
+                Listener.withListener(premise_id, ~onMessage=message =>
+                  fetchPremiseAndPublish(message.channel, message.payload)
+                )
+              }
+              store["published"]->Belt.HashSet.String.add(premise_id)
+              SocketState.setPublished(store["published"])
+            }
+          | Null.Null => ()
           }
-          Console.log(premise_id)
-          ws->Globals.WebSocket.subscribe(~topic=premise_id)
-          let fetchPremiseAndPublish = (premise_id: string, payload) => {
-            Connection.withClient(client =>
-              Promise.resolve(Premise.getConfig(~client, premise_id, url))
-            )
-            ->Promise.then(config => {
-              Console.log("Got config:")
-              Console.log(config)
-              ws->Globals.WebSocket.publish(
-                ~topic=premise_id,
-                ~data=config->JSON.stringifyAny->Option.getUnsafe,
-              )
-              config
-            })
-            ->ignore
-          }
-          let store = SocketState.getStore()
-          if store["published"]->Belt.HashSet.String.has(premise_id) == false {
-            Listener.withListener(premise_id, ~onMessage=message =>
-              fetchPremiseAndPublish(message.channel, message.payload)
-            )
-          }
-          store["published"]->Belt.HashSet.String.add(premise_id)
-          SocketState.setPublished(store["published"])
         },
         message: (ws, message) => {
           Console.log("Message received:" ++ message)
@@ -147,7 +145,7 @@ let server = SocketState.storage->RescriptBun.AsyncHooks.AsyncLocalStorage.run(
           }
           ()
         }
-        let filePath = `../public/${url.pathname}`
+        let filePath = `${env["DOC_ROOT"]}/${url.pathname}`
         let file = Bun.file(filePath)
         switch await file->Bun.BunFile.exists {
         | true => Response.makeFromFile(file)

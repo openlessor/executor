@@ -5,8 +5,36 @@ let window = switch globalThis["window"]->Nullable.toOption {
 | None => {"__EXECUTOR_CONFIG__": Nullable.null}
 }
 
+/* @TODO XXX Add this to a shared module so it can be shared between both repositories */
+module Premise = {
+  type t = {
+    id: string,
+    name: string,
+    description: string,
+    updated_at: Date.t,
+  }
+}
+
+module InputConfig = {
+  type t = {
+    inventory: array<InventoryItem.t>,
+    appUrl: list<string>,
+    premise: nullable<
+      {
+        id: string,
+        name: string,
+        description: string,
+        updated_at: string,
+      },
+    >,
+  }
+}
+
 module Config = {
-  type t = {inventory: array<InventoryItem.t>, appUrl: list<string>}
+  type t = {inventory: array<InventoryItem.t>, appUrl: list<string>, premise: option<Premise.t>}
+
+  @scope("JSON") @val
+  external parseJSON: string => t = "parse"
 
   // XXX @todo Make this base URL configurable from an env var
   // window.location.origin is not SSR friendly
@@ -22,8 +50,13 @@ module Config = {
   }
 
   module Client = {
-    let rec subscribe = (premise_id: string, set) => {
-      let url = WebAPI.URL.make(~url=`${env["API_BASE_URL"]}/events?premise_id=${premise_id}`)
+    let rec subscribe = (premise_id: string, updated_at: float, set) => {
+      Console.log("Premise_id:" ++ premise_id)
+      Console.log("updated_at: ")
+      Console.log(updated_at)
+      let url = WebAPI.URL.make(
+        ~url=`${env["API_BASE_URL"]}/events?premise_id=${premise_id}&ts=${updated_at->Float.toString}`,
+      )
       url.protocol = "ws"
 
       let ws = WebAPI.WebSocket.make2(~url=url.href)
@@ -34,93 +67,88 @@ module Config = {
       }
       Console.log(path)
       let timeout = 5.0
-      let (lastPongValue, setLastPong) = signal(0.0)
-      let (lastPingValue, setLastPing) = signal(0.0)
+      let (last_pong_ts, set_last_pong_ts) = signal(0.0)
+      let (last_ping_ts, set_last_ping_ts) = signal(0.0)
+      let (updated_ts, set_updated_ts) = signal(updated_at)
       let state = tilia({
-        "lastPing": lastPingValue->lift,
-        "lastPong": lastPongValue->lift,
+        "last_ping": last_ping_ts->lift,
+        "last_pong": last_pong_ts->lift,
+        "updated_at": updated_ts->lift,
       })
-      let sendPing = () => {
+      let send_ping = () => {
         if ws.readyState == 1 {
           // I don't know if this is the best way to send a ping packet or not.
           ws->WebAPI.WebSocket.send4("ping")
-          setLastPing(Date.fromString("now")->Date.getTime)
+          set_last_ping_ts(Date.fromString("now")->Date.getTime)
         }
       }
       observe(() => {
-        let elapsed = state["lastPong"] - state["lastPing"]
+        let elapsed = state["last_pong"] - state["last_ping"]
         if elapsed > timeout {
           Console.log("No pong received from server, reconnecting...")
           ws->WebAPI.WebSocket.close
-          subscribe(premise_id, set)
+          subscribe(premise_id, Date.now(), set)
         }
       })
       if globalThis["interval"] == undefined {
-        globalThis["interval"] = setInterval(() => sendPing(), Float.toInt(timeout) * 1000)->ignore
+        globalThis["interval"] = setInterval(() => send_ping(), Float.toInt(timeout) * 1000)->ignore
       }
       ws->WebAPI.WebSocket.addEventListener(Close, _event => {
         Console.log("WebSocket closed, reconnecting")
-        setTimeout(() => subscribe(premise_id, set), 1000)->ignore
+        setTimeout(() => subscribe(premise_id, state["updated_at"], set), 1000)->ignore
       })
       ws->WebAPI.WebSocket.addEventListener(Message, event => {
         let data: string = event.data->Option.getUnsafe
+        Console.log("Got data:" ++ data)
         if data == "pong" {
-          setLastPong(Date.fromString("now")->Date.getTime)
+          set_last_pong_ts(Date.fromString("now")->Date.getTime)
         } else {
-          let json = data->JSON.parseOrThrow
-          let config: t = {
-            appUrl: path,
-            inventory: json
-            ->JSON.Decode.object
-            ->Option.flatMap(d => d->Dict.get("inventory"))
-            ->Option.flatMap(JSON.Decode.array)
-            ->Option.getOr([])
-            ->Array.map(itemJson => {
-              // ... decode item ...
-              Obj.magic(itemJson) // or proper decoding
-            }),
+          let config = data->parseJSON
+          switch config.premise {
+          | Some(premise) => set_updated_ts(premise.updated_at->Date.getTime)
+          | _ => set_updated_ts(Date.now())
           }
           set(config)
         }
-        // set(json)
       })
     }
   }
 }
 
 module SSR = {
-  let empty: Config.t = {inventory: [], appUrl: list{}}
-  let context: React.Context.t<Config.t> = React.createContext(empty)
+  let empty: Config.t = {premise: None, inventory: [], appUrl: list{}}
+}
 
-  module Provider = {
-    let provider = React.Context.provider(context)
-
-    @react.component
-    let make = (~value: Config.t, ~children: React.element) => {
-      let element: React.element = React.createElement(provider, {value, children})
-      element
-    }
+let domExecutorConfig: nullable<InputConfig.t> = window["__EXECUTOR_CONFIG__"]
+let initialExecutorConfig: Config.t = switch domExecutorConfig {
+| Nullable.Undefined | Nullable.Null => SSR.empty
+| Nullable.Value(config) => {
+    inventory: config.inventory,
+    appUrl: config.appUrl,
+    premise: switch config.premise {
+    | Nullable.Value(premise) =>
+      Some({
+        id: premise.id,
+        name: premise.name,
+        description: premise.description,
+        updated_at: premise.updated_at->Date.fromString,
+      })
+    | Nullable.Undefined | Nullable.Null => SSR.empty.premise
+    },
   }
 }
 
-// XXX: For now we hardcode the premise ID
-// We need to figure out how to scope this to the correct context in client and server environment.
-// For server we need a "session store"
-// For client we can use the client side store
-let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410"
-
-let domExecutorConfig = switch window["__EXECUTOR_CONFIG__"]->Nullable.toOption {
-| Some(config) => config
-| None => Nullable.null
-}
-let initialExecutorConfig: Config.t = switch Nullable.toOption(domExecutorConfig) {
-| Some(config) => config
-| None => SSR.empty // This value is actually not going to be used on the server
-}
-
 let state = source(initialExecutorConfig, async (_prev, set) => {
-  switch globalThis["window"]->Nullable.toOption {
-  | Some(_) => Config.Client.subscribe(premiseId, set)
-  | None => () // PremiseContainer.state is only used on the client
+  switch initialExecutorConfig.premise {
+  | Some(premise) => {
+      let {updated_at, id} = premise
+      Console.log("PREMISE:")
+      Console.log(premise)
+      switch globalThis["window"]->Nullable.toOption {
+      | Some(_) => Config.Client.subscribe(id, updated_at->Date.getTime, set)
+      | None => () // PremiseContainer.state is only used on the client
+      }
+    }
+  | None => ()
   }
 })

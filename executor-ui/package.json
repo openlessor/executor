@@ -24,10 +24,8 @@
     "@fontsource/inter": "^5.2.8",
     "@rescript/react": "^0.14.0",
     "@rescript/webapi": "0.1.0-experimental-2090589",
-    "@tilia/react": "link:../../tilia/react",
     "lucide-react": "^0.555.0",
     "react-dom": "^19.2.1",
-    "rescript-bun": "^2.1.0",
-    "tilia": "link:../../tilia/tilia"
+    "rescript-bun": "^2.1.0"
   }
 }

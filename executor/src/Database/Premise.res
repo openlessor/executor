@@ -11,7 +11,7 @@ let getConfig = async (
   premise_id: string,
   url: WebAPI.URLAPI.url,
 ): ExecutorUi.PremiseContainer.Config.t => {
-  //let premise = Nullable.toOption(await getPremise(~client, premise_id))->Belt.Option.getUnsafe
+  let premise = Nullable.toOption(await getPremise(~client, premise_id))->Belt.Option.getUnsafe
   let inventoryRows = await Inventory.getInventoryList(~client, premise_id)
   let inventory: array<ExecutorUi.InventoryItem.t> = Belt.Array.map(
     inventoryRows,
@@ -21,5 +21,9 @@ let getConfig = async (
   | "/" => list{"/"}
   | _ => url.pathname->String.split("/")->List.fromArray
   }
-  {inventory, appUrl: url}
+  {
+    inventory,
+    appUrl: url,
+    premise: Some((premise :> ExecutorUi.PremiseContainer.Premise.t)),
+  }
 }

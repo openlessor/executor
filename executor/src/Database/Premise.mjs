@@ -3,6 +3,7 @@
 import * as Belt_Array from "@rescript/runtime/lib/es6/Belt_Array.js";
 import * as Stdlib_List from "@rescript/runtime/lib/es6/Stdlib_List.js";
 import * as Stdlib_Nullable from "@rescript/runtime/lib/es6/Stdlib_Nullable.js";
+import * as Primitive_option from "@rescript/runtime/lib/es6/Primitive_option.js";
 import * as Inventory$Executor from "./Inventory.mjs";
 import * as Premise__sql$Executor from "./Premise__sql.mjs";
 
@@ -14,6 +15,7 @@ async function getPremise(client, premise_id) {
 }
 
 async function getConfig(client, premise_id, url) {
+  let premise = await getPremise(client, premise_id);
   let inventoryRows = await Inventory$Executor.getInventoryList(client, premise_id);
   let inventory = Belt_Array.map(inventoryRows, Inventory$Executor.toInventoryItem);
   let match = url.pathname;
@@ -23,7 +25,8 @@ async function getConfig(client, premise_id, url) {
     }) : Stdlib_List.fromArray(url.pathname.split("/"));
   return {
     inventory: inventory,
-    appUrl: url$1
+    appUrl: url$1,
+    premise: (premise == null) ? undefined : Primitive_option.some(premise)
   };
 }
 

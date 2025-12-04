@@ -4,6 +4,8 @@ import * as Tilia from "tilia/src/Tilia.mjs";
 import * as Belt_Array from "@rescript/runtime/lib/es6/Belt_Array.js";
 import * as Primitive_option from "@rescript/runtime/lib/es6/Primitive_option.js";
 
+let Premise = {};
+
 let match = Tilia.signal("month");
 
 let Unit_signal = match[0];
@@ -31,6 +33,7 @@ function deriveState(store) {
 }
 
 export {
+  Premise,
   Unit,
   deriveState,
 }

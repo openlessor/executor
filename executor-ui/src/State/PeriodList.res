@@ -1,3 +1,12 @@
+module Premise = {
+  type t = {
+    id: string,
+    name: string,
+    description: string,
+    updated_at: Date.t,
+  }
+}
+
 module Unit = {
   type t = [#second | #minute | #hour | #day | #week | #month | #year]
   // XXX: This default state should come from the server

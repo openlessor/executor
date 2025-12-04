@@ -30,7 +30,6 @@
     "pg-promise": "^12.3.0",
     "pgtyped-rescript": "^2.6.0",
     "rescript-bun": "^2.1.0",
-    "tilia": "link:../../tilia/tilia",
     "typescript": "^5.9.3"
   }
 }

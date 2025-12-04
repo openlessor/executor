@@ -21,7 +21,7 @@ await Bun.build({
   publicPath: `${process.env.API_BASE_URL}/`,
   plugins: [tailwind, resolveReactToRoot],
   entrypoints: ["./executor-ui/index.html", "./executor-ui/src/Index.mjs"],
-  outdir: "../public",
+  outdir: "public",
   env: "inline",
 });
 

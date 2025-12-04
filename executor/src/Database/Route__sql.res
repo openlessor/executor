@@ -11,7 +11,10 @@ type query1Params = {
 /** 'Query1' return type */
 @gentype
 type query1Result = {
-  premise_id: option<string>,
+  description: string,
+  id: string,
+  name: string,
+  updated_at: Date.t,
 }
 
 /** 'Query1' query type */
@@ -21,12 +24,12 @@ type query1Query = {
   result: query1Result,
 }
 
-%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{"root":true},"params":[{"name":"root","required":true,"transform":{"type":"scalar"},"locs":[{"a":56,"b":61}]}],"statement":"SELECT premise_id FROM premise_route WHERE route_root = :root!"}`))
+%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{"root":true},"params":[{"name":"root","required":true,"transform":{"type":"scalar"},"locs":[{"a":138,"b":143}]}],"statement":"SELECT id, name, description, updated_at FROM premise_route LEFT JOIN premise ON premise.id = premise_route.premise_id WHERE route_root = :root!"}`))
 
 /**
  Runnable query:
  ```sql
-SELECT premise_id FROM premise_route WHERE route_root = $1
+SELECT id, name, description, updated_at FROM premise_route LEFT JOIN premise ON premise.id = premise_route.premise_id WHERE route_root = $1
  ```
 
  */

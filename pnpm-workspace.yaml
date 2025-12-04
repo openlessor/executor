@@ -11,10 +11,6 @@ onlyBuiltDependencies:
   - bun
   - rescript-embed-lang
 
-overrides:
-  '@tilia/react': link:../tilia/react
-  tilia: link:../tilia/tilia
-
 workspaces:
   - executor/*
   - executor-ui/*

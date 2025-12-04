@@ -8,7 +8,7 @@ async function getMatchingPremise(client, root) {
   let query = Route__sql$Executor.Query1.one;
   return Stdlib_Option.getOrThrow(await query(client, {
     root: root
-  }), "Invalid route root:" + root).premise_id;
+  }), "Invalid route root:" + root);
 }
 
 export {

@@ -4,10 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@tilia/react': link:../tilia/react
-  tilia: link:../tilia/tilia
-
 importers:
 
   .:
@@ -21,6 +17,9 @@ importers:
       '@rescript/webapi':
         specifier: 0.1.0-experimental-2090589
         version: 0.1.0-experimental-2090589(rescript@12.0.0)
+      '@tilia/react':
+        specifier: github:Software-Deployed/tilia#path:react
+        version: https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:react(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       executor:
         specifier: link:executor
         version: link:executor
@@ -52,8 +51,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(rescript@12.0.0)
       tilia:
-        specifier: link:../tilia/tilia
-        version: link:../tilia/tilia
+        specifier: github:Software-Deployed/tilia#path:tilia
+        version: https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:tilia
     devDependencies:
       '@rescript/core':
         specifier: ^1.6.1
@@ -310,6 +309,13 @@ packages:
 
   '@scarf/scarf@1.4.0':
     resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
+
+  '@tilia/react@https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:react':
+    resolution: {path: react, tarball: https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243}
+    version: 0.0.0
+    peerDependencies:
+      react: ^19.2.1
+      react-dom: ^19.2.1
 
   a-sync-waterfall@1.0.1:
     resolution: {integrity: sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA==}
@@ -737,6 +743,13 @@ packages:
   tailwindcss@4.1.17:
     resolution: {integrity: sha512-j9Ee2YjuQqYT9bbRTfTZht9W/ytp5H+jJpZKiYdP/bpnXARAuELt9ofP0lPnmHjbga7SNQIxdTAXCmtKVYjN+Q==}
 
+  tilia@file:../tilia:
+    resolution: {directory: ../tilia, type: directory}
+
+  tilia@https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:tilia:
+    resolution: {path: tilia, tarball: https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243}
+    version: 0.0.0
+
   tinypool@0.7.0:
     resolution: {integrity: sha512-zSYNUlYSMhJ6Zdou4cJwo/p7w5nmAH17GRfU/ui3ctvjXFErXXkruT4MWW6poDeXgCaIBlGLrfU6TbTXxyGMww==}
     engines: {node: '>=14.0.0'}
@@ -954,6 +967,12 @@ snapshots:
     optional: true
 
   '@scarf/scarf@1.4.0': {}
+
+  '@tilia/react@https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:react(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+    dependencies:
+      react: 19.2.1
+      react-dom: 19.2.1(react@19.2.1)
+      tilia: file:../tilia
 
   a-sync-waterfall@1.0.1: {}
 
@@ -1377,6 +1396,10 @@ snapshots:
       has-flag: 4.0.0
 
   tailwindcss@4.1.17: {}
+
+  tilia@file:../tilia: {}
+
+  tilia@https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:tilia: {}
 
   tinypool@0.7.0: {}
 
