@@ -1,4 +1,3 @@
-jsx = "react"
 [install]
 linker = "hoisted"
 [serve.static]
