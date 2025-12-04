@@ -51,11 +51,11 @@ function fixReactResolution() {
   console.log("🔧 Fixing React resolution for linked packages...");
 
   const rootNodeModules = resolve(process.cwd(), "node_modules");
-  const tiliaPath = resolve(rootNodeModules, "tilia");
+  const tiliaPath = resolve(rootNodeModules, "@tilia", "react");
 
   if (!existsSync(tiliaPath)) {
     console.warn(
-      "⚠️  'tilia' package not found in node_modules. Skipping fix.",
+      "⚠️  '@tilia/react' package not found in node_modules. Skipping fix.",
     );
     return;
   }
