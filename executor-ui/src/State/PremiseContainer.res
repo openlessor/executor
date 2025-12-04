@@ -33,25 +33,54 @@ module Config = {
       | _ => pathname->String.split("/")->List.fromArray
       }
       Console.log(path)
+      let timeout = 5.0
+      let (lastPongValue, setLastPong) = signal(0.0)
+      let (lastPingValue, setLastPing) = signal(0.0)
+      let state = tilia({
+        "lastPing": lastPingValue->lift,
+        "lastPong": lastPongValue->lift,
+      })
+      let sendPing = () => {
+        if ws.readyState == 1 {
+          ws->WebAPI.WebSocket.send4("ping")
+          setLastPing(Date.fromString("now")->Date.getTime)
+        }
+      }
+      observe(() => {
+        let elapsed = state["lastPong"] - state["lastPing"]
+        if elapsed > timeout {
+          Console.log("No pong received from server, reconnecting...")
+          ws->WebAPI.WebSocket.close
+          subscribe(premise_id, set)
+        }
+      })
+      if globalThis["interval"] == undefined {
+        globalThis["interval"] = setInterval(() => sendPing(), Float.toInt(timeout) * 1000)->ignore
+      }
       ws->WebAPI.WebSocket.addEventListener(Close, _event => {
-        subscribe(premise_id, set)
+        Console.log("WebSocket closed, reconnecting")
+        setTimeout(() => subscribe(premise_id, set), 1000)->ignore
       })
       ws->WebAPI.WebSocket.addEventListener(Message, event => {
-        let jsonR: string = event.data->Option.getUnsafe
-        let json = jsonR->JSON.parseOrThrow
-        let config: t = {
-          appUrl: path,
-          inventory: json
-          ->JSON.Decode.object
-          ->Option.flatMap(d => d->Dict.get("inventory"))
-          ->Option.flatMap(JSON.Decode.array)
-          ->Option.getOr([])
-          ->Array.map(itemJson => {
-            // ... decode item ...
-            Obj.magic(itemJson) // or proper decoding
-          }),
+        let data: string = event.data->Option.getUnsafe
+        if data == "pong" {
+          setLastPong(Date.fromString("now")->Date.getTime)
+        } else {
+          let json = data->JSON.parseOrThrow
+          let config: t = {
+            appUrl: path,
+            inventory: json
+            ->JSON.Decode.object
+            ->Option.flatMap(d => d->Dict.get("inventory"))
+            ->Option.flatMap(JSON.Decode.array)
+            ->Option.getOr([])
+            ->Array.map(itemJson => {
+              // ... decode item ...
+              Obj.magic(itemJson) // or proper decoding
+            }),
+          }
+          set(config)
         }
-        set(config)
         // set(json)
       })
     }

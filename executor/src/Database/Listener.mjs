@@ -3,50 +3,62 @@
 import * as Tilia from "tilia/src/Tilia.mjs";
 import PgPromise from "pg-promise";
 import * as PgListener from "pg-listener";
+import * as Nodeasync_hooks from "node:async_hooks";
 import * as Belt_HashSetString from "@rescript/runtime/lib/es6/Belt_HashSetString.js";
 
-let pgp = PgPromise();
+let storage = new Nodeasync_hooks.AsyncLocalStorage();
 
-let db = pgp(process.env.DB_URL);
+function getPgListener() {
+  if (globalThis.pgOptions) {
+    return globalThis.pgListener;
+  }
+  let pgp = PgPromise();
+  let db = pgp(process.env.DB_URL);
+  let pgOptions = {
+    pgp: pgp,
+    db: db
+  };
+  globalThis.pgOptions = pgOptions;
+  globalThis.pgListener = new PgListener.PgListener(pgOptions);
+  return globalThis.pgListener;
+}
 
-let listener = new PgListener.PgListener({
-  pgp: pgp,
-  db: db
-});
-
-let match = Tilia.signal(Belt_HashSetString.make(0));
+let match = Tilia.signal(Belt_HashSetString.make(1024));
 
 let setListeners = match[1];
 
-let listenersSignal = match[0];
+let listeners = match[0];
 
 let store = Tilia.tilia({
-  listeners: Tilia.computed(() => Tilia.lift(listenersSignal))
+  listeners: Tilia.computed(() => Tilia.lift(listeners))
 });
 
 let Store = {
-  listenersSignal: listenersSignal,
+  getPgListener: getPgListener,
+  listeners: listeners,
   setListeners: setListeners,
   store: store
 };
 
 function withListener(premise_id, onMessage) {
-  let listeners = store.listeners;
-  if (Belt_HashSetString.has(listeners, premise_id) === false) {
-    Belt_HashSetString.add(listeners, premise_id);
-    setListeners(listeners);
-    listener.listen([premise_id], {
-      onMessage: onMessage
-    });
-    return;
-  }
+  let pgListener = getPgListener();
+  storage.run(store, param => {
+    let alsStore = storage.getStore();
+    if (Belt_HashSetString.has(alsStore.listeners, premise_id) === false) {
+      console.log("Adding listener");
+      Belt_HashSetString.add(alsStore.listeners, premise_id);
+      setListeners(alsStore.listeners);
+      pgListener.listen([premise_id], {
+        onMessage: onMessage
+      });
+      return;
+    }
+  });
 }
 
 export {
-  pgp,
-  db,
-  listener,
+  storage,
   Store,
   withListener,
 }
-/* pgp Not a pure module */
+/* storage Not a pure module */

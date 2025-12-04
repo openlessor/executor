@@ -31,10 +31,42 @@ function subscribe(premise_id, set) {
       tl: /* [] */0
     }) : Stdlib_List.fromArray(pathname.split("/"));
   console.log(path);
-  ws.addEventListener("close", _event => subscribe(premise_id, set));
+  let match = Tilia.signal(0.0);
+  let setLastPong = match[1];
+  let match$1 = Tilia.signal(0.0);
+  let setLastPing = match$1[1];
+  let state = Tilia.tilia({
+    lastPing: Tilia.lift(match$1[0]),
+    lastPong: Tilia.lift(match[0])
+  });
+  let sendPing = () => {
+    if (ws.readyState === 1) {
+      ws.send("ping");
+      return setLastPing(new Date("now").getTime());
+    }
+  };
+  Tilia.observe(() => {
+    let elapsed = state.lastPong - state.lastPing;
+    if (elapsed > 5.0) {
+      console.log("No pong received from server, reconnecting...");
+      ws.close();
+      return subscribe(premise_id, set);
+    }
+  });
+  if (globalThis.interval === undefined) {
+    setInterval(() => sendPing(), 5000);
+    globalThis.interval = undefined;
+  }
+  ws.addEventListener("close", _event => {
+    console.log("WebSocket closed, reconnecting");
+    setTimeout(() => subscribe(premise_id, set), 1000);
+  });
   ws.addEventListener("message", event => {
-    let jsonR = event.data;
-    let json = JSON.parse(jsonR);
+    let data = event.data;
+    if (data === "pong") {
+      return setLastPong(new Date("now").getTime());
+    }
+    let json = JSON.parse(data);
     set({
       inventory: Stdlib_Option.getOr(Stdlib_Option.flatMap(Stdlib_Option.flatMap(Stdlib_JSON.Decode.object(json), d => d["inventory"]), Stdlib_JSON.Decode.array), []).map(itemJson => itemJson),
       appUrl: path

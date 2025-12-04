@@ -134,8 +134,12 @@ let server = Bun.serve({
     ]
   ]),
   websocket: {
-    message: (_ws, message) => {
+    message: (ws, message) => {
       console.log("Message received:" + message);
+      if (message === "ping") {
+        ws.send("pong");
+        return;
+      }
     },
     open: ws => {
       let websocketUrl = ws["WebSocket.url"];

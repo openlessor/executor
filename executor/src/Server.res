@@ -106,8 +106,11 @@ let server = Bun.serveWithWebSocket({
         fetchPremiseAndPublish(message.channel, message.payload)
       )
     },
-    message: (_ws, message) => {
+    message: (ws, message) => {
       Console.log("Message received:" ++ message)
+      if message == "ping" {
+        ws->Globals.WebSocket.send("pong")
+      }
     },
     close: (_ws, _, _) => {
       Console.log("Client disconnected")
