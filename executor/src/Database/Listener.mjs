@@ -35,7 +35,6 @@ function withListener(premise_id, onMessage) {
   let listeners = Belt_SetString.fromArray(Stdlib_List.toArray(store.listeners));
   if (Belt_SetString.has(listeners, premise_id) === false) {
     setListeners(Belt_SetString.toList(Belt_SetString.add(listeners, premise_id)));
-    console.log("Listening on " + premise_id);
     listener.listen([premise_id], {
       onMessage: onMessage
     });
