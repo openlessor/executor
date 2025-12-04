@@ -2,9 +2,8 @@
 
 import * as Tilia from "tilia/src/Tilia.mjs";
 import PgPromise from "pg-promise";
-import * as Stdlib_List from "@rescript/runtime/lib/es6/Stdlib_List.js";
 import * as PgListener from "pg-listener";
-import * as Belt_SetString from "@rescript/runtime/lib/es6/Belt_SetString.js";
+import * as Belt_HashSetString from "@rescript/runtime/lib/es6/Belt_HashSetString.js";
 
 let pgp = PgPromise();
 
@@ -15,7 +14,7 @@ let listener = new PgListener.PgListener({
   db: db
 });
 
-let match = Tilia.signal(Stdlib_List.make(0, ""));
+let match = Tilia.signal(Belt_HashSetString.make(0));
 
 let setListeners = match[1];
 
@@ -32,9 +31,10 @@ let Store = {
 };
 
 function withListener(premise_id, onMessage) {
-  let listeners = Belt_SetString.fromArray(Stdlib_List.toArray(store.listeners));
-  if (Belt_SetString.has(listeners, premise_id) === false) {
-    setListeners(Belt_SetString.toList(Belt_SetString.add(listeners, premise_id)));
+  let listeners = store.listeners;
+  if (Belt_HashSetString.has(listeners, premise_id) === false) {
+    Belt_HashSetString.add(listeners, premise_id);
+    setListeners(listeners);
     listener.listen([premise_id], {
       onMessage: onMessage
     });
