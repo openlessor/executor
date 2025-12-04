@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rescript build && bun build.js",
+    "start": "bun dist/Server.js",
     "clean": "rescript clean",
     "watch": "rescript watch",
     "test": "echo \"Error: no test specified\" && exit 1"
