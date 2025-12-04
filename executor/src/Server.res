@@ -87,7 +87,10 @@ let server = Bun.serveWithWebSocket({
           ~url=`${env["API_BASE_URL"]}/events?premise_id=${ExecutorUi.PremiseContainer.premiseId}`,
         )
       }
-      let premise_id = url.searchParams->WebAPI.URLSearchParams.get("premise_id")
+      let premise_id = switch url.searchParams->WebAPI.URLSearchParams.get("premise_id") {
+      | Value(value) => value
+
+      }
       ws->Globals.WebSocket.subscribe(~topic=premise_id)
       let fetchPremiseAndPublish = (premise_id: string, payload) => {
         Connection.withClient(client => Promise.resolve(Premise.getConfig(~client, premise_id)))

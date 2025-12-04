@@ -13,27 +13,24 @@
   "devDependencies": {
     "@types/bun": "latest",
     "rescript-embed-lang": "^0.5.5",
-    "tailwindcss": "^4.1.17"
+    "tailwindcss": "^4.1.17",
+    "@pgtyped/cli": "^2.4.3"
   },
   "peerDependencies": {
     "rescript": "12.0.0"
   },
   "dependencies": {
-    "@pgtyped/cli": "^2.4.3",
     "@pgtyped/runtime": "^2.4.2",
-    "@rescript/react": "^0.14.0",
     "@rescript/runtime": "^12.0.0",
-    "@rescript/webapi": "0.1.0-experimental-ca5db29",
-    "@tilia/react": "file:../../tilia/react",
+    "@rescript/webapi": "0.1.0-experimental-2090589",
     "compression": "^1.8.1",
     "express": "^5.2.1",
     "pg": "^8.16.3",
     "pg-listener": "^1.1.3",
     "pg-promise": "^12.3.0",
     "pgtyped-rescript": "^2.6.0",
-    "react": "^19.2.0",
     "rescript-bun": "^2.1.0",
-    "tilia": "file:../../tilia/tilia",
+    "tilia": "link:../../tilia/tilia",
     "typescript": "^5.9.3"
   }
 }

@@ -14,5 +14,5 @@ let getConfig = async (~client, premise_id: string): ExecutorUi.PremiseContainer
     Inventory.toInventoryItem,
   )
 
-  {inventory: inventory}
+  {/*premise_id: Some(premise_id),*/ inventory: inventory}
 }

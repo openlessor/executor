@@ -1,12 +1,12 @@
 lockfileVersion: '9.0'
 
 settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
+  autoInstallPeers: false
+  excludeLinksFromLockfile: false 
 
 overrides:
   '@tilia/react': link:../../tilia/react
-
+  'tilia': link:../../tilia/tilia
 importers:
 
   .:
@@ -23,7 +23,7 @@ importers:
       '@tilia/react':
         specifier: link:../../tilia/react
         version: link:../../tilia/react
-      '@tilia/tilia':
+      'tilia':
         specifier: link:/Users/briankaplan/dev-current/tilia/tilia
         version: link:../../tilia/tilia
       lucide-react:

@@ -2,13 +2,7 @@
   "namespace": true,
   "jsx": { "version": 4 },
   "ppx-flags": ["rescript-embed-lang/ppx"],
-  "dependencies": [
-    "@rescript/webapi",
-    "@rescript/react",
-    "tilia",
-    "@tilia/react",
-    "rescript-bun"
-  ],
+  "dependencies": ["@rescript/react", "@rescript/webapi", "tilia", "@tilia/react", "rescript-bun"],
   "compiler-flags": [
     "-open RescriptBun",
     "-open RescriptBun.Globals",
@@ -27,5 +21,5 @@
     "module": "esmodule",
     "in-source": true
   },
-  "suffix": ".mjs"
+  "suffix": ".jsx"
 }

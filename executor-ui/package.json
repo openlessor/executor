@@ -17,16 +17,17 @@
     "tailwindcss": "^4.1.17"
   },
   "peerDependencies": {
-    "@rescript/react": "^0.14.0",
     "react": "19.2.0",
     "rescript": "12.0.0"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
-    "@rescript/webapi": "0.1.0-experimental-ca5db29",
-    "@tilia/react": "file:../../tilia/react",
+    "@rescript/react": "^0.14.0",
+    "@rescript/webapi": "0.1.0-experimental-2090589",
+    "@tilia/react": "link:../../tilia/react",
     "lucide-react": "^0.555.0",
+    "react-dom": "^19.2.1",
     "rescript-bun": "^2.1.0",
-    "tilia": "file:../../tilia/tilia"
+    "tilia": "link:../../tilia/tilia"
   }
 }

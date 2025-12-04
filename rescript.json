@@ -7,17 +7,15 @@
       "in-source": true
     }
   ],
-  "dev-dependencies": [
-    "@rescript/react"
-  ],
+  "ppx-flags": ["rescript-embed-lang/ppx"],
   "dependencies": [
+    "@rescript/webapi",
     "executor-ui",
     "executor"
   ],
   "suffix": ".mjs",
   "jsx": {
-    "version": 4,
-    "mode": "automatic"
+    "version": 4
   },
-  "pinned-dependencies": ["executor-ui", "executor"]
+  "pinned-dependencies": ["@rescript/webapi", "rescript-embed-lang", "executor-ui", "executor"]
 }

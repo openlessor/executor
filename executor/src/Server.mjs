@@ -157,7 +157,20 @@ let server = Bun.serve({
       if (exit === 1) {
         url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + PremiseContainer$ExecutorUi.premiseId);
       }
-      let premise_id = url.searchParams.get("premise_id");
+      let value = url.searchParams.get("premise_id");
+      let premise_id;
+      if (value === null) {
+        throw {
+          RE_EXN_ID: "Match_failure",
+          _1: [
+            "Server.res",
+            90,
+            23
+          ],
+          Error: new Error()
+        };
+      }
+      premise_id = value;
       ws.subscribe(premise_id);
       Listener$Executor.withListener(premise_id, message => {
         let premise_id = message.channel;

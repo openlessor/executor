@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "rescript build && bun build.js",
     "clean": "rescript clean",
     "watch": "rescript watch",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,20 +14,34 @@
   "license": "ISC",
   "packageManager": "pnpm@10.22.0",
   "dependencies": {
-    "@rescript/react": "^0.14.0",
+    "@fontsource/inter": "^5.2.8",
     "@rescript/runtime": "^12.0.0",
+    "@rescript/webapi": "0.1.0-experimental-2090589",
     "executor": "link:executor",
     "executor-ui": "link:executor-ui",
-    "react": "19.2.0",
+    "lucide-react": "^0.555.0",
+    "pg": "^8.16.3",
+    "pg-listener": "^1.1.3",
+    "pg-promise": "^12.3.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "rescript": "12.0.0",
-    "rescript-embed-lang": "^0.5.5"
+    "rescript-bun": "^2.1.0",
+    "tilia": "link:../tilia/tilia"
+  },
+  "overrides": {
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
   },
   "trustedDependencies": [
     "rescript-embed-lang"
   ],
   "devDependencies": {
     "@rescript/core": "^1.6.1",
+    "@rescript/react": "^0.14.0",
     "bun-plugin-tailwind": "^0.1.2",
+    "pgtyped-rescript": "^2.6.0",
+    "rescript-embed-lang": "^0.5.5",
     "tailwindcss": "^4.1.17"
   }
 }

@@ -1,3 +1,5 @@
+hoist: true
+
 ignoredBuiltDependencies:
   - '@scarf/scarf'
   - esbuild
@@ -7,6 +9,11 @@ ignoredBuiltDependencies:
 onlyBuiltDependencies:
   - '@rolandpeelen/rewatch'
   - bun
+  - rescript-embed-lang
+
+overrides:
+  '@tilia/react': link:../tilia/react
+  tilia: link:../tilia/tilia
 
 workspaces:
   - executor/*

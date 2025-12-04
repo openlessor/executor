@@ -6,7 +6,7 @@ module GlobalThis = {
 external env: {..} = "process.env"
 
 module Config = {
-  type t = {inventory: array<InventoryItem.t>}
+  type t = {/*premise_id: option<string>,*/ inventory: array<InventoryItem.t>}
 
   @scope("JSON") @val
   external parseJSON: string => t = "parse"
@@ -34,6 +34,7 @@ module Config = {
         let jsonR: string = event.data->Option.getUnsafe
         let json = jsonR->JSON.parseOrThrow
         let config: t = {
+          //premise_id: Some(premise_id),
           inventory: json
           ->JSON.Decode.object
           ->Option.flatMap(d => d->Dict.get("inventory"))
@@ -52,7 +53,7 @@ module Config = {
 }
 
 module SSR = {
-  let empty: Config.t = {inventory: []}
+  let empty: Config.t = {/*premise_id: None,*/ inventory: []}
   let context: React.Context.t<Config.t> = React.createContext(empty)
 
   module Provider = {

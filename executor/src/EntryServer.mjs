@@ -16,7 +16,7 @@ function render(url) {
     let config = {
       inventory: inventory
     };
-    return Store$ExecutorUi.makeServerStore(config, _storage => Promise.resolve({
+    return Store$ExecutorUi.makeServerStore(config, param => Promise.resolve({
       executorConfig: config,
       html: Server.renderToString(JsxRuntime.jsx(App$ExecutorUi.make, {
         initialExecutorConfig: config,
