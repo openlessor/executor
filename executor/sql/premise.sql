@@ -1,7 +1,8 @@
 CREATE TABLE premise (
   id uuid primary key not null default uuidv4(),
   name varchar not null,
-  description varchar not null
+  description varchar not null,
+  updated_at timestamp not null default now()
 );
 
 INSERT INTO premise (name, description) VALUES ('Example Premise', 'An example premise');

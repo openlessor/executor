@@ -30,8 +30,11 @@ BEGIN
     -- Determine channel name (premise_id) and notify
     IF TG_TABLE_NAME = 'premise' THEN
         IF TG_OP = 'DELETE' THEN
+            -- XXX Send special notification when premise deleted / no inventory available
             channel_name := OLD.id::text;
         ELSE
+            -- Add updated at timestamp, don't add it during delete since the table no longer exists now.
+            UPDATE premise SET updated_at = NOW() WHERE id = channel_name::UUID;
             channel_name := NEW.id::text;
         END IF;
         PERFORM pg_notify(channel_name, payload::text);
@@ -42,7 +45,9 @@ BEGIN
         ELSE
             channel_name := NEW.premise_id::text;
         END IF;
-        PERFORM pg_notify(channel_name, payload::text);
+        -- Add updated at timestamp, will trigger notification
+        UPDATE premise SET updated_at = NOW() where id = channel_name::UUID;
+        -- PERFORM pg_notify(channel_name, payload::text);
 
     ELSIF TG_TABLE_NAME = 'inventory_period_map' THEN
         IF TG_OP = 'DELETE' THEN
@@ -52,7 +57,9 @@ BEGIN
         END IF;
 
         IF channel_name IS NOT NULL THEN
-            PERFORM pg_notify(channel_name, payload::text);
+            -- Add updated at timestamp, will trigger notification
+            UPDATE premise SET updated_at = NOW() WHERE id = channel_name::UUID;
+            -- PERFORM pg_notify(channel_name, payload::text);
         END IF;
 
     ELSIF TG_TABLE_NAME = 'period' THEN
@@ -63,7 +70,9 @@ BEGIN
             JOIN inventory_period_map ipm ON ipm.inventory_id = i.id
             WHERE ipm.period_id = (CASE WHEN TG_OP = 'DELETE' THEN OLD.id ELSE NEW.id END)
         LOOP
-            PERFORM pg_notify(rec.premise_id::text, payload::text);
+            -- Add updated at timestamp, will trigger notification
+            UPDATE premise SET updated_at = NOW() WHERE id = rec.premise_id::UUID;
+            -- PERFORM pg_notify(rec.premise_id::text, payload::text);
         END LOOP;
     END IF;
 
