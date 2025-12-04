@@ -1,9 +1,7 @@
 external env: {..} = "process.env"
 
-let storage = RescriptBun.AsyncHooks.AsyncLocalStorage.make()
-
-module Store = {
-  let getPgListener = () => {
+module Singleton = {
+  let make = () => {
     if globalThis["pgOptions"] {
       globalThis["pgListener"]
     } else {
@@ -15,37 +13,16 @@ module Store = {
       globalThis["pgListener"]
     }
   }
-  let (listeners, setListeners) = signal(Belt.HashSet.String.make(~hintSize=1024))
-  let store = tilia({
-    "listeners": computed(() => listeners->lift),
-  })
-  /* let pgListener = getPgListener()
-  pgListener
-  ->PgListener.cancelAll
-  ->Promise.then(() => {
-    Console.log("Canceled all listeners")
-    Promise.resolve()
-  })
-  ->ignore*/
 }
 
 let withListener = (premise_id: string, ~onMessage: PgListener.message => unit) => {
-  let pgListener = Store.getPgListener()
-  // Running this in AsyncLocalStorage ensures that the listeners hashset and the pgListener remain stable for the entire lifecycle of the server
-  storage->RescriptBun.AsyncHooks.AsyncLocalStorage.run(Store.store, _ => {
-    let alsStore = storage->RescriptBun.AsyncHooks.AsyncLocalStorage.getStore->Option.getUnsafe
-    if alsStore["listeners"]->Belt.HashSet.String.has(premise_id) == false {
-      Console.log("Adding listener")
-      alsStore["listeners"]->Belt.HashSet.String.add(premise_id)
-      Store.setListeners(alsStore["listeners"])
-      pgListener
-      ->PgListener.listen(
-        [premise_id],
-        ~events={
-          onMessage: onMessage,
-        },
-      )
-      ->ignore
-    }
-  })
+  let pgListener = Singleton.make()
+  pgListener
+  ->PgListener.listen(
+    [premise_id],
+    ~events={
+      onMessage: onMessage,
+    },
+  )
+  ->ignore
 }

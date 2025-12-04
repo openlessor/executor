@@ -42,6 +42,7 @@ module Config = {
       })
       let sendPing = () => {
         if ws.readyState == 1 {
+          // I don't know if this is the best way to send a ping packet or not.
           ws->WebAPI.WebSocket.send4("ping")
           setLastPing(Date.fromString("now")->Date.getTime)
         }
