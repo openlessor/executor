@@ -64,7 +64,11 @@ external env: {..} = "process.env"
 
 module SocketState = {
   let storage = RescriptBun.AsyncHooks.AsyncLocalStorage.make()
-  let (published, setPublished) = signal(Belt.HashSet.String.make(~hintSize=1024))
+  // We should probably make a global context object and store this signal in a module for that.
+  if globalThis["published_signal"] == undefined {
+    globalThis["published_signal"] = signal(Belt.HashSet.String.make(~hintSize=1024))
+  }
+  let (published, setPublished) = globalThis["published_signal"]
   let store = tilia({
     "published": computed(() => published->lift),
   })

@@ -102,7 +102,11 @@ let Route = {
 
 let storage = new Nodeasync_hooks.AsyncLocalStorage();
 
-let match = Tilia.signal(Belt_HashSetString.make(1024));
+if (globalThis.published_signal === undefined) {
+  globalThis.published_signal = Tilia.signal(Belt_HashSetString.make(1024));
+}
+
+let match = globalThis.published_signal;
 
 let setPublished = match[1];
 
