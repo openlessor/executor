@@ -7,14 +7,22 @@ type t = {
 let window = globalThis["window"]->Nullable.toOption
 
 let storage = switch window {
-| Some(_) => Some(RescriptBun.AsyncHooks.AsyncLocalStorage.make())
-| None => None
+| None => Some(RescriptBun.AsyncHooks.AsyncLocalStorage.make())
+| Some(_) => None
 }
 
 let getAsyncLocalStorage = () => {
   // This should never be called on the browser
   storage->Belt.Option.getUnsafe
 }
+
+let makeStore = (initialExecutorConfig) => carve(({derived}) => {
+  {
+    "config": initialExecutorConfig,
+    "period_list": derived(ExecutorUi.PeriodList.deriveState),
+    "unit": PeriodList.Unit.signal->lift,
+  }
+})
 
 let makeServerStore = (
   initialExecutorConfig,
@@ -23,13 +31,7 @@ let makeServerStore = (
   switch window {
   | Some(_) => JsError.throwWithMessage("This function should never run in the client context")
   | None => {
-      let store = carve(({derived}) => {
-        {
-          "config": initialExecutorConfig,
-          "period_list": derived(ExecutorUi.PeriodList.deriveState),
-          "unit": PeriodList.Unit.signal->lift,
-        }
-      })
+      let store = makeStore(initialExecutorConfig)
       getAsyncLocalStorage()->RescriptBun.AsyncHooks.AsyncLocalStorage.run(store, callback)
     }
   }
@@ -43,16 +45,7 @@ let getServerStore = () => {
 // There may be a better way to do this, but for now I make main_store an option.
 // Then I use getStore in my components to get the store based on the execution context.
 let main_store: option<t> = switch window {
-| Some(_) =>
-  Some(
-    carve(({derived}) => {
-      {
-        "config": PremiseContainer.state,
-        "period_list": derived(PeriodList.deriveState),
-        "unit": PeriodList.Unit.signal->lift,
-      }
-    }),
-  )
+| Some(_) => Some(makeStore(PremiseContainer.state))
 | None => None
 }
 

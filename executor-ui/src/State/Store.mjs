@@ -9,25 +9,25 @@ import * as PremiseContainer$ExecutorUi from "./PremiseContainer.mjs";
 
 let window = globalThis.window;
 
-let storage = !(window == null) ? Primitive_option.some(new Nodeasync_hooks.AsyncLocalStorage()) : undefined;
+let storage = (window == null) ? Primitive_option.some(new Nodeasync_hooks.AsyncLocalStorage()) : undefined;
+
+function makeStore(initialExecutorConfig) {
+  return Tilia.carve(param => ({
+    config: initialExecutorConfig,
+    period_list: param.derived(PeriodList$ExecutorUi.deriveState),
+    unit: Tilia.lift(PeriodList$ExecutorUi.Unit.signal)
+  }));
+}
 
 function makeServerStore(initialExecutorConfig, callback) {
   if (!(window == null)) {
     return Stdlib_JsError.throwWithMessage("This function should never run in the client context");
   }
-  let store = Tilia.carve(param => ({
-    config: initialExecutorConfig,
-    period_list: param.derived(PeriodList$ExecutorUi.deriveState),
-    unit: Tilia.lift(PeriodList$ExecutorUi.Unit.signal)
-  }));
+  let store = makeStore(initialExecutorConfig);
   return storage.run(store, callback);
 }
 
-let main_store = !(window == null) ? Primitive_option.some(Tilia.carve(param => ({
-    config: PremiseContainer$ExecutorUi.state,
-    period_list: param.derived(PeriodList$ExecutorUi.deriveState),
-    unit: Tilia.lift(PeriodList$ExecutorUi.Unit.signal)
-  }))) : undefined;
+let main_store = !(window == null) ? Primitive_option.some(makeStore(PremiseContainer$ExecutorUi.state)) : undefined;
 
 function getStore() {
   if (main_store !== undefined) {
