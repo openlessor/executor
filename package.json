@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rescript build && bun build.js",
+    "dev": "bun dev.js",
     "start": "bun dist/Server.js",
     "clean": "rescript clean",
     "watch": "rescript watch",
