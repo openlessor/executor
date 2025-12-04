@@ -4,7 +4,7 @@ import * as Stdlib from "@rescript/runtime/lib/es6/Stdlib.js";
 import * as Stdlib_Option from "@rescript/runtime/lib/es6/Stdlib_Option.js";
 import * as PgtypedRescriptRuntime from "pgtyped-rescript-runtime";
 
-let query1IR = {"usedParamSet":{},"params":[],"statement":"SELECT premise_id FROM premise_route"};
+let query1IR = {"usedParamSet":{"root":true},"params":[{"name":"root","required":true,"transform":{"type":"scalar"},"locs":[{"a":56,"b":61}]}],"statement":"SELECT premise_id FROM premise_route WHERE route_root = :root!"};
 
 let query = new PgtypedRescriptRuntime.PreparedQuery(query1IR);
 

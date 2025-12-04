@@ -4,7 +4,9 @@ open PgTyped
 
 /** 'Query1' parameters type */
 @gentype
-type query1Params = unit
+type query1Params = {
+  root: string,
+}
 
 /** 'Query1' return type */
 @gentype
@@ -19,12 +21,12 @@ type query1Query = {
   result: query1Result,
 }
 
-%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{},"params":[],"statement":"SELECT premise_id FROM premise_route"}`))
+%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{"root":true},"params":[{"name":"root","required":true,"transform":{"type":"scalar"},"locs":[{"a":56,"b":61}]}],"statement":"SELECT premise_id FROM premise_route WHERE route_root = :root!"}`))
 
 /**
  Runnable query:
  ```sql
-SELECT premise_id FROM premise_route
+SELECT premise_id FROM premise_route WHERE route_root = $1
  ```
 
  */

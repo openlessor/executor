@@ -123,8 +123,10 @@ let server = Bun.serve({
       return new Response(file);
     } else if (typeof get === "object") {
       return new Response("");
-    } else {
+    } else if (url.pathname !== "/events") {
       return await get(req, server);
+    } else {
+      return;
     }
   },
   routes: Object.fromEntries([
@@ -157,25 +159,17 @@ let server = Bun.serve({
       if (exit === 1) {
         url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + PremiseContainer$ExecutorUi.premiseId);
       }
+      console.log(url);
       let value = url.searchParams.get("premise_id");
       let premise_id;
-      if (value === null) {
-        throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "Server.res",
-            90,
-            23
-          ],
-          Error: new Error()
-        };
-      }
-      premise_id = value;
+      premise_id = value === null ? PremiseContainer$ExecutorUi.premiseId : value;
+      console.log(premise_id);
       ws.subscribe(premise_id);
       Listener$Executor.withListener(premise_id, message => {
         let premise_id = message.channel;
-        Connection$Executor.withClient(client => Promise.resolve(Premise$Executor.getConfig(client, premise_id))).then(config => {
-          console.log("Got config");
+        Connection$Executor.withClient(client => Promise.resolve(Premise$Executor.getConfig(client, premise_id, url))).then(config => {
+          console.log("Got config:");
+          console.log(config);
           ws.publish(premise_id, JSON.stringify(config));
           return config;
         });

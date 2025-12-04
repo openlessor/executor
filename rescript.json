@@ -1,4 +1,5 @@
 {
+  "experimental-features": { "LetUnwrap": true },
   "name": "executor-full-stack",
   "sources": [],
   "package-specs": [

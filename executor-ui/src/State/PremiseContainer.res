@@ -1,15 +1,12 @@
-module GlobalThis = {
-  @scope("globalThis") @val
-  external window_: Nullable.t<WebAPI.DOMAPI.window> = "window"
-}
-
 external env: {..} = "process.env"
 
-module Config = {
-  type t = {/*premise_id: option<string>,*/ inventory: array<InventoryItem.t>}
+let window = switch globalThis["window"]->Nullable.toOption {
+| Some(window) => window
+| None => {"__EXECUTOR_CONFIG__": Nullable.null}
+}
 
-  @scope("JSON") @val
-  external parseJSON: string => t = "parse"
+module Config = {
+  type t = {inventory: array<InventoryItem.t>, appUrl: list<string>}
 
   // XXX @todo Make this base URL configurable from an env var
   // window.location.origin is not SSR friendly
@@ -25,16 +22,25 @@ module Config = {
   }
 
   module Client = {
-    let subscribe = (premise_id: string, set) => {
+    let rec subscribe = (premise_id: string, set) => {
       let url = WebAPI.URL.make(~url=`${env["API_BASE_URL"]}/events?premise_id=${premise_id}`)
       url.protocol = "ws"
 
       let ws = WebAPI.WebSocket.make2(~url=url.href)
+      let pathname = WebAPI.Global.location.pathname
+      let path = switch pathname {
+      | "/" => list{"/"}
+      | _ => pathname->String.split("/")->List.fromArray
+      }
+      Console.log(path)
+      ws->WebAPI.WebSocket.addEventListener(Close, _event => {
+        subscribe(premise_id, set)
+      })
       ws->WebAPI.WebSocket.addEventListener(Message, event => {
         let jsonR: string = event.data->Option.getUnsafe
         let json = jsonR->JSON.parseOrThrow
         let config: t = {
-          //premise_id: Some(premise_id),
+          appUrl: path,
           inventory: json
           ->JSON.Decode.object
           ->Option.flatMap(d => d->Dict.get("inventory"))
@@ -53,7 +59,7 @@ module Config = {
 }
 
 module SSR = {
-  let empty: Config.t = {/*premise_id: None,*/ inventory: []}
+  let empty: Config.t = {inventory: [], appUrl: list{}}
   let context: React.Context.t<Config.t> = React.createContext(empty)
 
   module Provider = {
@@ -72,10 +78,7 @@ module SSR = {
 // For server we need a "session store"
 // For client we can use the client side store
 let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410"
-let window = switch globalThis["window"]->Nullable.toOption {
-| Some(window) => window
-| None => {"__EXECUTOR_CONFIG__": Nullable.null}
-}
+
 let domExecutorConfig = switch window["__EXECUTOR_CONFIG__"]->Nullable.toOption {
 | Some(config) => config
 | None => Nullable.null

@@ -3,7 +3,14 @@
 import * as Tilia from "tilia/src/Tilia.mjs";
 import * as React from "react";
 import * as Stdlib_JSON from "@rescript/runtime/lib/es6/Stdlib_JSON.js";
+import * as Stdlib_List from "@rescript/runtime/lib/es6/Stdlib_List.js";
 import * as Stdlib_Option from "@rescript/runtime/lib/es6/Stdlib_Option.js";
+
+let window = globalThis.window;
+
+let window$1 = (window == null) ? ({
+    __EXECUTOR_CONFIG__: null
+  }) : window;
 
 let base_url = process.env.API_BASE_URL;
 
@@ -14,8 +21,32 @@ async function fetch$1(premiseId) {
   return await response.json();
 }
 
+function subscribe(premise_id, set) {
+  let url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + premise_id);
+  url.protocol = "ws";
+  let ws = new WebSocket(url.href);
+  let pathname = location.pathname;
+  let path = pathname === "/" ? ({
+      hd: "/",
+      tl: /* [] */0
+    }) : Stdlib_List.fromArray(pathname.split("/"));
+  console.log(path);
+  ws.addEventListener("close", _event => subscribe(premise_id, set));
+  ws.addEventListener("message", event => {
+    let jsonR = event.data;
+    let json = JSON.parse(jsonR);
+    set({
+      inventory: Stdlib_Option.getOr(Stdlib_Option.flatMap(Stdlib_Option.flatMap(Stdlib_JSON.Decode.object(json), d => d["inventory"]), Stdlib_JSON.Decode.array), []).map(itemJson => itemJson),
+      appUrl: path
+    });
+  });
+}
+
+let empty_inventory = [];
+
 let empty = {
-  inventory: []
+  inventory: empty_inventory,
+  appUrl: /* [] */0
 };
 
 let context = React.createContext(empty);
@@ -31,12 +62,6 @@ function PremiseContainer$SSR$Provider(props) {
 
 let premiseId = "a55351b1-1b78-4b6c-bd13-6859dc9ad410";
 
-let window = globalThis.window;
-
-let window$1 = (window == null) ? ({
-    __EXECUTOR_CONFIG__: null
-  }) : window;
-
 let config = window$1.__EXECUTOR_CONFIG__;
 
 let domExecutorConfig = (config == null) ? null : config;
@@ -46,17 +71,7 @@ let initialExecutorConfig = (domExecutorConfig == null) ? empty : domExecutorCon
 let state = Tilia.source(initialExecutorConfig, async (_prev, set) => {
   let match = globalThis.window;
   if (!(match == null)) {
-    let url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + premiseId);
-    url.protocol = "ws";
-    let ws = new WebSocket(url.href);
-    ws.addEventListener("message", event => {
-      let jsonR = event.data;
-      let json = JSON.parse(jsonR);
-      set({
-        inventory: Stdlib_Option.getOr(Stdlib_Option.flatMap(Stdlib_Option.flatMap(Stdlib_JSON.Decode.object(json), d => d["inventory"]), Stdlib_JSON.Decode.array), []).map(itemJson => itemJson)
-      });
-    });
-    return;
+    return subscribe(premiseId, set);
   }
 });
 
@@ -80,4 +95,4 @@ export {
   premiseId,
   state,
 }
-/* base_url Not a pure module */
+/* window Not a pure module */

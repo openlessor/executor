@@ -87,15 +87,20 @@ let server = Bun.serveWithWebSocket({
           ~url=`${env["API_BASE_URL"]}/events?premise_id=${ExecutorUi.PremiseContainer.premiseId}`,
         )
       }
+      Console.log(url)
       let premise_id = switch url.searchParams->WebAPI.URLSearchParams.get("premise_id") {
       | Value(value) => value
-
+      | Null => ExecutorUi.PremiseContainer.premiseId
       }
+      Console.log(premise_id)
       ws->Globals.WebSocket.subscribe(~topic=premise_id)
       let fetchPremiseAndPublish = (premise_id: string, payload) => {
-        Connection.withClient(client => Promise.resolve(Premise.getConfig(~client, premise_id)))
+        Connection.withClient(client =>
+          Promise.resolve(Premise.getConfig(~client, premise_id, url))
+        )
         ->Promise.then(config => {
-          Console.log("Got config")
+          Console.log("Got config:")
+          Console.log(config)
           ws->Globals.WebSocket.publish(
             ~topic=premise_id,
             ~data=config->JSON.stringifyAny->Option.getUnsafe,
@@ -129,7 +134,12 @@ let server = Bun.serveWithWebSocket({
     | true => Response.makeFromFile(file)
     | false =>
       switch Route.Frontend.get {
-      | Bun.Handler(handler) => await handler(req, server)
+      | Bun.Handler(handler) =>
+        if url.pathname != "/events" {
+          await handler(req, server)
+        } else {
+          Obj.magic(undefined)
+        }
       | _ => Response.make("")
       }
     }

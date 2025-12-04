@@ -1,5 +1,5 @@
 module Config: {
-  type t = {/*premise_id: option<string>,*/ inventory: array<InventoryItem.t>}
+  type t = {inventory: array<InventoryItem.t>, appUrl: list<string>}
   let fetch: string => promise<t>
 }
 

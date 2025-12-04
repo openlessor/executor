@@ -4,17 +4,24 @@ import PgPromise from "pg-promise";
 import * as PgListener from "pg-listener";
 
 let pgp = PgPromise();
+
 let db = pgp(process.env.DB_URL);
 
+let listener = new PgListener.PgListener({
+  pgp: pgp,
+  db: db
+});
+
 function withListener(premise_id, onMessage) {
-  let listener = new PgListener.PgListener({
-    pgp: pgp,
-    db: db,
-  });
   listener.listen([premise_id], {
-    onMessage: onMessage,
+    onMessage: onMessage
   });
 }
 
-export { withListener };
-/* pg-promise Not a pure module */
+export {
+  pgp,
+  db,
+  listener,
+  withListener,
+}
+/* pgp Not a pure module */
