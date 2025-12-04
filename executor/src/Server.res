@@ -59,13 +59,6 @@ module Route = {
   }
 }
 
-module Clients = {
-  let subscriptions: Belt.Set.String.t = Belt.Set.String.empty
-
-  let connections = tilia({
-    "subscriptions": subscriptions,
-  })
-}
 external env: {..} = "process.env"
 @get external url: WebSocket.t<'a> => Nullable.t<string> = "WebSocket.url"
 
