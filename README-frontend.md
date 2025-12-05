@@ -1,5 +1,7 @@
 # OpenLessor POC
 
+This project has 2 readmes because it was merged into two repositorys. Give me some time to merge the READMEs together into one.
+
 ## Prototype Phase
 
 This software is currently in the prototype phase and is not ready to be used in production. The software design, APIs, and database schemas may completely change by a beta release.
@@ -9,8 +11,8 @@ This software is currently in the prototype phase and is not ready to be used in
 Written using ReScript and React. This is a work in progress. In it's current state, it should not be used by anyone. Any or all of this document is subject to change. 
 
 ## Running the frontend POC
-Use the Bun powered server for development with --hot flag:
-`bun --hot executor/src/Server.mjs`
+Use the Bun powered server for development; the following command will run the ReScript watch on all child monorepository packages and run the Bun server using the --hot flag:
+`pnpm run "/(watch|dev-server)/"/`
 
 1. Install dependencies using pnpm: `pnpm install`
 2. Start the SSR dev server (with hot reload) via `pnpm dev`

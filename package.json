@@ -9,7 +9,8 @@
   },
   "scripts": {
     "build": "rescript build && bun build.js",
-    "dev": "bun dev.js",
+    "dev-server": "bun --hot executor/src/Server.mjs",
+    "dev": "/(watch|dev-server)/",
     "start": "bun dist/Server.js",
     "clean": "rescript clean",
     "watch": "rescript watch",

@@ -2,7 +2,7 @@
 
 ## Important Note
 
-This project will not run currently since I've upgraded to ReScript v12. I've forked the dependencies `tilia` and `@tilia/react` to work with ReScript v12. I haven't published the fork in hopes the developer will release a new version soon.
+This project is currently using forked dependencies `tilia` and `@tilia/react` to work with ReScript v12. I've submitted a PR with the TiliaJS project.
 
 ## Prototype Phase
 
@@ -18,13 +18,11 @@ bun install
 
 **Note**: You may have to use NPM to install dependencies, since it seems to install ReScript v11 instead of ReScript v12. This could be caused by something I'm doing wrong.
 
-To run:
+To run the ReScript watch process and dev server:
 
 ```bash
-bun run src/Index.js
+pnpm run "/(watch|dev-server)/"
 ```
-
-This project was created using `bun init` in bun v1.3.3. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
 
 ## Backend Vision
 
