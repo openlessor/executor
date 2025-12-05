@@ -12,7 +12,7 @@ Written using ReScript and React. This is a work in progress. In it's current st
 
 ## Running the frontend POC
 Use the Bun powered server for development; the following command will run the ReScript watch on all child monorepository packages and run the Bun server using the --hot flag:
-`pnpm run "/(watch|dev-server)/"/`
+`pnpm dev`
 
 1. Install dependencies using pnpm: `pnpm install`
 2. Start the SSR dev server (with hot reload) via `pnpm dev`

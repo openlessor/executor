@@ -21,7 +21,7 @@ bun install
 To run the ReScript watch process and dev server:
 
 ```bash
-pnpm run "/(watch|dev-server)/"
+pnpm dev
 ```
 
 ## Backend Vision
