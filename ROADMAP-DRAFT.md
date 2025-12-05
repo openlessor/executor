@@ -36,3 +36,16 @@ TODO (Web channel is focus for now, then mobile and b&m):
 - Administrator backend
    - GUI for “Configuration based customization"
 - Create fully customizable UI driver so you stay on brand.
+
+## Plans for Frontend POC (written in ReScript using ReScript React)
+- Nearly zero configuration React components which you simply need to point to Executor endpoint URL to bootstrap
+- Styled using Tailwind CSS and packaged via Vite's SSR + client hydration pipeline
+- Frontend POC will run Vite Server, possibly deployed to CloudFlare containers
+
+## Plans for Backend POC (OpenLessor Executor; written in ReScript using rescript-bun)
+- Multiple billing period type (i.e.: seconds, minutes, days, weeks, months)
+- Configurable to call a provisioner (i.e.: hook for GET/POST URL during different phases; open source micro service for this TBD)
+- Each product subscription type will have it's own unique endpoint URL for configuring frontend React HOC
+- Service POC will be deployed to serverless infrastructure (service used TBD, maybe Vercel)
+
+All with multiple billing types depending on if it fits the use case; such as per minute, per day, per week, per month.

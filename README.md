@@ -1,5 +1,17 @@
 # executor
 
+## Preamble
+
+Written using ReScript and React. This is a work in progress. In it's current state, it should not be used by anyone. Any or all of this document is subject to change. 
+
+## Who is Executor for? 
+
+Some example use cases:
+- Hardware Cloud Equipment Rental
+- Apartment / Room Rental
+- Cloud Server
+- Website Subscription
+
 ## Important Note
 
 This project is currently using forked dependencies `tilia` and `@tilia/react` to work with ReScript v12. I've submitted a PR with the TiliaJS project.
@@ -24,13 +36,11 @@ Run the development tool in watch mode:
 npx pgtyped-rescript -w -c pgtyped.config.json
 ```
 
-**Note**: You may have to use NPM to install dependencies, since it seems to install ReScript v11 instead of ReScript v12. This could be caused by something I'm doing wrong.
+## Development server
 
-To run the ReScript watch process and dev server:
-
-```bash
-pnpm dev
-```
+1. Install dependencies using pnpm: `pnpm install`
+2. Start the ReScript watch and Bun dev server: `pnpm dev`
+3. Visit `http://localhost:8899` to interact with the app rendered on the server and hydrated in the browser.
 
 ## Backend Vision
 
@@ -51,6 +61,22 @@ Inventory will have child data as well. This child data will dictate: Time model
 - You can assign a "lease holder" to each inventory.
 
 This can be applied to anything billed on a recurring model. More to come on vision as the software progresses. Most of the business logic of OpenLessor will live in Executor.
+
+## Vision
+
+OpenLessor will be an open source project for omnichannel commerce, lease management, and subscription management. It will offer multiple billing types based on time units such as minutes, days, weeks, and months. I am currently working on this in my freetime and my hope is that the project will slowly progress over time. This is the fullstack monorepository for OpenLessor. It currently runs using the Bun JavaScript runtime. Tech stack:
+
+- PostgreSQL - pgtyped-rescript
+- Bun JavaScript runtime
+- ReScript / rescript-bun
+
+A key principal of OpenLessor will be performance first. That's why we adapt the latest bleeding edge technology when developing the stack.
+
+# Fully Customizable Vision
+
+Not only should performance be blazing fast, but also integration...
+
+The end goal of OpenLessor is to create a completely customizable software that can be easily integrated into your organization.
 
 ## Created by Brian Kaplan @ Software Deployed
 [https://softwaredeployed.com](https://softwaredeployed.com)
