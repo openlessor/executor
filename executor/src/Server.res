@@ -1,6 +1,19 @@
+external env: {..} = "process.env"
+
 module Route = {
   let getPremiseId = req => {
     req->Bun.BunRequest.params->Dict.get("premise_id")->Option.getUnsafe
+  }
+  module Events = {
+    let get = Bun.Handler(
+      async (req: Bun.BunRequest.t, server) => {
+        if server->Bun.Server.upgrade(req) == false {
+          JsError.throwWithMessage("Error")
+        }
+        Obj.magic(undefined)
+      },
+    )
+    let handler: Bun.routeHandlerObject = {get: get}
   }
   module Frontend = {
     external env: {..} = "process.env"
@@ -59,12 +72,9 @@ module Route = {
   }
 }
 
-external env: {..} = "process.env"
-@get external url: WebSocket.t<'a> => Nullable.t<string> = "WebSocket.url"
+//@get external url: WebSocket.t<'a> => Nullable.t<string> = "WebSocket.url"
 
 module SocketState = {
-  let storage = RescriptBun.AsyncHooks.AsyncLocalStorage.make()
-  // We should probably make a global context object and store this signal in a module for that.
   if globalThis["published_signal"] == undefined {
     globalThis["published_signal"] = signal(Belt.HashSet.String.make(~hintSize=1024))
   }
@@ -73,96 +83,81 @@ module SocketState = {
     "published": computed(() => published->lift),
   })
   let getStore = () => {
-    storage->RescriptBun.AsyncHooks.AsyncLocalStorage.getStore->Option.getUnsafe
+    store
   }
 }
 
-let server = SocketState.storage->RescriptBun.AsyncHooks.AsyncLocalStorage.run(
-  SocketState.store,
-  _ =>
-    Bun.serveWithWebSocket({
-      development: true,
-      port: 8899,
-      routes: Dict.fromArray([
-        ("/", Route.Frontend.handler),
-        ("/config/:premise_id", Route.Config.handler),
-        ("/inventory/:premise_id", Route.Inventory.handler),
-      ]),
-      websocket: {
-        open_: ws => {
-          let websocketUrl: Nullable.t<'a> = ws->url
-          let url = switch websocketUrl {
-          | Value(unwrapped) => WebAPI.URL.make(~url=unwrapped)
-          | _ => WebAPI.URL.make(~url=`${env["API_BASE_URL"]}/events`)
-          }
-          // Only do the thing if initial premise_id is provided
-          // XXX: This logic needs to be factored out so we can also call it from the message handler
-          switch url.searchParams->WebAPI.URLSearchParams.get("premise_id") {
-          | Null.Value(premise_id) => {
-              ws->Globals.WebSocket.subscribe(~topic=premise_id)
-              let fetchPremiseAndPublish = (premise_id: string, _payload) => {
-                Connection.withClient(client =>
-                  Promise.resolve(Premise.getConfig(~client, premise_id, url))
-                )
-                ->Promise.then(config => {
-                  Console.log("Got config:")
-                  Console.log(config)
-                  ws->Globals.WebSocket.publish(
-                    ~topic=premise_id,
-                    ~data=config->JSON.stringifyAny->Option.getUnsafe,
-                  )
-                  config
-                })
-                ->ignore
-              }
-              let store = SocketState.getStore()
-              if store["published"]->Belt.HashSet.String.has(premise_id) == false {
-                Listener.withListener(premise_id, ~onMessage=message =>
-                  fetchPremiseAndPublish(message.channel, message.payload)
-                )
-              }
-              store["published"]->Belt.HashSet.String.add(premise_id)
-              SocketState.setPublished(store["published"])
-            }
-          | Null.Null => ()
-          }
-        },
-        message: (ws, message) => {
-          Console.log("Message received:" ++ message)
-          if message == "ping" {
-            ws->Globals.WebSocket.send("pong")
-          }
-        },
-        close: (_ws, _, _) => {
-          Console.log("Client disconnected")
-        },
-      },
-      fetch: async (req, server) => {
-        let url = WebAPI.URL.make(~url=req->Request.url)
-        if url.pathname == "/events" {
-          if server->Bun.Server.upgrade(req) == false {
-            JsError.throwWithMessage("Error")
-          }
-          ()
-        }
-        let filePath = `${env["DOC_ROOT"]}/${url.pathname}`
-        let file = Bun.file(filePath)
-        switch await file->Bun.BunFile.exists {
-        | true => Response.makeFromFile(file)
-        | false =>
-          switch Route.Frontend.get {
-          | Bun.Handler(handler) =>
-            if url.pathname != "/events" {
-              await handler(req, server)
-            } else {
-              Obj.magic(undefined)
-            }
-          | _ => Response.make("")
-          }
-        }
-      },
-    }),
-)
+let subscribeTopic = (ws, premise_id) => {
+  Console.log("Subscribing to " ++ premise_id)
+  ws->Globals.WebSocket.subscribe(~topic=premise_id)
+  let fetchPremiseAndPublish = (premise_id: string, _payload) => {
+    Connection.withClient(client => Premise.getConfig(~client, premise_id))
+    ->Promise.then(config => {
+      Console.log("Got config:")
+      Console.log(config)
+      ws->Globals.WebSocket.publish(
+        ~topic=premise_id,
+        ~data=config->JSON.stringifyAny->Option.getUnsafe,
+      )
+      Promise.resolve(config)
+    })
+    ->ignore
+  }
+  let store = SocketState.getStore()
+  if store["published"]->Belt.HashSet.String.has(premise_id) == false {
+    Listener.withListener(premise_id, ~onMessage=message =>
+      fetchPremiseAndPublish(message.channel, message.payload)
+    )
+  }
+  store["published"]->Belt.HashSet.String.add(premise_id)
+  SocketState.setPublished(store["published"])
+}
+
+//let server = SocketState.storage->RescriptBun.AsyncHooks.AsyncLocalStorage.run(
+//  SocketState.store,
+//  _ =>
+let rec server = Bun.serveWithWebSocket({
+  development: true,
+  port: 8899,
+  routes: Dict.fromArray([
+    ("/", Route.Frontend.handler),
+    ("/test", Route.Frontend.handler),
+    ("/events", Route.Events.handler),
+    ("/config/:premise_id", Route.Config.handler),
+    ("/inventory/:premise_id", Route.Inventory.handler),
+  ]),
+  websocket: {
+    message: (ws, message) => {
+      switch message->String.split(" ")->List.fromArray->List.splitAt(1)->Option.getUnsafe {
+      | (list{"ping"}, list{}) => ws->Globals.WebSocket.send("pong")
+      | (list{"select"}, list{premise_id}) => subscribeTopic(ws, premise_id)
+      | _ => ()
+      }
+    },
+    close: (_ws, _, _) => {
+      Console.log("Client disconnected")
+    },
+  },
+  fetch: async (req, server) => {
+    let url = WebAPI.URL.make(~url=req->Request.url)
+    if url.pathname == "/events" {
+      if server->Bun.Server.upgrade(req) == false {
+        JsError.throwWithMessage("Error")
+      }
+      ()
+    }
+    let filePath = `${env["DOC_ROOT"]}/${url.pathname}`
+    let file = Bun.file(filePath)
+    switch await file->Bun.BunFile.exists {
+    | true => Response.makeFromFile(file)
+    | false =>
+      switch Route.Frontend.get {
+      | Bun.Handler(handler) => await handler(req, server)
+      | _ => Response.make("")
+      }
+    }
+  },
+})
 
 // I think this state will be wrong because it can potentially be another user's state?
 // So this store should probably be something like a HashMap of the data from the database

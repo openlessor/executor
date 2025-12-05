@@ -30,7 +30,20 @@ function App(props) {
   }, []);
   let match$1 = match[0].path;
   let tmp;
-  tmp = match$1 !== 0 && match$1.hd !== "item" ? JsxRuntime.jsx(NotFound$ExecutorUi.make, {}) : JsxRuntime.jsx(Landing$ExecutorUi.make, {});
+  if (match$1 !== 0) {
+    switch (match$1.hd) {
+      case "item" :
+        tmp = JsxRuntime.jsx(Landing$ExecutorUi.make, {});
+        break;
+      case "test" :
+        tmp = match$1.tl !== 0 ? JsxRuntime.jsx(NotFound$ExecutorUi.make, {}) : JsxRuntime.jsx(Landing$ExecutorUi.make, {});
+        break;
+      default:
+        tmp = JsxRuntime.jsx(NotFound$ExecutorUi.make, {});
+    }
+  } else {
+    tmp = JsxRuntime.jsx(Landing$ExecutorUi.make, {});
+  }
   return JsxRuntime.jsx(JsxRuntime.Fragment, {
     children: tmp
   });

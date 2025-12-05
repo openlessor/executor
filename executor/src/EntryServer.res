@@ -19,7 +19,6 @@ let render = (url: string): promise<renderResult> => {
           )
           let config: ExecutorUi.PremiseContainer.Config.t = {
             inventory,
-            appUrl: appUrl.path,
             premise: Some({
               id: premise.id,
               name: premise.name,

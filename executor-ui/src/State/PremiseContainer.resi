@@ -10,7 +10,6 @@ module Premise: {
 module Config: {
   type t = {
     inventory: array<InventoryItem.t>,
-    appUrl: list<string>,
     premise: option<Premise.t>,
   }
   let fetch: string => promise<t>

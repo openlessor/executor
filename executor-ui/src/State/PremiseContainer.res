@@ -18,7 +18,6 @@ module Premise = {
 module InputConfig = {
   type t = {
     inventory: array<InventoryItem.t>,
-    appUrl: list<string>,
     premise: nullable<
       {
         id: string,
@@ -31,10 +30,21 @@ module InputConfig = {
 }
 
 module Config = {
-  type t = {inventory: array<InventoryItem.t>, appUrl: list<string>, premise: option<Premise.t>}
+  module Input = {
+    type t = {
+      inventory: array<InventoryItem.t>,
+      premise: {
+        id: string,
+        name: string,
+        description: string,
+        updated_at: string,
+      },
+    }
+    @scope("JSON") @val
+    external parseJSON: string => t = "parse"
+  }
 
-  @scope("JSON") @val
-  external parseJSON: string => t = "parse"
+  type t = {inventory: array<InventoryItem.t>, premise: option<Premise.t>}
 
   // XXX @todo Make this base URL configurable from an env var
   // window.location.origin is not SSR friendly
@@ -93,17 +103,30 @@ module Config = {
       if globalThis["interval"] == undefined {
         globalThis["interval"] = setInterval(() => send_ping(), Float.toInt(timeout) * 1000)->ignore
       }
+      ws->WebAPI.WebSocket.addEventListener(Custom("open"), _event => {
+        ws->WebAPI.WebSocket.send4(`select ${premise_id}`)
+      })
       ws->WebAPI.WebSocket.addEventListener(Close, _event => {
         Console.log("WebSocket closed, reconnecting")
-        setTimeout(() => subscribe(premise_id, state["updated_at"], set), 1000)->ignore
+        subscribe(premise_id, state["updated_at"], set)
       })
       ws->WebAPI.WebSocket.addEventListener(Message, event => {
         let data: string = event.data->Option.getUnsafe
-        Console.log("Got data:" ++ data)
         if data == "pong" {
           set_last_pong_ts(Date.fromString("now")->Date.getTime)
         } else {
-          let config = data->parseJSON
+          let input = data->Input.parseJSON
+          let premise: option<Premise.t> = Some({
+            id: input.premise.id,
+            name: input.premise.name,
+            description: input.premise.description,
+            updated_at: Date.fromString(input.premise.updated_at),
+          })
+
+          let config: t = {
+            inventory: input.inventory,
+            premise,
+          }
           switch config.premise {
           | Some(premise) => set_updated_ts(premise.updated_at->Date.getTime)
           | _ => set_updated_ts(Date.now())
@@ -116,7 +139,7 @@ module Config = {
 }
 
 module SSR = {
-  let empty: Config.t = {premise: None, inventory: [], appUrl: list{}}
+  let empty: Config.t = {premise: None, inventory: []}
 }
 
 let domExecutorConfig: nullable<InputConfig.t> = window["__EXECUTOR_CONFIG__"]
@@ -124,7 +147,6 @@ let initialExecutorConfig: Config.t = switch domExecutorConfig {
 | Nullable.Undefined | Nullable.Null => SSR.empty
 | Nullable.Value(config) => {
     inventory: config.inventory,
-    appUrl: config.appUrl,
     premise: switch config.premise {
     | Nullable.Value(premise) =>
       Some({

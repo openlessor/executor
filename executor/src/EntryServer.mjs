@@ -17,7 +17,6 @@ function render(url) {
   console.log("root route:" + root_route);
   return Connection$Executor.withClient(client => Route$Executor.getMatchingPremise(client, root_route).then(premise => Inventory$Executor.getInventoryList(client, premise.id).then(inventoryRows => {
     let inventory = Belt_Array.map(inventoryRows, Inventory$Executor.toInventoryItem);
-    let config_appUrl = appUrl.path;
     let config_premise = {
       id: premise.id,
       name: premise.name,
@@ -26,7 +25,6 @@ function render(url) {
     };
     let config = {
       inventory: inventory,
-      appUrl: config_appUrl,
       premise: config_premise
     };
     return Store$ExecutorUi.makeServerStore(config, param => Promise.resolve({

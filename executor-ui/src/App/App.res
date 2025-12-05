@@ -23,7 +23,7 @@ let make = (
 
   <>
     {switch url.path {
-    | list{"item", ..._} | list{} => <Landing />
+    | list{"item", ..._} | list{"test"} | list{} => <Landing />
     | _ => <NotFound />
     }}
   </>

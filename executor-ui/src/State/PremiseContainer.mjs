@@ -62,23 +62,31 @@ function subscribe(premise_id, updated_at, set) {
     setInterval(() => send_ping(), 5000);
     globalThis.interval = undefined;
   }
+  ws.addEventListener("open", _event => {
+    ws.send(`select ` + premise_id);
+  });
   ws.addEventListener("close", _event => {
     console.log("WebSocket closed, reconnecting");
-    setTimeout(() => subscribe(premise_id, state.updated_at, set), 1000);
+    subscribe(premise_id, state.updated_at, set);
   });
   ws.addEventListener("message", event => {
     let data = event.data;
-    console.log("Got data:" + data);
     if (data === "pong") {
       return set_last_pong_ts(new Date("now").getTime());
     }
-    let config = JSON.parse(data);
-    let premise = config.premise;
-    if (premise !== undefined) {
-      set_updated_ts(premise.updated_at.getTime());
-    } else {
-      set_updated_ts(Date.now());
-    }
+    let input = JSON.parse(data);
+    let premise = {
+      id: input.premise.id,
+      name: input.premise.name,
+      description: input.premise.description,
+      updated_at: new Date(input.premise.updated_at)
+    };
+    let config_inventory = input.inventory;
+    let config = {
+      inventory: config_inventory,
+      premise: premise
+    };
+    set_updated_ts(premise.updated_at.getTime());
     set(config);
   });
 }
@@ -87,7 +95,6 @@ let empty_inventory = [];
 
 let empty = {
   inventory: empty_inventory,
-  appUrl: /* [] */0,
   premise: undefined
 };
 
@@ -112,7 +119,6 @@ if (domExecutorConfig == null) {
     });
   initialExecutorConfig = {
     inventory: domExecutorConfig.inventory,
-    appUrl: domExecutorConfig.appUrl,
     premise: tmp
   };
 }
