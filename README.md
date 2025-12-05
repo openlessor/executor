@@ -16,6 +16,14 @@ To install dependencies:
 bun install
 ```
 
+## pgtyped-rescript
+
+Run the development tool in watch mode:
+
+```bash
+npx pgtyped-rescript -w -c pgtyped.config.json
+```
+
 **Note**: You may have to use NPM to install dependencies, since it seems to install ReScript v11 instead of ReScript v12. This could be caused by something I'm doing wrong.
 
 To run the ReScript watch process and dev server:
