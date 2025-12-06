@@ -1,5 +1,7 @@
 type t = {
-  "config": ExecutorUi.PremiseContainer.Config.t,
+  // Perhaps the ID should be typed as a UUID?
+  "premise_id": string,
+  "config": ExecutorUi.Config.t,
   "period_list": array<ExecutorUi.Pricing.period>,
   "unit": ExecutorUi.PeriodList.Unit.t,
 }
@@ -16,13 +18,20 @@ let getAsyncLocalStorage = () => {
   storage->Belt.Option.getUnsafe
 }
 
-let makeStore = (initialExecutorConfig) => carve(({derived}) => {
-  {
-    "config": initialExecutorConfig,
-    "period_list": derived(ExecutorUi.PeriodList.deriveState),
-    "unit": PeriodList.Unit.signal->lift,
-  }
-})
+let derivePremiseId = (store: t) => {
+  let premise = store["config"].premise->Option.getOrThrow
+  premise.id
+}
+
+let makeStore = initialExecutorConfig =>
+  carve(({derived}) => {
+    {
+      "premise_id": derived(derivePremiseId),
+      "config": initialExecutorConfig,
+      "period_list": derived(ExecutorUi.PeriodList.deriveState),
+      "unit": PeriodList.Unit.signal->lift,
+    }
+  })
 
 let makeServerStore = (
   initialExecutorConfig,

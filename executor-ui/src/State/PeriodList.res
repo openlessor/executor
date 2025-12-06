@@ -16,7 +16,7 @@ module Unit = {
 
 let deriveState = store => {
   let seen_units = Set.make()
-  let config: PremiseContainer.Config.t = store["config"]
+  let config: Config.t = store["config"]
   let inventory = config.inventory->Belt.Array.copy
   inventory
   ->Belt.Array.flatMap(inv => {

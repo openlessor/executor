@@ -1,4 +1,4 @@
-type renderResult = {executorConfig: ExecutorUi.PremiseContainer.Config.t, html: string}
+type renderResult = {executorConfig: ExecutorUi.Config.t, html: string}
 
 let render = (url: string): promise<renderResult> => {
   let appUrl = RescriptReactRouter.dangerouslyGetInitialUrl(~serverUrlString=url, ())
@@ -17,7 +17,7 @@ let render = (url: string): promise<renderResult> => {
             inventoryRows,
             Inventory.toInventoryItem,
           )
-          let config: ExecutorUi.PremiseContainer.Config.t = {
+          let config: ExecutorUi.Config.t = {
             inventory,
             premise: Some({
               id: premise.id,
