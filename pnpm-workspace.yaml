@@ -11,6 +11,9 @@ onlyBuiltDependencies:
   - bun
   - rescript-embed-lang
 
+overrides:
+  common: link:common
+
 workspaces:
   - executor/*
   - executor-ui/*

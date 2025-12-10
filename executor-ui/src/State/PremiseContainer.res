@@ -1,5 +1,3 @@
-external env: {..} = "process.env"
-
 let window = switch globalThis["window"]->Nullable.toOption {
 | Some(window) => window
 | None => {"__EXECUTOR_CONFIG__": Nullable.null}
@@ -42,7 +40,7 @@ let state = source(initialExecutorConfig, async (_prev, set) => {
   | Some(premise) => {
       let {updated_at, id} = premise
       switch globalThis["window"]->Nullable.toOption {
-      | Some(_) => Client.subscribe(id, updated_at->Date.getTime, set)
+      | Some(_) => set -> Client.subscribe(id, updated_at->Date.getTime)
       | None => () // PremiseContainer.state is only used on the client
       }
     }

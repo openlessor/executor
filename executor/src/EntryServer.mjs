@@ -13,7 +13,7 @@ import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mj
 
 function render(url) {
   let appUrl = RescriptReactRouter.dangerouslyGetInitialUrl(url, undefined);
-  let root_route = Belt_List.length(appUrl.path) === 0 ? "/" : Belt_List.head(appUrl.path);
+  let root_route = Belt_List.length(appUrl.path) === 0 ? "/" : "/" + Belt_List.head(appUrl.path);
   console.log("root route:" + root_route);
   return Connection$Executor.withClient(client => Route$Executor.getMatchingPremise(client, root_route).then(premise => Inventory$Executor.getInventoryList(client, premise.id).then(inventoryRows => {
     let inventory = Belt_Array.map(inventoryRows, Inventory$Executor.toInventoryItem);

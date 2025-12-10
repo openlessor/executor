@@ -81,7 +81,7 @@ function Cart(props) {
       String(props.count),
       ")"
     ],
-    className: "block font-bold align-middle text-gray-700 text-base m-2 text-3xl"
+    className: "block font-bold align-middle text-gray-700 m-2 text-3xl"
   });
 }
 

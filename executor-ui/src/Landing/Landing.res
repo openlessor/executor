@@ -16,7 +16,7 @@ let removeFromCart = (state: Cart.t, id) => {
 @react.component
 let make = leaf(() => {
   let main_store = Store.getStore()
-  let unit = main_store["unit"]
+  let _unit = main_store["unit"]
   let today = Date.make()
   today->Date.setHoursMSMs(~hours=0, ~minutes=0, ~seconds=0, ~milliseconds=0)
 
@@ -26,7 +26,7 @@ let make = leaf(() => {
     Some(() => ())
   }, [openDate, closeDate])
 
-  let updateOpenDate = (openDate: Nullable.t<Date.t>) => {
+  let _updateOpenDate = (openDate: Nullable.t<Date.t>) => {
     setOpenDate(_prev =>
       switch openDate {
       | Js.Nullable.Value(date) => date
@@ -35,7 +35,7 @@ let make = leaf(() => {
     )
     //setCloseDate(openDate)
   }
-  let updateCloseDate = (closeDate: Nullable.t<Date.t>) => {
+  let _updateCloseDate = (closeDate: Nullable.t<Date.t>) => {
     setCloseDate(_prev =>
       switch closeDate {
       | Js.Nullable.Value(date) => date
@@ -54,7 +54,7 @@ let make = leaf(() => {
   let cartCount = Belt.Array.length(state.cart)
 
   <Container>
-    <Card className="bg-slate-200/40 border-slate-200/40 border-1">
+    <Card className="bg-slate-200/40 border-slate-200/40 border">
       <h1 className="text-xl">
         <span>
           <Icon.MonitorCloud
@@ -74,11 +74,11 @@ let make = leaf(() => {
         <Icon.Calendar
           size={48} className="absolute left-0 top-0 bottom-0 my-auto text-slate-400"
         />
-        <span className="align-middle text-lg pl-[56px]">
+        <span className="align-middle text-lg pl-14">
           {"Select your reservation start date: "->str}
         </span>
         <input className="block align-end outline-slate-400 outline-1 px-2" />
-        <span className="align-middle text-lg pl-[56px]">
+        <span className="align-middle text-lg pl-14">
           {"Select your reservation end date: "->str}
         </span>
         <input className="block align-end outline-slate-400 outline-1 px-2" />

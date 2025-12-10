@@ -2,14 +2,13 @@
   "namespace": true,
   "jsx": { "version": 4 },
   "ppx-flags": ["rescript-embed-lang/ppx"],
-  "dependencies": ["@rescript/react", "@rescript/webapi", "tilia", "@tilia/react", "rescript-bun"],
+  "dependencies": ["common", "@rescript/react", "@rescript/webapi", "tilia", "@tilia/react", "rescript-bun"],
   "compiler-flags": [
     "-open RescriptBun",
     "-open RescriptBun.Globals",
     "-open Tilia",
     "-open TiliaReact"
   ],
-  "uncurried": true,
   "name": "executor-ui",
   "sources": [
     {

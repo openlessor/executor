@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  common: link:common
+
 importers:
 
   .:
@@ -19,7 +22,10 @@ importers:
         version: 0.1.0-experimental-2090589(rescript@12.0.0)
       '@tilia/react':
         specifier: github:Software-Deployed/tilia#path:react
-        version: https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:react(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+        version: https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:react(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      common:
+        specifier: link:common
+        version: link:common
       executor:
         specifier: link:executor
         version: link:executor
@@ -44,19 +50,13 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.1(react@19.2.1)
-      rescript:
-        specifier: 12.0.0
-        version: 12.0.0
       rescript-bun:
         specifier: ^2.1.0
         version: 2.1.0(rescript@12.0.0)
       tilia:
         specifier: github:Software-Deployed/tilia#path:tilia
-        version: https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:tilia
+        version: https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:tilia
     devDependencies:
-      '@rescript/core':
-        specifier: ^1.6.1
-        version: 1.6.1(rescript@12.0.0)
       '@rescript/react':
         specifier: ^0.14.0
         version: 0.14.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
@@ -66,6 +66,9 @@ importers:
       pgtyped-rescript:
         specifier: ^2.6.0
         version: 2.6.0(@rescript/core@1.6.1(rescript@12.0.0))(rescript@12.0.0)
+      rescript:
+        specifier: 12.0.0
+        version: 12.0.0
       rescript-embed-lang:
         specifier: ^0.5.5
         version: 0.5.5
@@ -310,8 +313,8 @@ packages:
   '@scarf/scarf@1.4.0':
     resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
 
-  '@tilia/react@https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:react':
-    resolution: {path: react, tarball: https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243}
+  '@tilia/react@https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:react':
+    resolution: {path: react, tarball: https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111}
     version: 0.0.0
     peerDependencies:
       react: ^19.2.1
@@ -746,8 +749,8 @@ packages:
   tilia@file:../tilia:
     resolution: {directory: ../tilia, type: directory}
 
-  tilia@https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:tilia:
-    resolution: {path: tilia, tarball: https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243}
+  tilia@https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:tilia:
+    resolution: {path: tilia, tarball: https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111}
     version: 0.0.0
 
   tinypool@0.7.0:
@@ -968,7 +971,7 @@ snapshots:
 
   '@scarf/scarf@1.4.0': {}
 
-  '@tilia/react@https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:react(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+  '@tilia/react@https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:react(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
     dependencies:
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
@@ -1399,7 +1402,7 @@ snapshots:
 
   tilia@file:../tilia: {}
 
-  tilia@https://codeload.github.com/Software-Deployed/tilia/tar.gz/d9fb17297f4bc250f1c7a15ea911b271377b5243#path:tilia: {}
+  tilia@https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:tilia: {}
 
   tinypool@0.7.0: {}
 

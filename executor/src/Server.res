@@ -72,8 +72,6 @@ module Route = {
   }
 }
 
-//@get external url: WebSocket.t<'a> => Nullable.t<string> = "WebSocket.url"
-
 module SocketState = {
   if globalThis["published_signal"] == undefined {
     globalThis["published_signal"] = signal(Belt.HashSet.String.make(~hintSize=1024))
@@ -113,16 +111,13 @@ let subscribeTopic = (ws, premise_id) => {
   SocketState.setPublished(store["published"])
 }
 
-//let server = SocketState.storage->RescriptBun.AsyncHooks.AsyncLocalStorage.run(
-//  SocketState.store,
-//  _ =>
-let rec server = Bun.serveWithWebSocket({
+let server = Bun.serveWithWebSocket({
   development: true,
   port: 8899,
   routes: Dict.fromArray([
     ("/", Route.Frontend.handler),
     ("/test", Route.Frontend.handler),
-    ("/events", Route.Events.handler),
+    (Common.Constants.event_url, Route.Events.handler),
     ("/config/:premise_id", Route.Config.handler),
     ("/inventory/:premise_id", Route.Inventory.handler),
   ]),
@@ -140,7 +135,7 @@ let rec server = Bun.serveWithWebSocket({
   },
   fetch: async (req, server) => {
     let url = WebAPI.URL.make(~url=req->Request.url)
-    if url.pathname == "/events" {
+    if url.pathname == Common.Constants.event_url {
       if server->Bun.Server.upgrade(req) == false {
         JsError.throwWithMessage("Error")
       }
@@ -158,19 +153,6 @@ let rec server = Bun.serveWithWebSocket({
     }
   },
 })
-
-// I think this state will be wrong because it can potentially be another user's state?
-// So this store should probably be something like a HashMap of the data from the database
-// For testing purposes it will suffice
-/* observe(() => {
-  Console.log("Publishing premiseId: " ++ PremiseContainer.premiseId)
-  server->Bun.Server.publish(
-    ~topic=PremiseContainer.premiseId,
-    ~data=State.main_store["config"].inventory
-    ->JSON.stringifyAny
-    ->Belt.Option.getUnsafe,
-  )
-})*/
 
 let port =
   server

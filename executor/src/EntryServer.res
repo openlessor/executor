@@ -5,7 +5,7 @@ let render = (url: string): promise<renderResult> => {
   let root_route = if appUrl.path->Belt.List.length == 0 {
     "/"
   } else {
-    appUrl.path->Belt.List.head->Option.getUnsafe
+    "/" ++ appUrl.path->Belt.List.head->Option.getUnsafe
   }
   Console.log("root route:" ++ root_route)
 

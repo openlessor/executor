@@ -1,11 +1,8 @@
 external env: {..} = "process.env"
 
-let rec subscribe = (premise_id: string, updated_at: float, set) => {
-  Console.log("Premise_id:" ++ premise_id)
-  Console.log("updated_at: ")
-  Console.log(updated_at)
+let rec subscribe = (set, premise_id: string, updated_at: float) => {
   let url = WebAPI.URL.make(
-    ~url=`${env["API_BASE_URL"]}/events?premise_id=${premise_id}&ts=${updated_at->Float.toString}`,
+    ~url=`${env["API_BASE_URL"]}/${Common.Constants.event_url}?premise_id=${premise_id}&ts=${updated_at->Float.toString}`,
   )
   url.protocol = "ws"
 
@@ -41,7 +38,7 @@ let rec subscribe = (premise_id: string, updated_at: float, set) => {
     if elapsed > timeout {
       Console.log("No pong received from server, reconnecting...")
       ws->WebAPI.WebSocket.close
-      subscribe(premise_id, Date.now(), set)
+      set->subscribe(premise_id, Date.now())
     }
   })
   if globalThis["interval"] == undefined {
@@ -52,7 +49,7 @@ let rec subscribe = (premise_id: string, updated_at: float, set) => {
   })
   ws->WebAPI.WebSocket.addEventListener(Close, _event => {
     Console.log("WebSocket closed, reconnecting")
-    subscribe(premise_id, state["updated_at"], set)
+    subscribe(set, premise_id, state["updated_at"])
   })
   ws->WebAPI.WebSocket.addEventListener(Message, event => {
     let data: string = event.data->Option.getUnsafe

@@ -2,13 +2,11 @@
 
 import * as Tilia from "tilia/src/Tilia.mjs";
 import * as Stdlib_List from "@rescript/runtime/lib/es6/Stdlib_List.js";
+import * as Constants$Common from "common/./src/Constants.mjs";
 import * as Input$ExecutorUi from "./Input.mjs";
 
-function subscribe(premise_id, updated_at, set) {
-  console.log("Premise_id:" + premise_id);
-  console.log("updated_at: ");
-  console.log(updated_at);
-  let url = new URL(process.env.API_BASE_URL + `/events?premise_id=` + premise_id + `&ts=` + updated_at.toString());
+function subscribe(set, premise_id, updated_at) {
+  let url = new URL(process.env.API_BASE_URL + `/` + Constants$Common.event_url + `?premise_id=` + premise_id + `&ts=` + updated_at.toString());
   url.protocol = "ws";
   let ws = new WebSocket(url.href);
   let pathname = location.pathname;
@@ -39,7 +37,7 @@ function subscribe(premise_id, updated_at, set) {
     if (elapsed > 5.0) {
       console.log("No pong received from server, reconnecting...");
       ws.close();
-      return subscribe(premise_id, Date.now(), set);
+      return subscribe(set, premise_id, Date.now());
     }
   });
   if (globalThis.interval === undefined) {
@@ -51,7 +49,7 @@ function subscribe(premise_id, updated_at, set) {
   });
   ws.addEventListener("close", _event => {
     console.log("WebSocket closed, reconnecting");
-    subscribe(premise_id, state.updated_at, set);
+    subscribe(set, premise_id, state.updated_at);
   });
   ws.addEventListener("message", event => {
     let data = event.data;

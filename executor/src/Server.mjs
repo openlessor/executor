@@ -3,6 +3,7 @@
 import * as Tilia from "tilia/src/Tilia.mjs";
 import * as Stdlib_List from "@rescript/runtime/lib/es6/Stdlib_List.js";
 import * as Stdlib_JsError from "@rescript/runtime/lib/es6/Stdlib_JsError.js";
+import * as Constants$Common from "common/./src/Constants.mjs";
 import * as Premise$Executor from "./Database/Premise.mjs";
 import * as Primitive_option from "@rescript/runtime/lib/es6/Primitive_option.js";
 import * as Listener$Executor from "./Database/Listener.mjs";
@@ -165,7 +166,7 @@ let server = Bun.serve({
   port: 8899,
   fetch: async (req, server) => {
     let url = new URL(req.url);
-    if (url.pathname === "/events") {
+    if (url.pathname === Constants$Common.event_url) {
       if (server.upgrade(req) === false) {
         Stdlib_JsError.throwWithMessage("Error");
       }
@@ -190,7 +191,7 @@ let server = Bun.serve({
       handler$1
     ],
     [
-      "/events",
+      Constants$Common.event_url,
       handler
     ],
     [

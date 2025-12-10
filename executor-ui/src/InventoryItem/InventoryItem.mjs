@@ -49,12 +49,12 @@ let make = TiliaReact.leaf(props => {
               period_list: item.period_list
             })
           ],
-          className: "flex flex-col flex-grow flex-1 w-full bg-white/40 rounded-sm m-[1.5] justify-between items-end"
+          className: "flex flex-col grow flex-1 w-full bg-white/40 rounded-sm m-[1.5] justify-between items-end"
         })
       ],
-      className: "relative m-[1.5] flex flex-1 flex-col flex-grow max-w-40"
+      className: "relative m-[1.5] flex flex-1 flex-col grow max-w-40"
     }),
-    className: "flex flex-1 flex-col flex-grow border-2",
+    className: "flex flex-1 flex-col grow border-2",
     id: "item-" + String(id),
     href: "/item/" + String(id),
     onClick: e => {

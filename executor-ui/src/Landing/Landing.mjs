@@ -73,7 +73,7 @@ let make = TiliaReact.leaf(props => {
           }),
           className: "text-xl"
         }),
-        className: "bg-slate-200/40 border-slate-200/40 border-1"
+        className: "bg-slate-200/40 border-slate-200/40 border"
       }),
       JsxRuntime.jsxs(Card$ExecutorUi.make, {
         children: [
@@ -96,14 +96,14 @@ let make = TiliaReact.leaf(props => {
               }),
               JsxRuntime.jsx("span", {
                 children: "Select your reservation start date: ",
-                className: "align-middle text-lg pl-[56px]"
+                className: "align-middle text-lg pl-14"
               }),
               JsxRuntime.jsx("input", {
                 className: "block align-end outline-slate-400 outline-1 px-2"
               }),
               JsxRuntime.jsx("span", {
                 children: "Select your reservation end date: ",
-                className: "align-middle text-lg pl-[56px]"
+                className: "align-middle text-lg pl-14"
               }),
               JsxRuntime.jsx("input", {
                 className: "block align-end outline-slate-400 outline-1 px-2"

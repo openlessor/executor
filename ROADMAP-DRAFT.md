@@ -5,26 +5,21 @@ Basically the goal right now is to support the following for the initial release
 - I’ve created a concept called a “Premise” which is essentially the parent object or scope of Inventory. This can be used to do things like split responsibility (think different staff roles), use the same backend for multiple businesses, etc. The idea is that you can use some JavaScript and just pass in the Premise ID (which is a random UUIDv4) and it will pull and render everything from the backend.
 - ReactJS components to render inventory, pricing, timer / elapsed time, etc, although I want to make it so you can actually use any components that use JSX. Which is actually a possibility with ReScript. Also for example the state management library I’m using is not coupled to React.
   - End goal is to have a fully customizable UI experience (the only requirement is JSX)
-- Full server rendering for performance. This is already done using Vite bundler.
-- WebSockets to enable real-time events, etc.
 - Simple admin backend 
 
 Future:
-- Merge the frontend and backend into one repository using ReScript v12, Bun runtime. Currently it’s in two different packages since ReScript just upgraded to v12, so some packages that haven’t caught up yet are only working on v11.
 - Fully customizable Administrator panel with granular roles, access control, etc.
 -  Pluggable UI allowing you to use any JSX-based UI components.
 - Fully customizable and overridable declarative UI / styling system.
 
-Some blah blah I'm posting here also:
-It’s still a very early stage prototype, so it doesn’t do much yet. I’m building the foundation. Current features:
-
+Currently implemented:
 - Realtime WebSocket, ping/pong connection failure detection, auto-reconnect, subscribe to state updates over WebSocket using the active Premise ID.
 - PostgreSQL database triggers for sending notifications when a Premise or it’s children are updated.
 - Map a root URL to a Premise (for example “/“ or “/movies”) — eventually more mappings will be available. The idea will be that you can configure based on domain name, URL, etc. You can embed or do a customized implementation for full performance, etc.
 
 TODO (Web channel is focus for now, then mobile and b&m):
 - In the catchall Bun handler, add a way to load the root URL for a Premise so you don’t have to configure each one. Make it so the child links work top down from the root URL. (i.e.: make the Postgres table the driver for this.)
-   - Log a warning if a URL name is used that is reserved for system use.
+   - Fail to start if a URL name is used that is reserved for system use.
    - Change the system use URLs like the socket to have a underscore in front of it (events -> _events) — In case you want to name your root events.
 - Fix an issue when you add a new inventory to an empty Premise the page doesn’t update.
 - Add “Out of stock” or similar (customizable) message when no inventory available. 

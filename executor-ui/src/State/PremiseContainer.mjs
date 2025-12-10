@@ -38,7 +38,7 @@ let state = Tilia.source(initialExecutorConfig, async (_prev, set) => {
   }
   let match = globalThis.window;
   if (!(match == null)) {
-    return Client$ExecutorUi.subscribe(premise.id, premise.updated_at.getTime(), set);
+    return Client$ExecutorUi.subscribe(set, premise.id, premise.updated_at.getTime());
   }
 });
 

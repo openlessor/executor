@@ -10,6 +10,7 @@
     "pgtyped-rescript",
     "rescript-bun",
     "executor-ui",
+    "common",
     "@rescript/react"
   ],
   "compiler-flags": [
@@ -17,7 +18,6 @@
     "-open RescriptBun",
     "-open RescriptBun.Globals"
   ],
-  "uncurried": true,
   "name": "executor",
   "sources": [
     {

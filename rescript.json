@@ -12,11 +12,11 @@
   "dependencies": [
     "@rescript/webapi",
     "executor-ui",
-    "executor"
+    "executor",
+    "common"
   ],
   "suffix": ".mjs",
   "jsx": {
     "version": 4
-  },
-  "pinned-dependencies": ["@rescript/webapi", "rescript-embed-lang", "executor-ui", "executor"]
+  }
 }
