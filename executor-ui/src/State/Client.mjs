@@ -6,7 +6,7 @@ import * as Constants$Common from "common/./src/Constants.mjs";
 import * as Input$ExecutorUi from "./Input.mjs";
 
 function subscribe(set, premise_id, updated_at) {
-  let url = new URL(process.env.API_BASE_URL + `/` + Constants$Common.event_url + `?premise_id=` + premise_id + `&ts=` + updated_at.toString());
+  let url = new URL(process.env.API_BASE_URL + Constants$Common.event_url + `?premise_id=` + premise_id + `&ts=` + updated_at.toString());
   url.protocol = "ws";
   let ws = new WebSocket(url.href);
   let pathname = location.pathname;

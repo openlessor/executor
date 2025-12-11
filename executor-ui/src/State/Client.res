@@ -2,7 +2,7 @@ external env: {..} = "process.env"
 
 let rec subscribe = (set, premise_id: string, updated_at: float) => {
   let url = WebAPI.URL.make(
-    ~url=`${env["API_BASE_URL"]}/${Common.Constants.event_url}?premise_id=${premise_id}&ts=${updated_at->Float.toString}`,
+    ~url=`${env["API_BASE_URL"]}${Common.Constants.event_url}?premise_id=${premise_id}&ts=${updated_at->Float.toString}`,
   )
   url.protocol = "ws"
 

@@ -2,8 +2,11 @@
 
 import * as Belt_List from "@rescript/runtime/lib/es6/Belt_List.js";
 import * as Belt_Array from "@rescript/runtime/lib/es6/Belt_Array.js";
+import * as Stdlib_List from "@rescript/runtime/lib/es6/Stdlib_List.js";
+import * as Stdlib_Option from "@rescript/runtime/lib/es6/Stdlib_Option.js";
 import * as App$ExecutorUi from "executor-ui/src/App/App.mjs";
 import * as Route$Executor from "./Database/Route.mjs";
+import * as Constants$Common from "common/./src/Constants.mjs";
 import * as Store$ExecutorUi from "executor-ui/src/State/Store.mjs";
 import * as Server from "react-dom/server";
 import * as JsxRuntime from "react/jsx-runtime";
@@ -12,10 +15,12 @@ import * as Connection$Executor from "./Database/Connection.mjs";
 import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mjs";
 
 function render(url) {
-  let appUrl = RescriptReactRouter.dangerouslyGetInitialUrl(url, undefined);
-  let root_route = Belt_List.length(appUrl.path) === 0 ? "/" : "/" + Belt_List.head(appUrl.path);
-  console.log("root route:" + root_route);
-  return Connection$Executor.withClient(client => Route$Executor.getMatchingPremise(client, root_route).then(premise => Inventory$Executor.getInventoryList(client, premise.id).then(inventoryRows => {
+  let app_url = RescriptReactRouter.dangerouslyGetInitialUrl(url, undefined);
+  let requested_root = "/" + Stdlib_Option.getOr(Stdlib_List.head(app_url.path), "");
+  let is_child_route = Stdlib_List.has(Constants$Common.premise_routes, requested_root, (a, b) => a === b);
+  let route_root = is_child_route || Belt_List.length(app_url.path) === 0 ? "/" : "/" + Belt_List.head(app_url.path);
+  console.log("root route:" + route_root);
+  return Connection$Executor.withClient(client => Route$Executor.getMatchingPremise(client, route_root).then(premise => Inventory$Executor.getInventoryList(client, premise.id).then(inventoryRows => {
     let inventory = Belt_Array.map(inventoryRows, Inventory$Executor.toInventoryItem);
     let config_premise = {
       id: premise.id,
@@ -30,7 +35,8 @@ function render(url) {
     return Store$ExecutorUi.makeServerStore(config, param => Promise.resolve({
       executorConfig: config,
       html: Server.renderToString(JsxRuntime.jsx(App$ExecutorUi.make, {
-        serverUrl: appUrl
+        route_root: premise.route_root,
+        server_url: app_url
       }))
     }));
   })));

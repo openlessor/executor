@@ -5,7 +5,7 @@ open PgTyped
 /** 'Query1' parameters type */
 @gentype
 type query1Params = {
-  root: string,
+  route_root: string,
 }
 
 /** 'Query1' return type */
@@ -14,6 +14,7 @@ type query1Result = {
   description: string,
   id: string,
   name: string,
+  route_root: string,
   updated_at: Date.t,
 }
 
@@ -24,12 +25,12 @@ type query1Query = {
   result: query1Result,
 }
 
-%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{"root":true},"params":[{"name":"root","required":true,"transform":{"type":"scalar"},"locs":[{"a":138,"b":143}]}],"statement":"SELECT id, name, description, updated_at FROM premise_route LEFT JOIN premise ON premise.id = premise_route.premise_id WHERE route_root = :root!"}`))
+%%private(let query1IR: IR.t = %raw(`{"usedParamSet":{"route_root":true},"params":[{"name":"route_root","required":true,"transform":{"type":"scalar"},"locs":[{"a":150,"b":161}]}],"statement":"SELECT id, name, description, updated_at, route_root FROM premise_route LEFT JOIN premise ON premise.id = premise_route.premise_id WHERE route_root = :route_root!"}`))
 
 /**
  Runnable query:
  ```sql
-SELECT id, name, description, updated_at FROM premise_route LEFT JOIN premise ON premise.id = premise_route.premise_id WHERE route_root = $1
+SELECT id, name, description, updated_at, route_root FROM premise_route LEFT JOIN premise ON premise.id = premise_route.premise_id WHERE route_root = $1
  ```
 
  */

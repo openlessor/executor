@@ -3,7 +3,13 @@
 
 let event_url = "/_events";
 
+let premise_routes = {
+  hd: "/item",
+  tl: /* [] */0
+};
+
 export {
   event_url,
+  premise_routes,
 }
 /* No side effect */
