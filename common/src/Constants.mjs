@@ -4,7 +4,7 @@
 let event_url = "/_events";
 
 let premise_routes = {
-  hd: "/item",
+  hd: "item",
   tl: /* [] */0
 };
 

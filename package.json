@@ -10,7 +10,7 @@
   "scripts": {
     "build": "rescript build && bun build.js",
     "dev-server": "bun --hot executor/src/Server.mjs",
-    "dev": "pnpm run \"/(watch|dev-server)/\"",
+    "dev": "pnpm run --stream \"/(watch|dev-server)/\"",
     "start": "bun dist/Server.js",
     "clean": "rescript clean",
     "watch": "rescript watch",
@@ -22,7 +22,7 @@
   "packageManager": "pnpm@10.22.0",
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
-    "@rescript/runtime": "^12.0.0",
+    "@rescript/runtime": "^12.0.1",
     "@rescript/webapi": "0.1.0-experimental-2090589",
     "@tilia/react": "github:Software-Deployed/tilia#path:react",
     "common": "link:common",
@@ -32,14 +32,14 @@
     "pg": "^8.16.3",
     "pg-listener": "^1.1.3",
     "pg-promise": "^12.3.0",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "rescript-bun": "^2.1.0",
     "tilia": "github:Software-Deployed/tilia#path:tilia"
   },
   "overrides": {
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "trustedDependencies": [
     "rescript-embed-lang"
@@ -50,6 +50,6 @@
     "pgtyped-rescript": "^2.6.0",
     "rescript": "12.0.0",
     "rescript-embed-lang": "^0.5.5",
-    "tailwindcss": "^4.1.17"
+    "tailwindcss": "^4.1.18"
   }
 }

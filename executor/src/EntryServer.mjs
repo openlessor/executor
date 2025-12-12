@@ -16,17 +16,18 @@ import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mj
 
 function render(url) {
   let app_url = RescriptReactRouter.dangerouslyGetInitialUrl(url, undefined);
-  let requested_root = "/" + Stdlib_Option.getOr(Stdlib_List.head(app_url.path), "");
+  let requested_root = Stdlib_Option.getOr(Stdlib_List.head(app_url.path), "/");
   let is_child_route = Stdlib_List.has(Constants$Common.premise_routes, requested_root, (a, b) => a === b);
+  console.log(is_child_route);
   let route_root = is_child_route || Belt_List.length(app_url.path) === 0 ? "/" : "/" + Belt_List.head(app_url.path);
   console.log("root route:" + route_root);
-  return Connection$Executor.withClient(client => Route$Executor.getMatchingPremise(client, route_root).then(premise => Inventory$Executor.getInventoryList(client, premise.id).then(inventoryRows => {
+  return Connection$Executor.withClient(client => Route$Executor.getMatchingPremise(client, route_root).then(premise => Inventory$Executor.getInventoryList(client, Stdlib_Option.getOr(Stdlib_Option.map(premise, p => p.id), "")).then(inventoryRows => {
     let inventory = Belt_Array.map(inventoryRows, Inventory$Executor.toInventoryItem);
     let config_premise = {
-      id: premise.id,
-      name: premise.name,
-      description: premise.description,
-      updated_at: premise.updated_at
+      id: Stdlib_Option.getOr(Stdlib_Option.map(premise, p => p.id), ""),
+      name: Stdlib_Option.getOr(Stdlib_Option.map(premise, p => p.name), ""),
+      description: Stdlib_Option.getOr(Stdlib_Option.map(premise, p => p.description), ""),
+      updated_at: Stdlib_Option.getOr(Stdlib_Option.map(premise, p => p.updated_at), new Date())
     };
     let config = {
       inventory: inventory,
@@ -35,7 +36,7 @@ function render(url) {
     return Store$ExecutorUi.makeServerStore(config, param => Promise.resolve({
       executorConfig: config,
       html: Server.renderToString(JsxRuntime.jsx(App$ExecutorUi.make, {
-        route_root: premise.route_root,
+        route_root: Stdlib_Option.getOr(Stdlib_Option.map(premise, p => p.route_root), ""),
         server_url: app_url
       }))
     }));

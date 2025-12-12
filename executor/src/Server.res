@@ -116,7 +116,6 @@ let server = Bun.serveWithWebSocket({
   port: 8899,
   routes: Dict.fromArray([
     ("/", Route.Frontend.handler),
-    ("/test", Route.Frontend.handler),
     (Common.Constants.event_url, Route.Events.handler),
     ("/config/:premise_id", Route.Config.handler),
     ("/inventory/:premise_id", Route.Inventory.handler),

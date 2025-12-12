@@ -15,14 +15,14 @@ importers:
         specifier: ^5.2.8
         version: 5.2.8
       '@rescript/runtime':
-        specifier: ^12.0.0
-        version: 12.0.0
+        specifier: ^12.0.1
+        version: 12.0.1
       '@rescript/webapi':
         specifier: 0.1.0-experimental-2090589
         version: 0.1.0-experimental-2090589(rescript@12.0.0)
       '@tilia/react':
         specifier: github:Software-Deployed/tilia#path:react
-        version: https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:react(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+        version: https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:react(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       common:
         specifier: link:common
         version: link:common
@@ -34,7 +34,7 @@ importers:
         version: link:executor-ui
       lucide-react:
         specifier: ^0.555.0
-        version: 0.555.0(react@19.2.1)
+        version: 0.555.0(react@19.2.3)
       pg:
         specifier: ^8.16.3
         version: 8.16.3
@@ -45,11 +45,11 @@ importers:
         specifier: ^12.3.0
         version: 12.3.0(pg-query-stream@4.10.3(pg@8.16.3))
       react:
-        specifier: ^19.2.1
-        version: 19.2.1
+        specifier: ^19.2.3
+        version: 19.2.3
       react-dom:
-        specifier: ^19.2.1
-        version: 19.2.1(react@19.2.1)
+        specifier: ^19.2.3
+        version: 19.2.3(react@19.2.3)
       rescript-bun:
         specifier: ^2.1.0
         version: 2.1.0(rescript@12.0.0)
@@ -59,7 +59,7 @@ importers:
     devDependencies:
       '@rescript/react':
         specifier: ^0.14.0
-        version: 0.14.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+        version: 0.14.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       bun-plugin-tailwind:
         specifier: ^0.1.2
         version: 0.1.2(bun@1.3.3)
@@ -73,8 +73,8 @@ importers:
         specifier: ^0.5.5
         version: 0.5.5
       tailwindcss:
-        specifier: ^4.1.17
-        version: 4.1.17
+        specifier: ^4.1.18
+        version: 4.1.18
 
 packages:
 
@@ -294,6 +294,9 @@ packages:
 
   '@rescript/runtime@12.0.0':
     resolution: {integrity: sha512-STRbYHT5rnW61vWn2+Bdtj620XaprnoBSbPbkvOYZ+Zs8nfqtpBjhNw+JNpGQLXf73crk6MhxFGPxL2o5vb8TQ==}
+
+  '@rescript/runtime@12.0.1':
+    resolution: {integrity: sha512-pMoWvllPFK0cl87vMYBVvll+DaAdPAsRuLIIJa+Q8LMhcS7cqpaZVflU3LbH+U/kv3vWaUYIfLBObwGnXw/CDg==}
 
   '@rescript/tools@0.6.4':
     resolution: {integrity: sha512-A7RdEEiMnBAN+6FYVseSTP9DPK2jR0Yo0DjZew7Sv4ey88+mwn7lHXTU9cmBlfZBoCPmnnr1e4V2MDbLEX0GUA==}
@@ -665,13 +668,13 @@ packages:
     resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
     engines: {node: '>=0.10.0'}
 
-  react-dom@19.2.1:
-    resolution: {integrity: sha512-ibrK8llX2a4eOskq1mXKu/TGZj9qzomO+sNfO98M6d9zIPOEhlBkMkBUBLd1vgS0gQsLDBzA+8jJBVXDnfHmJg==}
+  react-dom@19.2.3:
+    resolution: {integrity: sha512-yELu4WmLPw5Mr/lmeEpox5rw3RETacE++JgHqQzd2dg+YbJuat3jH4ingc+WPZhxaoFzdv9y33G+F7Nl5O0GBg==}
     peerDependencies:
-      react: ^19.2.1
+      react: ^19.2.3
 
-  react@19.2.1:
-    resolution: {integrity: sha512-DGrYcCWK7tvYMnWh79yrPHt+vdx9tY+1gPZa7nJQtO/p8bLTDaHp4dzwEhQB7pZ4Xe3ok4XKuEPrVuc+wlpkmw==}
+  react@19.2.3:
+    resolution: {integrity: sha512-Ku/hhYbVjOQnXDZFv2+RibmLFGwFdeeKHFcOTlrt7xplBnya5OGn/hIRDsqDiSUcfORsDC7MPxwork8jBwsIWA==}
     engines: {node: '>=0.10.0'}
 
   readdirp@3.6.0:
@@ -743,8 +746,8 @@ packages:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
 
-  tailwindcss@4.1.17:
-    resolution: {integrity: sha512-j9Ee2YjuQqYT9bbRTfTZht9W/ytp5H+jJpZKiYdP/bpnXARAuELt9ofP0lPnmHjbga7SNQIxdTAXCmtKVYjN+Q==}
+  tailwindcss@4.1.18:
+    resolution: {integrity: sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw==}
 
   tilia@file:../tilia:
     resolution: {directory: ../tilia, type: directory}
@@ -951,12 +954,14 @@ snapshots:
   '@rescript/linux-x64@12.0.0':
     optional: true
 
-  '@rescript/react@0.14.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+  '@rescript/react@0.14.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
-      react: 19.2.1
-      react-dom: 19.2.1(react@19.2.1)
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
 
   '@rescript/runtime@12.0.0': {}
+
+  '@rescript/runtime@12.0.1': {}
 
   '@rescript/tools@0.6.4':
     dependencies:
@@ -971,10 +976,10 @@ snapshots:
 
   '@scarf/scarf@1.4.0': {}
 
-  '@tilia/react@https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:react(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+  '@tilia/react@https://codeload.github.com/Software-Deployed/tilia/tar.gz/df68a7cebbeb9611edfede71e46dbbf655f1c111#path:react(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
-      react: 19.2.1
-      react-dom: 19.2.1(react@19.2.1)
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
       tilia: file:../tilia
 
   a-sync-waterfall@1.0.1: {}
@@ -1167,9 +1172,9 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  lucide-react@0.555.0(react@19.2.1):
+  lucide-react@0.555.0(react@19.2.3):
     dependencies:
-      react: 19.2.1
+      react: 19.2.3
 
   minimatch@9.0.5:
     dependencies:
@@ -1329,12 +1334,12 @@ snapshots:
     dependencies:
       xtend: 4.0.2
 
-  react-dom@19.2.1(react@19.2.1):
+  react-dom@19.2.3(react@19.2.3):
     dependencies:
-      react: 19.2.1
+      react: 19.2.3
       scheduler: 0.27.0
 
-  react@19.2.1: {}
+  react@19.2.3: {}
 
   readdirp@3.6.0:
     dependencies:
@@ -1398,7 +1403,7 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
-  tailwindcss@4.1.17: {}
+  tailwindcss@4.1.18: {}
 
   tilia@file:../tilia: {}
 

@@ -5,6 +5,19 @@ let getActiveId = (url: RescriptReactRouter.url) => {
   }
 }
 
+let getRootlessPath = (route_root, path) => {
+  if Common.Constants.premise_routes->List.has(route_root, (a, b) => a === b) {
+    Some(path)
+  } else {
+    let route_root_prefix = route_root->String.split("/")
+    //->Array.filter(value => value->String.length > 0)
+    let root_idx = route_root_prefix->Array.length - 1
+    Console.log(root_idx)
+    let? Some((_, rootless_path)) = path->List.splitAt(root_idx->Math.Int.min(0))
+    Some(rootless_path) //->Option.getOr(List.make(~length=0, ""))
+  }
+}
+
 @react.component
 let make = (
   //~initialExecutorConfig: option<PremiseContainer.Config.t>=?,
@@ -21,14 +34,13 @@ let make = (
     // Cleanup function to unsubscribe when the component unmounts
     Some(() => RescriptReactRouter.unwatchUrl(watcher_id))
   })
-  let route_root = Option.getWithDefault(route_root, "/")
-  let route_root_list = List.fromArray(route_root->String.split("/"))
-  let item_route = route_root_list->List.concat(list{"item"})
-  Console.log2(route_root, item_route)
-  <>
-    {switch url.path {
-    | list{route_root, ..._} | list{route_root} => <Landing />
-    | _ => <NotFound />
-    }}
-  </>
+  let rootless_path = switch route_root {
+  | Some(route_root) => getRootlessPath(route_root, url.path)
+  | None => Some(list{})
+  }
+  Console.log(rootless_path)
+  switch rootless_path {
+  | Some(list{"item", ..._}) | Some(list{}) => <Landing />
+  | _ => <NotFound />
+  }
 }

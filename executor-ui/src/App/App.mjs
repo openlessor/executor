@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as Stdlib_List from "@rescript/runtime/lib/es6/Stdlib_List.js";
-import * as Stdlib_Option from "@rescript/runtime/lib/es6/Stdlib_Option.js";
+import * as Constants$Common from "common/./src/Constants.mjs";
 import * as JsxRuntime from "react/jsx-runtime";
 import * as Landing$ExecutorUi from "../Landing/Landing.mjs";
 import * as NotFound$ExecutorUi from "../NotFound/NotFound.mjs";
@@ -22,7 +22,23 @@ function getActiveId(url) {
   }
 }
 
+function getRootlessPath(route_root, path) {
+  if (Stdlib_List.has(Constants$Common.premise_routes, route_root, (a, b) => a === b)) {
+    return path;
+  }
+  let route_root_prefix = route_root.split("/");
+  let root_idx = route_root_prefix.length - 1 | 0;
+  console.log(root_idx);
+  let x = Stdlib_List.splitAt(path, Math.min(root_idx, 0));
+  if (x !== undefined) {
+    return x[1];
+  } else {
+    return x;
+  }
+}
+
 function App(props) {
+  let route_root = props.route_root;
   let initial_url = RescriptReactRouter.useUrl(props.server_url, undefined);
   let match = React.useState(() => initial_url);
   let set_url = match[1];
@@ -30,23 +46,20 @@ function App(props) {
     let watcher_id = RescriptReactRouter.watchUrl(new_url => set_url(param => new_url));
     return () => RescriptReactRouter.unwatchUrl(watcher_id);
   }, []);
-  let route_root = Stdlib_Option.getWithDefault(props.route_root, "/");
-  let route_root_list = Stdlib_List.fromArray(route_root.split("/"));
-  let item_route = Stdlib_List.concat(route_root_list, {
-    hd: "item",
-    tl: /* [] */0
-  });
-  console.log(route_root, item_route);
-  let match$1 = match[0].path;
-  return JsxRuntime.jsx(JsxRuntime.Fragment, {
-    children: match$1 !== 0 ? JsxRuntime.jsx(Landing$ExecutorUi.make, {}) : JsxRuntime.jsx(NotFound$ExecutorUi.make, {})
-  });
+  let rootless_path = route_root !== undefined ? getRootlessPath(route_root, match[0].path) : /* [] */0;
+  console.log(rootless_path);
+  if (rootless_path !== undefined && (rootless_path === 0 || rootless_path.hd === "item")) {
+    return JsxRuntime.jsx(Landing$ExecutorUi.make, {});
+  } else {
+    return JsxRuntime.jsx(NotFound$ExecutorUi.make, {});
+  }
 }
 
 let make = App;
 
 export {
   getActiveId,
+  getRootlessPath,
   make,
 }
 /* react Not a pure module */

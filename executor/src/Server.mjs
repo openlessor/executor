@@ -187,10 +187,6 @@ let server = Bun.serve({
       handler$1
     ],
     [
-      "/test",
-      handler$1
-    ],
-    [
       Constants$Common.event_url,
       handler
     ],

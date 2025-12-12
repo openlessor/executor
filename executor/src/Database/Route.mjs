@@ -5,9 +5,14 @@ import * as Route__sql$Executor from "./Route__sql.mjs";
 async function getMatchingPremise(client, route_root) {
   console.log("Looking up root route:" + route_root);
   let query = Route__sql$Executor.Query1.one;
-  return await query(client, {
+  let x = await query(client, {
     route_root: route_root
   });
+  if (x !== undefined) {
+    return x;
+  } else {
+    return x;
+  }
 }
 
 export {

@@ -40,7 +40,7 @@ let state = source(initialExecutorConfig, async (_prev, set) => {
   | Some(premise) => {
       let {updated_at, id} = premise
       switch globalThis["window"]->Nullable.toOption {
-      | Some(_) => set -> Client.subscribe(id, updated_at->Date.getTime)
+      | Some(_) => set->Client.subscribe(id, updated_at->Date.getTime)
       | None => () // PremiseContainer.state is only used on the client
       }
     }
