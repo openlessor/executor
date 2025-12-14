@@ -34,7 +34,7 @@ BEGIN
             channel_name := OLD.id::text;
         ELSE
             -- Add updated at timestamp, don't add it during delete since the table no longer exists now.
-            UPDATE premise SET updated_at = NOW() WHERE id = channel_name::UUID;
+            --UPDATE premise SET updated_at = NOW() WHERE id = channel_name::UUID;
             channel_name := NEW.id::text;
         END IF;
         PERFORM pg_notify(channel_name, payload::text);
@@ -47,7 +47,10 @@ BEGIN
         END IF;
         -- Add updated at timestamp, will trigger notification
         UPDATE premise SET updated_at = NOW() where id = channel_name::UUID;
-        -- PERFORM pg_notify(channel_name, payload::text);
+        IF OLD.premise_id::text != NEW.premise_id::text THEN
+            UPDATE premise SET updated_at = NOW() where id = OLD.premise_id;
+            PERFORM pg_notify(OLD.premise_id::text, payload::text);
+        END IF;
 
     ELSIF TG_TABLE_NAME = 'inventory_period_map' THEN
         IF TG_OP = 'DELETE' THEN
