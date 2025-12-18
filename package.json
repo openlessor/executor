@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Software-Deployed/tilia.git"
-  },
   "scripts": {
     "build": "rescript build && bun build.js",
     "dev-server": "bun --hot executor/src/Server.mjs",
@@ -24,7 +20,7 @@
     "@fontsource/inter": "^5.2.8",
     "@rescript/runtime": "^12.0.1",
     "@rescript/webapi": "0.1.0-experimental-2090589",
-    "@tilia/react": "github:Software-Deployed/tilia#path:react",
+    "@tilia/react": "5.0.0-beta.20251218T180640",
     "common": "link:common",
     "executor": "link:executor",
     "executor-ui": "link:executor-ui",
@@ -35,7 +31,7 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "rescript-bun": "^2.1.0",
-    "tilia": "github:Software-Deployed/tilia#path:tilia"
+    "tilia": "5.0.0-beta.20251218T180640"
   },
   "overrides": {
     "react": "^19.2.3",

@@ -21,12 +21,11 @@ Partially implemented:
 - In the catchall Bun handler, add a way to load the root URL for a Premise so you don’t have to configure each one. Make it so the child links work top down from the root URL. (i.e.: make the Postgres table the driver for this.)
    - Fail to start if a URL name is used that is reserved for system use.
    - Change the system use URLs like the socket to have a underscore in front of it (events -> _events) — In case you want to name your root events.
+- Updating inventory from empty to non-empty for a premise
 
 TODO (Web channel is focus for now, then mobile and b&m):
-
-- Fix an issue when you add a new inventory to an empty Premise the page doesn’t update.
+- Rewrite Postgres stored function in JavaScript compiled from ReScript and create a declarative framework for easily updating this logic
 - Add “Out of stock” or similar (customizable) message when no inventory available. 
-- When inventory becomes available from previously mentioned state, ensure the page updates correctly. 
 - Come up with a way to configure stock in different ways. For example, “Intangible items (infinite quantity)”, “Tangible items (finite quantity)”, etc.
 - Create “Purchase Flows” — The ability to customize the entire flow of a purchase. From simple to advanced.
    - Hook system or Pluggable extension system using NPM packages and the “hook” system (not to be confused with React hook)

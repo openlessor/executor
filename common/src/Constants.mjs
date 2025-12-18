@@ -5,25 +5,32 @@ let cart_url = "/cart";
 
 let event_url = "/_events";
 
+let item_url = "/item";
+
+let premise_routes_0 = item_url.substring(1);
+
+let premise_routes = {
+  hd: premise_routes_0,
+  tl: /* [] */0
+};
+
+let system_routes_0 = cart_url.substring(1);
+
 let system_routes_1 = {
-  hd: event_url,
+  hd: event_url.substring(1),
   tl: /* [] */0
 };
 
 let system_routes = {
-  hd: cart_url,
+  hd: system_routes_0,
   tl: system_routes_1
-};
-
-let premise_routes = {
-  hd: "item",
-  tl: /* [] */0
 };
 
 export {
   cart_url,
   event_url,
+  item_url,
   premise_routes,
   system_routes,
 }
-/* No side effect */
+/* premise_routes Not a pure module */
