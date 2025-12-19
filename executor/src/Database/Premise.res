@@ -1,9 +1,11 @@
 let getPremise = async (~client, premise_id: string) => {
-  let query = %sql.one(`
-  SELECT * FROM premise WHERE id = :premise_id!
-  `)
-  let result = await client->query({premise_id: premise_id})
-  result->Nullable.fromOption
+  let result = await client`
+  SELECT * FROM premise WHERE id = ${premise_id} LIMIT 1
+  `
+  switch result {
+  | Some(result) => Nullable.Value(result->Array.pop->Option.getOr(null))
+  | None => null
+  }
 }
 
 let getConfig = async (~client, premise_id: string): ExecutorUi.Config.t => {
