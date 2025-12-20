@@ -4,20 +4,24 @@ import * as Pg from "pg";
 
 let dbConfig = process.env.DB_URL;
 
+let pool = new Pg.Pool({
+  max: 100,
+  connectionString: dbConfig
+});
+
 async function getClient() {
-  let client = new Pg.Client(dbConfig);
-  await client.connect();
-  return client;
+  return await pool.connect();
 }
 
 async function withClient(fn) {
   let client = await getClient();
   let result = fn(client);
-  return await result.then(result => client.end().then(() => Promise.resolve(result)));
+  return await result.then(result => Promise.resolve(client.release()).then(param => Promise.resolve(result)));
 }
 
 export {
   dbConfig,
+  pool,
   getClient,
   withClient,
 }

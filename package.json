@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rescript build && bun build.js",
     "dev-server": "bun --hot executor/src/Server.mjs",
-    "pgtyped-watch": "pgtyped-rescript -w -c executor/pgtyped.config.json",
+    "pgtyped-watch": "cd executor && pgtyped-rescript -w -c pgtyped.config.json",
     "dev": "pnpm run --stream \"/(watch|dev-server|pgtyped-watch)/\"",
     "start": "bun dist/Server.js",
     "clean": "rescript clean",
