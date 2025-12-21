@@ -1,3 +1,5 @@
+(dirs common executor executor-ui)
+
 (melange.emit
  (target output)
  (module_systems commonjs)
@@ -6,5 +8,5 @@
   (pps melange.ppx reason-react-ppx)))
 
 (library
- (name executor_full_stack)
+ (name executor)
  (modes melange))

@@ -1,6 +1,6 @@
 (lang dune 3.20)
 
-(name executor-full-stack)
+(name executor)
 
 (generate_opam_files true)
 
@@ -18,10 +18,10 @@
 (using melange 0.1)
 
 (package
- (name executor-full-stack)
+ (name executor)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml melange reason melange-webapi reason-react)
+ (depends ocaml ocaml-lsp melange reason melange-webapi reason-react)
  (allow_empty)
  (tags
   ("add topics" "to describe" your project)))
