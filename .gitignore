@@ -1,3 +1,6 @@
+_opam
+dune.lock
+dev-tools.locks
 bin
 _build
 lib

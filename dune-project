@@ -21,7 +21,17 @@
  (name executor)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml ocaml-lsp melange reason melange-webapi reason-react)
+ (depends
+  (ocaml
+   (= "5.2.0"))
+  melange
+  ocaml-lsp-server
+  ocamlformat
+  reason
+  melange-webapi
+  ppxlib
+  reason-react-ppx
+  reason-react)
  (allow_empty)
  (tags
   ("add topics" "to describe" your project)))
