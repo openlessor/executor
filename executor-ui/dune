@@ -1,0 +1,10 @@
+(melange.emit
+ (target output)
+ (module_systems commonjs)
+ (libraries melange-webapi reason-react)
+ (preprocess
+  (pps melange.ppx reason-react-ppx)))
+
+(library
+ (name executor_ui)
+ (modes melange))
