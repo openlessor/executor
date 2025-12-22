@@ -1,12 +1,10 @@
-(dirs common executor executor-ui)
+(dirs :standard \ node_modules)
+
+(include_subdirs unqualified)
 
 (melange.emit
  (target output)
- (module_systems commonjs)
- (libraries melange-webapi reason-react)
+ (libraries reason-react)
  (preprocess
-  (pps melange.ppx reason-react-ppx)))
-
-(library
- (name executor)
- (modes melange))
+  (pps melange.ppx reason-react-ppx))
+ (module_systems commonjs))

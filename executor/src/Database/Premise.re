@@ -1,13 +1,13 @@
-let getPremise = async (~client, premise_id: string) => {
+let getPremise = (premise_id: string) => {
   let query = %sql.one(`
   SELECT * FROM premise WHERE id = :premise_id!
   `)
   let result = await client->query({premise_id: premise_id})
-  result->Nullable.fromOption
+  result->Js.Nullable.return
 }
 
-let getConfig = async (~client, premise_id: string): ExecutorUi.Config.t => {
-  let premise = Nullable.toOption(await getPremise(~client, premise_id))->Belt.Option.getUnsafe
+let getConfig = (premise_id: string): Js.promise(array({.})) => {
+  let premise = Js.Nullable.toOption(getPremise(premise_id))->Option.get
   let inventoryRows = await Inventory.getInventoryList(~client, premise_id)
   let inventory: array<ExecutorUi.InventoryItem.t> = Belt.Array.map(
     inventoryRows,
@@ -16,6 +16,13 @@ let getConfig = async (~client, premise_id: string): ExecutorUi.Config.t => {
 
   {
     inventory,
-    premise: Some((premise :> ExecutorUi.Premise.t)),
+    premise: Some(premise),
   }
+}
+
+type t = {
+  id: string,
+  name: string,
+  description: string,
+  updated_at: Date.t,
 }
