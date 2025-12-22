@@ -11,28 +11,29 @@
 */
 
 module PgPromise = {
-  type db
-  type main = string => db
-  @module("pg-promise")
-  external init: unit => main = "default"
+  [@mel.module] external init: unit => (string => {.}) = "pg-promise";
+  type db = {.}
+  type main = string => {.}
 }
 
-type t
+module ReasonPgListener = {
+  type t = Js.Dict.t<{.}>
+  
+  type message = {
+    channel: string,
+    payload: string,
+  }
 
-type message = {
-  channel: string,
-  payload: string,
+  type events = {onMessage: message => unit}
+
+  type config = {
+    pgp: PgPromise.main,
+    db: PgPromise.db,
+  }
 }
+module PgListener = {
+  [@mel.module("pg-listener")] external make: ReasonPgListener.config => ReasonPgListener.t = "PgListener"
 
-type events = {onMessage?: message => unit}
-
-type config = {
-  pgp: PgPromise.main,
-  db: PgPromise.db,
+  [@mel.send] external listen: (ReasonPgListener.t, array<string>, ReasonPgListener.events) => Js.promise<unit> = "listen"
+  [@mel.send] external cancelAll: ReasonPgListener.t => Js.promise<unit> = "cancelAll"
 }
-
-@module("pg-listener") @new
-external make: config => t = "PgListener"
-
-@send external listen: (t, array<string>, ~events: events=?) => promise<unit> = "listen"
-@send external cancelAll: t => promise<unit> = "cancelAll"

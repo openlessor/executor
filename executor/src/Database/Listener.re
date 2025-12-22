@@ -1,26 +1,23 @@
-external env: {..} = "process.env"
+external env: Js.Dict.t<string> = "process.env"
 
 module Singleton = {
-  let make = () => {
-    if globalThis["pgOptions"] {
-      globalThis["pgListener"]
-    } else {
-      let pgp = PgListener.PgPromise.init()
-      let db = pgp(env["DB_URL"])
-      let pgOptions: PgListener.config = {pgp, db}
-      globalThis["pgOptions"] = pgOptions
-      globalThis["pgListener"] = PgListener.make(pgOptions)
-      globalThis["pgListener"]
-    }
+  let connect = () => {
+    let db_url = env->Js.Dict.get("DB_URL")->Option.get
+    let pgp = PgListener.PgPromise.init()
+    let db = pgp(db_url)
+    let pgOptions: PgListener.ReasonPgListener.config = {pgp, db}
+    let pgListener = PgListener.PgListener.make(pgOptions)
+    pgListener
   }
+  let connection = connect()
 }
 
-let withListener = (premise_id: string, ~onMessage: PgListener.message => unit) => {
-  let pgListener = Singleton.make()
+let withListener = (premise_id: string, ~onMessage: PgListener.ReasonPgListener.message => unit) => {
+  let pgListener = Singleton.connection
   pgListener
-  ->PgListener.listen(
-    [premise_id],
-    ~events={
+  ->PgListener.PgListener.listen(
+    [|premise_id|],
+    {
       onMessage: onMessage,
     },
   )
