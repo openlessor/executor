@@ -9,15 +9,20 @@
     onMessage: msg => Console.log(msg)
   })->ignore
 */
-
+module ReasonPgPromise = {
+  type t
+}
 module PgPromise = {
-  [@mel.module] external init: unit => (string => {.}) = "pg-promise";
-  type db = {.}
-  type main = string => {.}
+  type t
+  type db
+  type func = [@u](string => db);
+  type pgp = [@u]unit => func;
+
+  [@mel.module] external make: pgp = "pg-promise";
 }
 
 module ReasonPgListener = {
-  type t = Js.Dict.t<{.}>
+  type t
   
   type message = {
     channel: string,
@@ -27,13 +32,11 @@ module ReasonPgListener = {
   type events = {onMessage: message => unit}
 
   type config = {
-    pgp: PgPromise.main,
+    pgp: PgPromise.func,
     db: PgPromise.db,
   }
 }
-module PgListener = {
-  [@mel.module("pg-listener")] external make: ReasonPgListener.config => ReasonPgListener.t = "PgListener"
 
-  [@mel.send] external listen: (ReasonPgListener.t, array<string>, ReasonPgListener.events) => Js.promise<unit> = "listen"
-  [@mel.send] external cancelAll: ReasonPgListener.t => Js.promise<unit> = "cancelAll"
-}
+[@mel.module("pg-listener")] [@mel.new] external make: ReasonPgListener.config => ReasonPgListener.t = "PgListener"
+[@mel.send] external listen: (ReasonPgListener.t, array<string>, ReasonPgListener.events) => Js.promise<unit> = "listen"
+[@mel.send] external cancelAll: ReasonPgListener.t => Js.promise<unit> = "cancelAll"
