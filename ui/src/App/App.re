@@ -24,7 +24,6 @@ let getRootlessPath = (route_root, path) =>
 
 [@react.component]
 let make =
-    //~initialExecutorConfig: option<PremiseContainer.Config.t>=?,
     (
       ~route_root: option(string)=?,
       ~server_url: option(ReasonReactRouter.url)=?,
