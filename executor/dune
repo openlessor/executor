@@ -1,0 +1,10 @@
+(library
+ (name executor)
+ (public_name executor.executor)
+ (wrapped false)
+ (preprocess
+  (pps melange.ppx reason-react-ppx))
+ (libraries common ui melange.dom melange.js)
+ (modes melange))
+
+(dirs :standard \ node_modules)

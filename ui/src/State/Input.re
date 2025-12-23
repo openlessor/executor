@@ -1,25 +1,29 @@
-type t = {
-  inventory: array<InventoryItem.t>,
-  premise: {
-    id: string,
-    name: string,
-    description: string,
-    updated_at: string,
-  },
-}
+type input_premise = {
+  id: string,
+  name: string,
+  description: string,
+  updated_at: string,
+};
 
-@scope("JSON") @val
-external parseJSON: string => t = "parse"
+type t = {
+  inventory: array(InventoryItem.t),
+  premise: input_premise,
+};
+
+[@mel.scope "JSON"] external parseJSON: string => t = "parse";
 
 let toConfig = data => {
-  let input: t = data->parseJSON
-  let premise: Premise.t = {
+  let input: t = data->parseJSON;
+  let premise: PeriodList.Premise.t = {
     id: input.premise.id,
     name: input.premise.name,
     description: input.premise.description,
-    updated_at: Date.fromString(input.premise.updated_at),
-  }
-  let inventory: array<InventoryItem.t> = Obj.magic(input.inventory)
-  let config: Config.t = {inventory, premise: Some(premise)}
-  config
-}
+    updated_at: Js.Date.fromString(input.premise.updated_at),
+  };
+  let inventory: array(InventoryItem.t) = Obj.magic(input.inventory);
+  let config: Config.t = {
+    inventory,
+    premise: Some(premise),
+  };
+  config;
+};

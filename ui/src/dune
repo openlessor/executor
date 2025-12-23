@@ -1,0 +1,8 @@
+(melange.emit
+ (target output)
+ (libraries melange.belt melange-webapi common reason-react)
+ (preprocess
+  (pps melange.ppx reason-react-ppx))
+ (module_systems commonjs))
+
+(include_subdirs unqualified)

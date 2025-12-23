@@ -1,12 +1,12 @@
 // Entry point
 // Kind of a crappy workaround to get TailwindCSS working with Bun...
-%%raw(`import "./tailwind.css"`)
+[%mel.raw "import \"./tailwind.css\""];
 
-open ReactDOM.Client
+open ReactDOM.Client;
 
-let rootElement = ReactDOM.querySelector("#root")
+let rootElement = ReactDOM.querySelector("#root");
 
-switch rootElement {
+switch (rootElement) {
 | Some(domNode) => hydrateRoot(domNode, <App />)->ignore
-| None => Console.log("No root element found")
-}
+| None => Js.log("No root element found")
+};

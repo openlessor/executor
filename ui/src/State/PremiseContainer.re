@@ -1,12 +1,8 @@
-type premise = {
-  id: string,
-  name: string,
-  description: string,
-  updated_at: string,
-};
+open Tilia;
+
 type input_config = {
-  inventory: array({. "test": string}),
-  premise: option(premise),
+  inventory: array(InventoryItem.t),
+  premise: option(PeriodList.Premise.t),
 };
 
 let domExecutorConfig: option(input_config) =
@@ -16,7 +12,7 @@ let domExecutorConfig: option(input_config) =
   | None => None
   };
 
-let empty = {
+let empty: Config.t = {
   inventory: [||],
   premise: None,
 };
@@ -34,45 +30,24 @@ let initialExecutorConfig =
     }
   };
 
-module Tilia = {
-  [@mel.module "tilia"] external make: 'a => 'a = "tilia";
-  [@mel.module "tilia"]
-  external source:
-    (. 'a, [@mel.uncurried] ((. 'a, 'a => unit) => 'ignored)) => 'a =
-    "source";
-};
-
-module Client = {
-  let setter =
-    (. prev, set) => {
-      Js.log(prev);
-      set({
-        ...empty,
-        inventory: [|{"test": "test"}|],
-      });
-      ();
-    };
-  let configSource = Tilia.source(. initialExecutorConfig, setter);
-  let store = Tilia.make({"config": configSource});
-  let subcribe = (_set, _id, _time) => Js.Promise.resolve();
-};
-
-/*
-
- Tilia.source(initialExecutorConfig, (set: input_config) => Js.promise(unit) =>
-   Client.subscribe(
-     set,
-     initialExecutorConfig.id,
-     initialExecutorConfig.updated_at->Js.Date.getTime,
-   );
+source(.
+  initialExecutorConfig,
+  (. _prev, set) => {
+    Client.subscribe(
+      set,
+      initialExecutorConfig.premise->Option.get.id,
+      initialExecutorConfig.premise->Option.get.updated_at->Js.Date.getTime,
+    );
 
     switch (initialExecutorConfig.premise) {
     | Some(premise) =>
-      let {updated_at, id, _} = premise;
+      let {id, updated_at, _}: PeriodList.Premise.t = premise;
       switch ([%mel.external window]) {
       | Some(_) => set->Client.subscribe(id, updated_at->Js.Date.getTime)
-      | None => () |> Js.Promise.resolve // PremiseContainer.state is only used on the client
+      | None => () // PremiseContainer.state is only used on the client
       };
-    | None => () |> Js.Promise.resolve
+    | None => ()
     };
-  */
+  },
+)
+|> ignore;

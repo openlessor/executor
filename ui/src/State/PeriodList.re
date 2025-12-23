@@ -1,39 +1,24 @@
+open Tilia;
+
 module Premise = {
   type t = {
     id: string,
     name: string,
     description: string,
-    updated_at: Date.t,
-  }
-}
+    updated_at: Js.Date.t,
+  };
+};
 
 module Unit = {
-  type t = [#second | #minute | #hour | #day | #week | #month | #year]
+  type t =
+    | [@mel.string "second"] Second
+    | [@mel.string "minute"] Minute
+    | [@mel.string "hour"] Hour
+    | [@mel.string "day"] Day
+    | [@mel.string "week"] Week
+    | [@mel.string "month"] Month
+    | [@mel.string "year"] Year;
   // XXX: This default state should come from the server
-  let defaultState: t = #month
-  let (signal, set) = signal(defaultState)
-}
-
-let deriveState = store => {
-  let seen_units = Set.make()
-  let config: Config.t = store["config"]
-  let inventory = config.inventory->Belt.Array.copy
-  inventory
-  ->Belt.Array.flatMap(inv => {
-    inv.period_list->Array.map((pl: Pricing.period) => {
-      if seen_units->Set.has(pl["unit"]) {
-        None
-      } else {
-        seen_units->Set.add(pl["unit"])->ignore
-        Some(pl)
-      }
-    })
-  })
-  ->Array.filter(pl =>
-    switch pl {
-    | Some(_) => true
-    | _ => false
-    }
-  )
-  ->Array.map(pl => Belt.Option.getUnsafe(pl))
-}
+  let defaultState: t = Month;
+  let (signal, set) = signal(defaultState);
+};

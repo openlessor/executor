@@ -1,68 +1,96 @@
-external env: {..} = "process.env"
+open Tilia;
+external env: Js.Dict.t(string) = "process.env";
+external globalThis: Js.Dict.t(int) = "globalThis";
+external setInterval: (. unit => unit, int) => int = "setInterval";
+
+type websocket_state = {
+  last_ping: float,
+  last_pong: float,
+  updated_at: float,
+};
 
 let rec subscribe = (set, premise_id: string, updated_at: float) => {
-  let url = WebAPI.URL.make(
-    ~url=`${env["API_BASE_URL"]}${Common.Constants.event_url}?premise_id=${premise_id}&ts=${updated_at->Float.toString}`,
-  )
-  url.protocol = "ws"
+  let base_url = env->Js.Dict.get("API_BASE_URL")->Option.get;
+  let url =
+    Webapi.Url.makeWith(
+      Constants.event_url
+      ++ "?premise_id="
+      ++ premise_id
+      ++ "&ts="
+      ++ updated_at->Float.to_string,
+      ~base=base_url,
+    );
+  url->Webapi.Url.setProtocol("ws");
 
-  let ws = WebAPI.WebSocket.make2(~url=url.href)
-  let pathname = WebAPI.Global.location.pathname
-  let path = switch pathname {
-  | "/" => list{"/"}
-  | _ => pathname->String.split("/")->List.fromArray
-  }
-  Console.log(path)
-  let timeout = 5.0
-  let (last_pong_ts, set_last_pong_ts) = signal(0.0)
-  let (last_ping_ts, set_last_ping_ts) = signal(0.0)
-  let (updated_ts, set_updated_ts) = signal(updated_at)
-  let state = tilia({
-    "last_ping": last_ping_ts->lift,
-    "last_pong": last_pong_ts->lift,
-    "updated_at": updated_ts->lift,
-  })
-  let send_ping = () => {
-    if ws.readyState == 1 {
+  let pathname = Webapi.Dom.Location.pathname(Webapi.Dom.location);
+  let ws = WebSocket.make(url->Webapi.Url.href);
+  let path =
+    switch (pathname) {
+    | "/" => ["/"]
+    | _ => pathname |> Js.String.split(~sep="/") |> Array.to_list
+    };
+  Js.log(path);
+  let timeout = 5.0;
+  let (last_pong_ts, set_last_pong_ts) = signal(0.0);
+  let (last_ping_ts, set_last_ping_ts) = signal(0.0);
+  let (updated_ts, set_updated_ts) = signal(updated_at);
+  let state: websocket_state =
+    Tilia.make({
+      last_ping: last_ping_ts->lift,
+      last_pong: last_pong_ts->lift,
+      updated_at: updated_ts->lift,
+    });
+  let send_ping = () =>
+    if (ws->WebSocket.readyState == 1) {
       // I don't know if this is the best way to send a ping packet or not.
-      ws->WebAPI.WebSocket.send4("ping")
-      set_last_ping_ts(Date.fromString("now")->Date.getTime)
-    }
-  }
+      ws->WebSocket.send_string("ping");
+      set_last_ping_ts(Js.Date.fromString("now")->Js.Date.getTime);
+    };
   let select = (premise_id: string) => {
-    ws->WebAPI.WebSocket.send4(`select ${premise_id}`)
-  }
+    ws->WebSocket.send_string("select " ++ premise_id);
+  };
 
   observe(() => {
-    let elapsed = state["last_pong"] - state["last_ping"]
-    if elapsed > timeout {
-      Console.log("No pong received from server, reconnecting...")
-      ws->WebAPI.WebSocket.close
-      set->subscribe(premise_id, Date.now())
-    }
-  })
-  if globalThis["interval"] == undefined {
-    globalThis["interval"] = setInterval(() => send_ping(), Float.toInt(timeout) * 1000)->ignore
-  }
-  ws->WebAPI.WebSocket.addEventListener(Custom("open"), _event => {
+    let elapsed = state.last_pong -. state.last_ping;
+    if (elapsed > timeout) {
+      Js.log("No pong received from server, reconnecting...");
+      ws->WebSocket.close;
+      set->subscribe(premise_id, Js.Date.now());
+    };
+  });
+  switch (globalThis->Js.Dict.get("interval")) {
+  | Some(_) => ()
+  | None =>
+    setInterval(. () => send_ping(), Float.to_int(timeout) * 1000)
+    |> globalThis->Js.Dict.set("interval")
+  };
+  WebSocket.addEventListener(. ws, WebSocket.Open, _event => {
     select(premise_id)
-  })
-  ws->WebAPI.WebSocket.addEventListener(Close, _event => {
-    Console.log("WebSocket closed, reconnecting")
-    subscribe(set, premise_id, state["updated_at"])
-  })
-  ws->WebAPI.WebSocket.addEventListener(Message, event => {
-    let data: string = event.data->Option.getUnsafe
-    if data == "pong" {
-      set_last_pong_ts(Date.fromString("now")->Date.getTime)
-    } else {
-      let config = data->Input.toConfig
-
-      switch config.premise {
-      | Some(premise) => set_updated_ts(premise.updated_at->Date.getTime)
-      | _ => set_updated_ts(Date.now())
-      }
-      set(config)
-    }
-  })
-}
+  });
+  WebSocket.addEventListener(.
+    ws,
+    WebSocket.Close,
+    _event => {
+      Js.log("WebSocket closed, reconnecting");
+      subscribe(set, premise_id, state.updated_at);
+    },
+  );
+  WebSocket.addEventListener(.
+    ws,
+    WebSocket.Message,
+    event => {
+      let data: string = event#data;
+      if (data === "pong") {
+        set_last_pong_ts(Js.Date.fromString("now")->Js.Date.getTime);
+      } else {
+        let config: Config.t = Js.Json.deserializeUnsafe(data);
+        switch (config.premise) {
+        | Some(premise) =>
+          set_updated_ts(premise.updated_at->Js.Date.getTime)
+        | _ => set_updated_ts(Js.Date.now())
+        };
+        set(config);
+      };
+    },
+  );
+};

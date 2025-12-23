@@ -1,10 +1,1 @@
-(dirs :standard \ node_modules)
-
-(include_subdirs unqualified)
-
-(melange.emit
- (target output)
- (libraries reason-react)
- (preprocess
-  (pps melange.ppx reason-react-ppx))
- (module_systems commonjs))
+(dirs common executor ui)
