@@ -53,7 +53,7 @@ let make = (~openDate: option(Js.Date.t)=?, ~closeDate: option(Js.Date.t)=?) => 
       className="border-none shadow-none shadow-transparent m-0 p-0 place-content-start grid lg:grid-cols-8 grid-cols-4 gap-4">
       {Js.Array.map(
          ~f=
-           (item: InventoryItem.t) => {
+           (item: Config.InventoryItem.t) => {
              switch (item.period_list) {
              /*|> Js.Array.find(~f=pl => pl.unit == unit)*/
              | _ => <InventoryItem key={Belt.Int.toString(item.id)} item />

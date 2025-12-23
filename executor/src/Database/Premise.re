@@ -7,29 +7,20 @@ type t = {
   updated_at: Js.Date.t,
 };
 
-let getPremise: string => Js.promise(t) = [%mel.raw
+let getPremise: string => PeriodList.Premise.t = [%mel.raw
   {| async function() {
   return await sql`
   SELECT * FROM premise WHERE id = ${premise_id}
-  `
+  ` }
   |}
 ];
 
-let getConfig = (premise_id: string): Js.promise(Config.t) => {
-  let premise =
-    getPremise(premise_id)
-    ->Js.Promise.then_(premise => {
-        let inventoryRows = Inventory.getInventoryList(premise_id);
-        let inventory: array(InventoryItem.t) =
-          Belt.Array.map(
-            inventoryRows,
-            Inventory.toInventoryItem,
-            {
-              inventory,
-              premise: Some(premise),
-            },
-          );
-        ();
-      });
-  ();
+let getConfig = (premise_id: string): Config.t => {
+  let premise = getPremise(premise_id);
+  let inventory = Inventory.getInventoryList(premise_id);
+  let config: Config.t = {
+    inventory,
+    premise: Some(premise),
+  };
+  config;
 };

@@ -1,15 +1,5 @@
-type period = {
-  id: int,
-  unit: string,
-  label: string,
-  price: int,
-  max_value: int,
-  min_value: int,
-};
-type period_list = array(period);
-
 [@react.component]
-let make = (~period_list: period_list) => {
+let make = (~period_list: Config.Pricing.period_list) => {
   let format_price = (p: int) => {
     (Int.to_float(p) /. Int.to_float(100))
     ->NumberFormatter.formatCurrency
@@ -18,10 +8,10 @@ let make = (~period_list: period_list) => {
 
   let list_items =
     period_list
-    |> Array.map(p => {
+    |> Array.map((p: Config.Pricing.period) => {
          <React.Fragment key={Int.to_string(p.id)}>
            <div className="border-1 border-black/30 p-1">
-             <p className="text-left text-sm"> p.label->React.string </p>
+             <p className="text-left text-sm"> {React.string(p.label)} </p>
            </div>
            <div className="border-1 border-black/30 p-1">
              <p className="text-left text-sm"> {format_price(p.price)} </p>

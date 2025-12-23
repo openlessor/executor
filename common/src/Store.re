@@ -4,7 +4,7 @@ type t = {
   // Perhaps the ID should be typed as a UUID?
   premise_id: string,
   config: Config.t,
-  period_list: array(Pricing.period),
+  period_list: array(Config.Pricing.period),
   unit: PeriodList.Unit.t,
 };
 
@@ -39,7 +39,7 @@ let makeStore = initialExecutorConfig =>
           let mapped_inventory =
             inventory->Belt.Array.flatMap(inv => {
               inv.period_list
-              |> Array.map((pl: Pricing.period) =>
+              |> Array.map((pl: Config.Pricing.period) =>
                    if (seen_units |> StringSet.exists(s => pl.unit === s)) {
                      None;
                    } else {
@@ -82,7 +82,7 @@ let getServerStore = () => {
 // Then I use getStore in my components to get the store based on the execution context.
 let main_store: option(t) =
   switch ([%mel.external window]) {
-  | Some(_) => Some(makeStore(PremiseContainer.empty))
+  | Some(_) => Some(makeStore(Config.SSR.empty))
   | None => None
   };
 

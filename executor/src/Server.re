@@ -1,3 +1,5 @@
+open Tilia;
+
 module BunRequest = {
   type t = Request.t;
   [@mel.get]
@@ -40,9 +42,9 @@ module Bun = {
         fetch: (Request.t, t) => Js.promise(Response.t),
         websocket: WebSocket.config<'websocketDataType>
       };
-
-     external serveWithWebSocket: serveOptions('websocketDataType) => t = "Bun.serve";
-  };
+    [@mel.scope "Bun"]
+    external serveWithWebSocket: serveOptions('websocketDataType) => t = "serve";
+};  
 
   [@mel.unwrap]
   type routeHandlerForMethod =
@@ -95,10 +97,10 @@ module Route = {
       premise: Js.Nullable.t(PeriodList.Premise.t),
     }
     let get = Bun.Handler(
-      async (req: BunRequest.t, _) => {
+      (req: BunRequest.t, _) => {
         let headers = Headers.make();
         headers->Headers.set("content-type", "application/json");
-        let response: output = await Connection.withClient(async (client) => {
+        let response: output = await Connection.withClient((client) => {
           let premise_id: string = req->getPremiseId;
           let premise = await Premise.getPremise(~client, premise_id);
           let inventory = await Inventory.getInventoryList(~client, premise_id);
@@ -111,9 +113,9 @@ module Route = {
   };
   module Inventory = {
     let post = Bun.Handler(
-      async (req: BunRequest.t, _) => {
+      (req: BunRequest.t, _) => {
         let premise_id: string = req->getPremiseId;
-        await Connection.withClient(async client => {
+        await Connection.withClient(client => {
           await MockData.createMockData(~client, premise_id);
         })l
         Response.make("");
@@ -124,11 +126,15 @@ module Route = {
 };
 
 module SocketState = {
-  if globalThis["published_signal"] == undefined {
-    globalThis["published_signal"] = signal(Belt.HashSet.String.make(~hintSize=1024));
+  let globalThis: Js.Dict.t('a) = switch ([%mel.external globalThis]) {
+    | Some(globalThis) => globalThis
+    | None => Js.Exn.raiseError("globalThis doesn't exist. This should never happen in the Bun runtime.")
   }
-  let (published, setPublished) = globalThis["published_signal"];
-  let store = tilia({
+  if (globalThis->Js.Dict.get("published_signal") == None) {
+    globalThis->Js.Dict.set("published_signal", signal(Belt.HashSet.String.make(~hintSize=1024)));
+  }
+  let (published, setPublished) = globalThis->Js.Dict.unsafeGet("published_signal");
+  let store = Tilia.make({
     "published": computed(() => published->lift),
   });
   let getStore = () => {
@@ -140,8 +146,8 @@ let subscribeTopic = (ws, premise_id) => {
   Console.log("Subscribing to " ++ premise_id);
   ws->Globals.WebSocket.subscribe(~topic=premise_id);
   let fetchPremiseAndPublish = (premise_id: string, _payload) => {
-    Connection.withClient(client => Premise.getConfig(~client, premise_id));
-    ->Promise.then(config => {
+    Premise.getConfig(premise_id)
+    |>Js.Promise.then_(config => {
       Console.log("Got config:");
       Console.log(config);
       ws->Globals.WebSocket.publish(
@@ -153,37 +159,36 @@ let subscribeTopic = (ws, premise_id) => {
     ->ignore
   }
   let store = SocketState.getStore()
-  if store["published"]->Belt.HashSet.String.has(premise_id) == false {
+  if (store##published->Belt.HashSet.String.has(premise_id) == false) {
     Listener.withListener(premise_id, ~onMessage=message =>
       fetchPremiseAndPublish(message.channel, message.payload)
     );
   }
   store["published"]->Belt.HashSet.String.add(premise_id);
-  SocketState.setPublished(store["published"]);
+  SocketState.setPublished(store##published);
 }
-
-let server = Bun.serveWithWebSocket({
+let server = Bun.Server.serveWithWebSocket({.
   development: true,
   port: 8899,
-  routes: Dict.fromArray([
+  routes: Js.Dict.fromArray([|
     ("/", Route.Frontend.handler),
-    (Common.Constants.event_url, Route.Events.handler),
+    (Constants.event_url, Route.Events.handler),
     ("/config/:premise_id", Route.Config.handler),
     ("/inventory/:premise_id", Route.Inventory.handler),
-  ]),
+  |]),
   websocket: {
     message: (ws, message) => {
       switch message->String.split(" ")->List.fromArray->List.splitAt(1)->Option.getUnsafe {
-      | (list{"ping"}, list{}) => ws->Globals.WebSocket.send("pong")
-      | (list{"select"}, list{premise_id}) => subscribeTopic(ws, premise_id)
+      | (["ping"], []) => ws|>WebSocket.send_string("pong")
+      | (["select"], [premise_id]) => subscribeTopic(ws, premise_id)
       | _ => ()
       }
     },
     close: (_ws, _, _) => {
-      Console.log("Client disconnected")
+      Js.log("Client disconnected")
     },
   },
-  fetch: async (req, server) => {
+  fetch: (req, server) => {
     let url = WebAPI.URL.make(~url=req->Request.url);
     //if (url.pathname == Constants.event_url) {
     //   if (server->Bun.Server.upgrade(req) == false) {

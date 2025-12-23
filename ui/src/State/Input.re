@@ -6,7 +6,7 @@ type input_premise = {
 };
 
 type t = {
-  inventory: array(InventoryItem.t),
+  inventory: array(Config.InventoryItem.t),
   premise: input_premise,
 };
 
@@ -20,7 +20,7 @@ let toConfig = data => {
     description: input.premise.description,
     updated_at: Js.Date.fromString(input.premise.updated_at),
   };
-  let inventory: array(InventoryItem.t) = Obj.magic(input.inventory);
+  let inventory: array(Config.InventoryItem.t) = Obj.magic(input.inventory);
   let config: Config.t = {
     inventory,
     premise: Some(premise),

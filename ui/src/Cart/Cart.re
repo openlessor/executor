@@ -3,7 +3,7 @@ let str = React.string;
 type t = {
   cart: array(int),
   selected_item: option(int),
-  items: array(InventoryItem.t),
+  items: array(Config.InventoryItem.t),
 };
 
 let itemCount = state => {

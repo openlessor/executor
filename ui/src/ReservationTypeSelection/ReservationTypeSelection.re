@@ -9,7 +9,7 @@ let make = () => {
 
   <div className="my-auto">
     {Array.map(
-       (period: Pricing.period) => {
+       (period: Config.Pricing.period) => {
          <label
            className="block"
            key={period.unit}

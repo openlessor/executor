@@ -1,7 +1,7 @@
 open Tilia;
 
 type input_config = {
-  inventory: array(InventoryItem.t),
+  inventory: array(Config.InventoryItem.t),
   premise: option(PeriodList.Premise.t),
 };
 

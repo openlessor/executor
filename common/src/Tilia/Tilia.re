@@ -8,7 +8,7 @@ type signal('a);
 [@mel.module "tilia"]
 external signal: 'a => (signal('a), 'a => unit) = "signal";
 [@mel.module "tilia"] external observe: _ => unit = "observe";
-
+[@mel.module "tilia"] external computed: (unit => 'a) => 'a = "computed";
 type deriver('p) = {
   /**
    * Return a derived value to be inserted into a tilia object. This is like
