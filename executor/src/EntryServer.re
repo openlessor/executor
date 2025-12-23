@@ -3,7 +3,7 @@ type renderResult = {
   html: string,
 };
 
-let render = (url: string): Js.promise(renderResult) => {
+let render = (url: string): renderResult => {
   let app_url =
     ReasonReactRouter.dangerouslyGetInitialUrl(~serverUrlString=url, ());
   let requested_root =
@@ -28,10 +28,10 @@ let render = (url: string): Js.promise(renderResult) => {
     premise: Some(premise),
   };
   Store.makeServerStore(config, _ => {
-    Js.Promise.resolve({
+    {
       html:
         ReactDOMServer.renderToString(<App route_root server_url=app_url />),
       executorConfig: config,
-    })
+    }
   });
 };

@@ -6,5 +6,11 @@
  (wrapped false)
  (preprocess
   (pps melange.ppx reason-react-ppx))
- (libraries melange.belt melange-webapi reason-react melange.dom melange.js)
+ (libraries
+  common
+  melange.belt
+  melange-webapi
+  reason-react
+  melange.dom
+  melange.js)
  (modes melange))

@@ -7,11 +7,10 @@
  (preprocess
   (pps melange.ppx reason-react-ppx))
  (libraries
+  ui
   melange.belt
   reason-react
   melange-webapi
-  common
-  ui
   melange.dom
   melange.js)
  (modes melange))
