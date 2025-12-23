@@ -7,14 +7,16 @@ let getInventoryList: unit => Js.promise(array(Config.t)) = [%mel.raw
   JOIN period p ON p.id = pm.period_id
   WHERE premise_id = :premise_id
   GROUP BY i.id, i.premise_id, i.name, i.description, i.quantity
-  ` |}
-  ];
+  ` } |}
+];
 
-let toInventoryItem = (row: {.}) => {
-  let period_list = switch row.period_list {
-  | Some(periods) => Obj.magic(periods)
-  | None => []
-  }
+let toInventoryItem = (row: InventoryItem.t) => {
+  let period_list =
+    switch (row.period_list) {
+    | Some(periods) => Obj.magic(periods)
+    | None => []
+    };
+
   {
     description: row.description,
     id: row.id,
@@ -22,5 +24,5 @@ let toInventoryItem = (row: {.}) => {
     quantity: row.quantity,
     premise_id: row.premise_id,
     period_list,
-  }
-}
+  };
+};

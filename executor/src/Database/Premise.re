@@ -16,17 +16,20 @@ let getPremise: string => Js.promise(t) = [%mel.raw
 ];
 
 let getConfig = (premise_id: string): Js.promise(Config.t) => {
-  let premise = Js.Nullable.toOption(getPremise(premise_id))->Option.get;
-  let inventoryRows = await;
-  Inventory.getInventoryList(~client, premise_id);
-  let inventory: array(ExecutorUi.InventoryItem.t) =
-    Belt.Array.map(
-      inventoryRows,
-      Inventory.toInventoryItem,
-      {
-        inventory,
-        premise: Some(premise),
-      },
-    );
+  let premise =
+    getPremise(premise_id)
+    ->Js.Promise.then_(premise => {
+        let inventoryRows = Inventory.getInventoryList(premise_id);
+        let inventory: array(InventoryItem.t) =
+          Belt.Array.map(
+            inventoryRows,
+            Inventory.toInventoryItem,
+            {
+              inventory,
+              premise: Some(premise),
+            },
+          );
+        ();
+      });
   ();
 };

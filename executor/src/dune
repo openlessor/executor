@@ -1,6 +1,8 @@
 (melange.emit
  (target output)
- (libraries reason-react)
+ (libraries ui common melange-webapi reason-react melange.js)
  (preprocess
   (pps melange.ppx reason-react-ppx))
  (module_systems commonjs))
+
+(include_subdirs unqualified)
