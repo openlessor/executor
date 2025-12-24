@@ -19,3 +19,7 @@ type deriver('p) = {
   derived: 'a. ('p => 'a) => 'a,
 };
 [@mel.module "tilia"] external carve: (deriver('a) => 'a) => 'a = "carve";
+
+module React = {
+  [@mel.module "@tilia/react"] external useTilia: unit => unit = "useTilia";
+};

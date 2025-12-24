@@ -1,3 +1,4 @@
+open Common;
 open Tilia;
 external env: Js.Dict.t(string) = "process.env";
 external globalThis: Js.Dict.t(int) = "globalThis";

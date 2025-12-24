@@ -55,6 +55,49 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18
 
+  ui:
+    dependencies:
+      '@fontsource/inter':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@rescript/react':
+        specifier: ^0.14.0
+        version: 0.14.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@rescript/webapi':
+        specifier: 0.1.0-experimental-2090589
+        version: 0.1.0-experimental-2090589(rescript@12.0.1)
+      '@tilia/react':
+        specifier: 5.0.0-beta.20251218T180640
+        version: 5.0.0-beta.20251218T180640(react@19.2.3)
+      lucide-react:
+        specifier: ^0.555.0
+        version: 0.555.0(react@19.2.3)
+      react:
+        specifier: 19.2.0
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.3(react@19.2.3)
+      rescript:
+        specifier: 12.0.0
+        version: 12.0.1
+      rescript-bun:
+        specifier: ^2.1.0
+        version: 2.1.0(rescript@12.0.1)
+    devDependencies:
+      '@types/bun':
+        specifier: latest
+        version: 1.3.5
+      bun-plugin-tailwind:
+        specifier: ^0.1.2
+        version: 0.1.2(bun@1.3.3)
+      rescript-embed-lang:
+        specifier: ^0.5.5
+        version: 0.5.5
+      tailwindcss:
+        specifier: ^4.1.17
+        version: 4.1.18
+
 packages:
 
   '@fontsource/inter@5.2.8':
@@ -115,10 +158,60 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@rescript/darwin-arm64@12.0.1':
+    resolution: {integrity: sha512-JJddiKKfOSc9X+2rt6IrbEUlOBaIfgjkWzCN986czZ5YV4lh3jysPVk6EQHaip2ibPkwf/nLv6Pin4t+XmdqLQ==}
+    engines: {node: '>=20.11.0'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@rescript/darwin-x64@12.0.1':
+    resolution: {integrity: sha512-tZSeHr9MQ90oKULDIn9ugvP08eLCflH2uO02iF7z1i8RshPrfD36qFiPOn4WxzcSJuqynffNLEgeWYrnPiZ0JQ==}
+    engines: {node: '>=20.11.0'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@rescript/linux-arm64@12.0.1':
+    resolution: {integrity: sha512-V/xnkFgEvSRMlyT1XCptnWWXgySFR9aKdja74VeDyEGLc6MGmi8zopxUUFcwCQXxV/zPAFkIxjz8xMY0SBCAmQ==}
+    engines: {node: '>=20.11.0'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rescript/linux-x64@12.0.1':
+    resolution: {integrity: sha512-WpVBjAvLsKATOJTckI6PDf4IFnHHxwsSVtklC+XAXbwqHLP1gqDDuVcykOOIWexxepod+QvBvEZGjzNPJ5L8gA==}
+    engines: {node: '>=20.11.0'}
+    cpu: [x64]
+    os: [linux]
+
+  '@rescript/react@0.14.0':
+    resolution: {integrity: sha512-ncOHWK7ujQmff+QMYKRmtwETvJVolzkwRpDa0MFenEXdUz9ZYywNbq+xH9F9RDQeSwC3/4s9JeUQVyTu4fMpHw==}
+    peerDependencies:
+      react: '>=19.0.0'
+      react-dom: '>=19.0.0'
+
+  '@rescript/runtime@12.0.1':
+    resolution: {integrity: sha512-pMoWvllPFK0cl87vMYBVvll+DaAdPAsRuLIIJa+Q8LMhcS7cqpaZVflU3LbH+U/kv3vWaUYIfLBObwGnXw/CDg==}
+
+  '@rescript/webapi@0.1.0-experimental-2090589':
+    resolution: {integrity: sha512-C0fkZPKUaMGtM4gznxfidcSNUMqAhioc2tnN5a99EbNHJxffFUGN+n9n9QuqOh1nXiN+02FW6gk1z397yxXgQg==}
+    peerDependencies:
+      rescript: '>=12.0.0 <13'
+
+  '@rescript/win32-x64@12.0.1':
+    resolution: {integrity: sha512-Hv6nwb6A94qtj6b4PcIsmoWhLIcLt6wLuHpD9YNxj4/d9FkrHM/yj9ZKhKan/9rfg4wkHl1cZE898AZe/nWq9g==}
+    engines: {node: '>=20.11.0'}
+    cpu: [x64]
+    os: [win32]
+
   '@tilia/react@5.0.0-beta.20251218T180640':
     resolution: {integrity: sha512-9H0h4FkeJVLvRIQJXjAnlWV2s8CpwZ9T00aNWR3XClPjpYive8CgHhO/8yOjWSkVDvKSGz0QFUg5H9vJRU35Fw==}
     peerDependencies:
       react: '*'
+
+  '@types/bun@1.3.5':
+    resolution: {integrity: sha512-RnygCqNrd3srIPEWBd5LFeUYG7plCoH2Yw9WaZGyNmdTEei+gWaHqydbaIRkIkcbXwhBT94q78QljxN0Sk838w==}
+
+  '@types/node@25.0.3':
+    resolution: {integrity: sha512-W609buLVRVmeW693xKfzHeIV6nJGGz98uCPfeXI1ELMLXVeKYZ9m15fAMSaUPBHYLGFsVRcMmSCksQOrZV9BYA==}
 
   assert-options@0.8.3:
     resolution: {integrity: sha512-s6v4HnA+vYSGO4eZX+F+I3gvF74wPk+m6Z1Q3w1Dsg4Pnv/R24vhKAasoMVZGvDpOOfTg1Qz4ptZnEbuy95XsQ==}
@@ -128,6 +221,9 @@ packages:
     resolution: {integrity: sha512-41jNC1tZRSK3s1o7pTNrLuQG8kL/0vR/JgiTmZAJ1eHwe0w5j6HFPKeqEk0WAD13jfrUC7+ULuewFBBCoADPpg==}
     peerDependencies:
       bun: '>=1.0.0'
+
+  bun-types@1.3.5:
+    resolution: {integrity: sha512-inmAYe2PFLs0SUbFOWSVD24sg1jFlMPxOjOSSCYqUgn4Hsc3rDc7dFvfVYjFPNHtov6kgUeulV4SxbuIV/stPw==}
 
   bun@1.3.3:
     resolution: {integrity: sha512-2hJ4ocTZ634/Ptph4lysvO+LbbRZq8fzRvMwX0/CqaLBxrF2UB5D1LdMB8qGcdtCer4/VR9Bx5ORub0yn+yzmw==}
@@ -225,6 +321,19 @@ packages:
     resolution: {integrity: sha512-Ku/hhYbVjOQnXDZFv2+RibmLFGwFdeeKHFcOTlrt7xplBnya5OGn/hIRDsqDiSUcfORsDC7MPxwork8jBwsIWA==}
     engines: {node: '>=0.10.0'}
 
+  rescript-bun@2.1.0:
+    resolution: {integrity: sha512-8INIikN97UlmJgPy5DAnx0fzkqq8Ux6Glj6iYE+SURfLr66PsgaVTgpmlpXBrBjTM/bhaAL82Ulc0gI60YdFYg==}
+    peerDependencies:
+      rescript: '>= 12.0.0-alpha.4'
+
+  rescript-embed-lang@0.5.5:
+    resolution: {integrity: sha512-XImHvK8bUsRmoalwlcVTHeUGN7frcs4PO5Dkj0xAcKkXC5HN2jepJ3sJbdVRhFyKIpzRt3w+MmaAbOi3Q085Dg==}
+
+  rescript@12.0.1:
+    resolution: {integrity: sha512-59JyEUyLj+IPd9VutAXpBXRGqaeaHCMtvACJNAy/oI1hjpjklQ2UJE07oLhxoWB4SDZrCxzowNUpE46UAgjOXg==}
+    engines: {node: '>=20.11.0'}
+    hasBin: true
+
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
@@ -241,6 +350,9 @@ packages:
 
   tilia@5.0.0-beta.20251218T180640:
     resolution: {integrity: sha512-sN+tYNkXXnRss0tWBTSnIwVa1DjY9UWVuOLtEHiSTBbPloe9EkiEPZuIok4VYmnX1VpHrZI3T/NJLKo0I8yQqw==}
+
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
 
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
@@ -283,16 +395,54 @@ snapshots:
   '@oven/bun-windows-x64@1.3.3':
     optional: true
 
+  '@rescript/darwin-arm64@12.0.1':
+    optional: true
+
+  '@rescript/darwin-x64@12.0.1':
+    optional: true
+
+  '@rescript/linux-arm64@12.0.1':
+    optional: true
+
+  '@rescript/linux-x64@12.0.1':
+    optional: true
+
+  '@rescript/react@0.14.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+
+  '@rescript/runtime@12.0.1': {}
+
+  '@rescript/webapi@0.1.0-experimental-2090589(rescript@12.0.1)':
+    dependencies:
+      rescript: 12.0.1
+
+  '@rescript/win32-x64@12.0.1':
+    optional: true
+
   '@tilia/react@5.0.0-beta.20251218T180640(react@19.2.3)':
     dependencies:
       react: 19.2.3
       tilia: 5.0.0-beta.20251218T180640
+
+  '@types/bun@1.3.5':
+    dependencies:
+      bun-types: 1.3.5
+
+  '@types/node@25.0.3':
+    dependencies:
+      undici-types: 7.16.0
 
   assert-options@0.8.3: {}
 
   bun-plugin-tailwind@0.1.2(bun@1.3.3):
     dependencies:
       bun: 1.3.3
+
+  bun-types@1.3.5:
+    dependencies:
+      '@types/node': 25.0.3
 
   bun@1.3.3:
     optionalDependencies:
@@ -389,6 +539,22 @@ snapshots:
 
   react@19.2.3: {}
 
+  rescript-bun@2.1.0(rescript@12.0.1):
+    dependencies:
+      rescript: 12.0.1
+
+  rescript-embed-lang@0.5.5: {}
+
+  rescript@12.0.1:
+    dependencies:
+      '@rescript/runtime': 12.0.1
+    optionalDependencies:
+      '@rescript/darwin-arm64': 12.0.1
+      '@rescript/darwin-x64': 12.0.1
+      '@rescript/linux-arm64': 12.0.1
+      '@rescript/linux-x64': 12.0.1
+      '@rescript/win32-x64': 12.0.1
+
   scheduler@0.27.0: {}
 
   spex@4.1.0: {}
@@ -398,5 +564,7 @@ snapshots:
   tailwindcss@4.1.18: {}
 
   tilia@5.0.0-beta.20251218T180640: {}
+
+  undici-types@7.16.0: {}
 
   xtend@4.0.2: {}

@@ -1,3 +1,6 @@
+open Common;
+open Database;
+
 type renderResult = {
   executorConfig: Config.t,
   html: string,

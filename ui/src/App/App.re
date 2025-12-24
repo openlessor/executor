@@ -1,3 +1,5 @@
+open Common;
+
 let getActiveId = (url: ReasonReactRouter.url) => {
   switch (url.path) {
   | ["item", id, _] => Some(id)

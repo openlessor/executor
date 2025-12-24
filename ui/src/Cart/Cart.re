@@ -1,3 +1,5 @@
+open Common;
+
 let str = React.string;
 
 type t = {

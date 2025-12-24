@@ -1,12 +1,9 @@
-(library
- (name common)
- (public_name executor.common)
- (wrapped false)
+(melange.emit
+ (target output)
+ (libraries tilia common)
+ (module_systems
+  (es6 mjs))
  (preprocess
-  (pps melange.ppx reason-react-ppx))
- (libraries reason-react melange.belt melange.dom melange.js)
- (modes melange))
+  (pps melange.ppx)))
 
-(dirs :standard \ node_modules)
-
-(include_subdirs unqualified)
+(dirs src)

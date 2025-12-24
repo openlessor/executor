@@ -1,16 +1,9 @@
-(dirs :standard \ node_modules)
-
-(library
- (name ui)
- (public_name executor.ui)
- (wrapped false)
+(melange.emit
+ (target output)
+ (libraries ui)
+ (module_systems
+  (es6 mjs))
  (preprocess
-  (pps melange.ppx reason-react-ppx))
- (libraries
-  common
-  melange.belt
-  melange-webapi
-  reason-react
-  melange.dom
-  melange.js)
- (modes melange))
+  (pps melange.ppx)))
+
+(dirs "src")

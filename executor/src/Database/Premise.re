@@ -1,3 +1,5 @@
+open Common;
+
 [%%mel.raw "const { sql } = require(\"bun\")"];
 
 type t = {

@@ -1,3 +1,5 @@
+open Common;
+
 [%%mel.raw "const { sql } = require(\"bun\")"];
 
 let getMatchingPremise: string => PeriodList.Premise.t = [%mel.raw

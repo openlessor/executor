@@ -1,3 +1,6 @@
+open Ui;
+open Common;
+
 let str = React.string;
 
 [@react.component]

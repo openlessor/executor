@@ -1,4 +1,5 @@
-open TiliaReact;
+open Common;
+open Tilia.React;
 
 let str = React.string;
 

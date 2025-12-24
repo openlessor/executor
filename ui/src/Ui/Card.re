@@ -1,4 +1,4 @@
-open Cx;
+open Css.Cx;
 
 [@react.component]
 let make = (~children, ~className: option(string)=?) => {

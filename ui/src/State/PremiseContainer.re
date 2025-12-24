@@ -1,3 +1,4 @@
+open Common;
 open Tilia;
 
 type input_config = {
