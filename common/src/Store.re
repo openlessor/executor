@@ -68,13 +68,14 @@ let makeServerStore = (initialExecutorConfig, callback) => {
   | Some(_) =>
     Js.Exn.raiseError("This function should never run in the client context")
   | None =>
+    let als = getAsyncLocalStorage();
     let store = makeStore(initialExecutorConfig);
-    getServerStore()->AsyncLocalStorage.run(callback);
+    als->AsyncLocalStorage.run(store, callback);
   };
 };
 
 let getServerStore = () => {
-  getAsyncLocalStorage()->AsyncLocalStorage.getStoreUnsafe;
+  getAsyncLocalStorage()->AsyncLocalStorage.getStoreExn;
 };
 
 // This store needs to be isomorphic so that it's in the context of the user's session on the server
