@@ -231,6 +231,7 @@ let subscribeTopic = (ws, premise_id) => {
     ws->Bun_.WebSocket.publish(
       ~topic=premise_id,
       ~data=config->Js.Json.stringifyAny->Option.get,
+      ~compress=?None,
     );
     Js.Promise.resolve(config);
   };
@@ -267,7 +268,7 @@ let config: Bun_.Server.serveOptions(string) = {
       let tokens = message |> String.split_on_char(' ');
       switch (tokens->Belt.List.splitAt(1)->Option.get) {
       | (["ping"], []) => ws->WebSocket.send_string("pong")
-      //      | (["select"], [premise_id]) => subscribeTopic(ws, premise_id)
+      | (["select"], [premise_id]) => subscribeTopic(ws, premise_id)
       | _ => ()
       };
     },
