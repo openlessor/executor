@@ -18,20 +18,27 @@ module BunFile = {
   [@mel.send] external text: t => Js.promise(string) = "text";
   [@mel.send] external hostname: t => string = "hostname";
 };
+
 module Response = {
   type t;
   type responseInit = {
     status: int,
     headers: Js.Dict.t(string),
   };
+
+  /* NOTE:
+     Avoid uncurried `(. ...)` + labeled args on externals; it can trigger
+     Melange internal assertion failures in some versions. */
   [@mel.new]
-  external make: (. string, ~options: responseInit) => t = "Response";
+  external make: string => (~options: responseInit) => t = "Response";
+
   [@mel.new] external makeFromFile: BunFile.t => t = "Response";
 
   external makeWithJsonUnsafe:
-    (. 'jsonCompatiblePayload, ~options: responseInit) => t =
+    'jsonCompatiblePayload => (~options: responseInit) => t =
     "Response.json";
 };
+
 module Bun = {
   type server;
   [@unwrap]
@@ -57,6 +64,7 @@ module Bun = {
       drain: t('t) => unit,
     };
   };
+
   module Server = {
     type t = server;
     [@mel.send] external upgrade: (t, Request.t) => option(bool) = "upgrade";
@@ -80,6 +88,7 @@ module Route = {
   let getPremiseId = req => {
     req->BunRequest.params->Js.Dict.get("premise_id")->Option.get;
   };
+
   module Events = {
     let get =
       Bun.Handler(
@@ -92,6 +101,7 @@ module Route = {
       );
     let handler: Bun.routeHandlerObject = {get: get};
   };
+
   module Frontend = {
     let html_placeholder = "<!--app-html-->";
     let get =
@@ -124,14 +134,13 @@ module Route = {
                  status: 200,
                  headers,
                };
-               Js.Promise.resolve(
-                 Response.make(. html, ~options=responseInit),
-               );
+               Js.Promise.resolve(Response.make(html)(~options=responseInit));
              });
         },
       );
     let handler: Bun.routeHandlerObject = {get: get};
   };
+
   module Config = {
     type output = {
       inventory: array(Config.InventoryItem.t),
@@ -150,13 +159,10 @@ module Route = {
             "premise": premise,
           };
           Js.Promise.resolve(
-            Response.makeWithJsonUnsafe(.
-              response,
-              ~options={
-                headers,
-                status: 200,
-              },
-            ),
+            Response.makeWithJsonUnsafe(response)(~options={
+              headers,
+              status: 200,
+            }),
           );
         },
       );
@@ -217,6 +223,7 @@ module SocketState = {
     store##published->Belt.HashSet.String.add(premise_id);
     SocketState.setPublished(store##published);
   };*/
+
 let routes =
   Js.Dict.fromArray([|
     ("/", Route.Frontend.handler),
@@ -265,18 +272,16 @@ let config: Bun.Server.serveOptions(string) = {
         | Bun.Handler(handler) => handler(req, server)
         | _ =>
           Js.Promise.resolve(
-            Response.make(.
-              "",
-              ~options={
-                status: 200,
-                headers: Js.Dict.empty(),
-              },
-            ),
+            Response.make("")(~options={
+              status: 200,
+              headers: Js.Dict.empty(),
+            }),
           )
         }
       );
   },
 };
+
 let server = Bun.Server.serveWithWebSocket(config);
 let port = server->Bun.Server.port->Int.to_string;
 let hostName = server->Bun.Server.hostname;
