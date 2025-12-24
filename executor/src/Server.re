@@ -14,7 +14,7 @@ module BunRequest = {
 module BunFile = {
   type t;
   [@mel.scope "Bun"] external make: string => t = "file";
-  [@mel.send] external exists: t => bool = "exists";
+  [@mel.send] external exists: t => Js.promise(bool) = "exists";
   [@mel.send] external text: t => Js.promise(string) = "text";
   [@mel.send] external hostname: t => string = "hostname";
 };
@@ -114,31 +114,36 @@ module Route = {
     let get = (req: BunRequest.t, _) => {
       let url = Webapi.Url.make(req->Request.url);
       let headers = Js.Dict.fromArray([|("content-type", "text/html")|]);
-      let f = BunFile.make(doc_root ++ "/index.html");
+      let f = BunFile.make(doc_root ++ "/ui/index.html");
       f->BunFile.text
       |> Js.Promise.then_(text => {
-           let rendered = EntryServer.render(url->Webapi.Url.pathname);
-           let appHtml = rendered.html;
-           let executorConfig = rendered.executorConfig;
-           let stateJson = executorConfig->Js.Json.stringifyAny->Option.get;
-           let html =
-             text
-             |> Js.String.replace(
-                  ~search=html_placeholder,
-                  ~replacement=appHtml,
-                )
-             |> Js.String.replace(
-                  ~search="</body>",
-                  ~replacement=
-                    "<script>window.__EXECUTOR_CONFIG__="
-                    ++ stateJson
-                    ++ ";</script></body>",
+           EntryServer.render(url->Webapi.Url.pathname)
+           |> Js.Promise.then_((rendered: EntryServer.renderResult) => {
+                let appHtml = rendered.html;
+                let executorConfig = rendered.executorConfig;
+                let stateJson =
+                  executorConfig->Js.Json.stringifyAny->Option.get;
+                let html =
+                  text
+                  |> Js.String.replace(
+                       ~search=html_placeholder,
+                       ~replacement=appHtml,
+                     )
+                  |> Js.String.replace(
+                       ~search="</body>",
+                       ~replacement=
+                         "<script>window.__EXECUTOR_CONFIG__="
+                         ++ stateJson
+                         ++ ";</script></body>",
+                     );
+                let responseInit: Response.responseInit = {
+                  status: 200,
+                  headers,
+                };
+                Js.Promise.resolve(
+                  Response.make(html, ~options=responseInit),
                 );
-           let responseInit: Response.responseInit = {
-             status: 200,
-             headers,
-           };
-           Js.Promise.resolve(Response.make(html, ~options=responseInit));
+              })
          });
     };
     let handler = Bun_.routeHandlerForMethod(~get=`Handler(get));
@@ -273,10 +278,14 @@ let config: Bun_.Server.serveOptions(string) = {
     let filePath = doc_root ++ "/" ++ url->Webapi.Url.pathname;
     let file = BunFile.make(filePath);
     file->BunFile.exists
-      ? Js.Promise.resolve(Response.makeFromFile(file))
-      : Route.Frontend.get(req, server);
+    |> Js.Promise.then_(exists =>
+         exists
+           ? Js.Promise.resolve(Response.makeFromFile(file))
+           : Route.Frontend.get(req, server)
+       );
   },
 };
+
 Js.log(routes);
 let server = Bun_.Server.serveWithWebSocket(config);
 let port = server->Bun_.Server.port->Int.to_string;

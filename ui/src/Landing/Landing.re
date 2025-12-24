@@ -22,6 +22,7 @@ let removeFromCart = (state: Cart.t, id) => {
 let make = () => {
   useTilia();
   let main_store = Store.getStore();
+  Js.log(main_store);
   let _unit = main_store.unit;
   let today =
     Js.Date.make()

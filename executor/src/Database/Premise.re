@@ -9,7 +9,7 @@ type t = {
   updated_at: Js.Date.t,
 };
 
-let getPremise: string => PeriodList.Premise.t = [%mel.raw
+let getPremise: string => Js.promise(PeriodList.Premise.t) = [%mel.raw
   {| async function() {
   return await sql`
   SELECT * FROM premise WHERE id = ${premise_id}
@@ -17,12 +17,16 @@ let getPremise: string => PeriodList.Premise.t = [%mel.raw
   |}
 ];
 
-let getConfig = (premise_id: string): Config.t => {
-  let premise = getPremise(premise_id);
-  let inventory = Inventory.getInventoryList(premise_id);
-  let config: Config.t = {
-    inventory,
-    premise: Some(premise),
-  };
-  config;
+let getConfig = (premise_id: string): Js.promise(Config.t) => {
+  getPremise(premise_id)
+  |> Js.Promise.then_(premise => {
+       Inventory.getInventoryList(premise_id)
+       |> Js.Promise.then_(inventory => {
+            let config: Config.t = {
+              inventory,
+              premise: Some(premise),
+            };
+            Js.Promise.resolve(config);
+          })
+     });
 };

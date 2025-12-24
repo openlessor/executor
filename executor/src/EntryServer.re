@@ -6,7 +6,7 @@ type renderResult = {
   html: string,
 };
 
-let render = (url: string): renderResult => {
+let render = (url: string): Js.promise(renderResult) => {
   let app_url =
     ReasonReactRouter.dangerouslyGetInitialUrl(~serverUrlString=url, ());
   let requested_root =
@@ -24,17 +24,27 @@ let render = (url: string): renderResult => {
       "/" ++ app_url.path->Belt.List.head->Option.get;
     };
   Js.log("root route:" ++ route_root);
-  let premise: PeriodList.Premise.t = Route.getMatchingPremise(route_root);
-  let inventory = premise.id |> Inventory.getInventoryList;
-  let config: Config.t = {
-    inventory,
-    premise: Some(premise),
-  };
-  Store.makeServerStore(config, _ => {
-    {
-      html:
-        ReactDOMServer.renderToString(<App route_root server_url=app_url />),
-      executorConfig: config,
-    }
-  });
+  Route.getMatchingPremise(route_root)
+  |> Js.Promise.then_((premise: PeriodList.Premise.t) => {
+       premise.id
+       |> Inventory.getInventoryList
+       |> Js.Promise.then_(inventory => {
+            Js.log(inventory);
+            let config: Config.t = {
+              inventory,
+              premise: Some(premise),
+            };
+            Js.Promise.resolve(
+              Store.makeServerStore(config, _ => {
+                {
+                  html:
+                    ReactDOMServer.renderToString(
+                      <App route_root server_url=app_url />,
+                    ),
+                  executorConfig: config,
+                }
+              }),
+            );
+          })
+     });
 };

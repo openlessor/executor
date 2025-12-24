@@ -42,12 +42,12 @@ let make =
   let rootless_path =
     switch (route_root) {
     | Some(route_root) => getRootlessPath(route_root, url.path)
-    | None => Some([])
+    | None => Some([""])
     };
   Js.log(rootless_path);
   switch (rootless_path) {
   | Some(["item", _])
-  | Some([]) => <Landing />
+  | Some([""]) => <Landing />
   | _ => <NotFound />
   };
 };

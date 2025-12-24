@@ -1,3 +1,4 @@
+open Common;
 open Tilia;
 
 type t = {
@@ -83,7 +84,7 @@ let getServerStore = () => {
 // Then I use getStore in my components to get the store based on the execution context.
 let main_store: option(t) =
   switch ([%mel.external window]) {
-  | Some(_) => Some(makeStore(Config.SSR.empty))
+  | Some(_) => Some(makeStore(PremiseContainer.state))
   | None => None
   };
 
