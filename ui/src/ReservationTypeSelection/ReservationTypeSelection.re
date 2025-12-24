@@ -6,7 +6,7 @@ let str = React.string;
 [@react.component]
 let make = () => {
   useTilia();
-  let main_store = Store.getStore();
+  let main_store = State.Store.getStore();
 
   <div className="my-auto">
     {Array.map(

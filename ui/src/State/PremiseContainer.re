@@ -1,15 +1,18 @@
 open Common;
 open Tilia;
 
+type input_premise = Js.Dict.t(string);
+
 type input_config = {
   inventory: array(Config.InventoryItem.t),
-  premise: option(PeriodList.Premise.t),
+  premise: option(input_premise),
 };
 
-[@mel.scope "window"]
-external domExecutorConfig: option(input_config) = "__EXECUTOR_CONFIG__";
-
-Js.log2("Config From DOM:", domExecutorConfig);
+let domExecutorConfig =
+  switch ([%mel.external window]) {
+  | Some(window) => window->Js.Dict.get("__EXECUTOR_CONFIG__")
+  | None => None
+  };
 
 let empty: Config.t = {
   inventory: [||],
@@ -23,7 +26,15 @@ let initialExecutorConfig =
       inventory: config.inventory,
       premise:
         switch (config.premise) {
-        | Some(premise) => Some(premise)
+        | Some(premise_in) =>
+          Some({
+            id: premise_in->Js.Dict.unsafeGet("id"),
+            name: premise_in->Js.Dict.unsafeGet("name"),
+            description: premise_in->Js.Dict.unsafeGet("description"),
+            updated_at:
+              premise_in->Js.Dict.unsafeGet("updated_at")
+              |> Js.Date.fromString,
+          })
         | None => None
         },
     }

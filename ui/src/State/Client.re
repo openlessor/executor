@@ -1,6 +1,6 @@
 open Common;
 open Tilia;
-external env: Js.Dict.t(string) = "process.env";
+[@mel.scope ("process", "env")] external base_url: string = "API_BASE_URL";
 external globalThis: Js.Dict.t(int) = "globalThis";
 external setInterval: (. unit => unit, int) => int = "setInterval";
 
@@ -11,7 +11,6 @@ type websocket_state = {
 };
 
 let rec subscribe = (set, premise_id: string, updated_at: float) => {
-  let base_url = env->Js.Dict.get("API_BASE_URL")->Option.get;
   let url =
     Webapi.Url.makeWith(
       Constants.event_url

@@ -35,7 +35,7 @@ let render = (url: string): Js.promise(renderResult) => {
               premise: Some(premise),
             };
             Js.Promise.resolve(
-              Store.makeServerStore(config, _ => {
+              State.Store.makeServerStore(config, _ => {
                 {
                   html:
                     ReactDOMServer.renderToString(

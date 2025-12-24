@@ -1,4 +1,3 @@
-open Common;
 open Tilia.React;
 open Ui;
 
@@ -21,7 +20,7 @@ let removeFromCart = (state: Cart.t, id) => {
 [@react.component]
 let make = () => {
   useTilia();
-  let main_store = Store.getStore();
+  let main_store = State.Store.getStore();
   Js.log(main_store);
   let _unit = main_store.unit;
   let today =

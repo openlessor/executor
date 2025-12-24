@@ -67,7 +67,7 @@ module StateContext = {
 let make = (~count) => {
   let _cartState = React.useContext(StateContext.context);
   let _dispatch = React.useContext(DispatchContext.context);
-  let main_store = Store.getStore();
+  let main_store = State.Store.getStore();
   let config: Config.t = main_store.config;
   let _items = config.inventory;
 
