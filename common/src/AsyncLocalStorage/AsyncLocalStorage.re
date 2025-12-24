@@ -1,13 +1,25 @@
 type t('store);
-type context('store);
 
-[@mel.send] external disable: t(_) => unit = "disable";
+[@mel.send] external disable: t('store) => unit = "disable";
 
 [@mel.module "node:async_hooks"] [@mel.new]
-external make: unit => t(_) = "AsyncLocalStorage";
-[@mel.send] external run: ('store, context('store) => 'ret) => 'ret = "run";
+external make: unit => t('store) = "AsyncLocalStorage";
 
-[@mel.send] external getStore: t('store) => option('store) = "getStore";
-[@mel.send] external getStoreUnsafe: t('store) => 'store = "getStore";
-[@mel.send] external exit: (t('store), unit => 'ret) => 'ret = "exit";
-[@mel.send] external enterWith: (t('store), 't) => unit = "enterWith";
+/* AsyncLocalStorage.run(store, callback) */
+[@mel.send]
+external run: (t('store), 'store, unit => 'ret) => 'ret = "run";
+
+/* AsyncLocalStorage.getStore(): store | undefined */
+[@mel.send]
+external getStore: t('store) => option('store) = "getStore";
+
+/* Convenience helper: raise if no store is present */
+let getStoreExn = (als: t('store)) => als->getStore->Option.getExn;
+
+/* AsyncLocalStorage.exit(callback) */
+[@mel.send]
+external exit: (t('store), unit => 'ret) => 'ret = "exit";
+
+/* AsyncLocalStorage.enterWith(store) */
+[@mel.send]
+external enterWith: (t('store), 'store) => unit = "enterWith";
