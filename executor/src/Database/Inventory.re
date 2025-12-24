@@ -1,6 +1,6 @@
 open Common;
 
-[%%mel.raw "const { sql } = require(\"bun\")"];
+[%%mel.raw "import { sql } from \"bun\""];
 
 let getInventoryList: string => array(Config.InventoryItem.t) = [%mel.raw
   {| async function(premise_id) { return await sql`

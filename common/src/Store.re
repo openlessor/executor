@@ -69,7 +69,7 @@ let makeServerStore = (initialExecutorConfig, callback) => {
     Js.Exn.raiseError("This function should never run in the client context")
   | None =>
     let store = makeStore(initialExecutorConfig);
-    AsyncLocalStorage.run(store, callback);
+    getServerStore()->AsyncLocalStorage.run(callback);
   };
 };
 

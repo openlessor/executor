@@ -29,23 +29,28 @@ module Response = {
   /* NOTE:
      Avoid uncurried `(. ...)` + labeled args on externals; it can trigger
      Melange internal assertion failures in some versions. */
-  [@mel.new]
-  external make: string => (~options: responseInit) => t = "Response";
+  [@mel.new] external make: (string, ~options: responseInit) => t = "Response";
 
   [@mel.new] external makeFromFile: BunFile.t => t = "Response";
 
   external makeWithJsonUnsafe:
-    'jsonCompatiblePayload => (~options: responseInit) => t =
+    ('jsonCompatiblePayload, ~options: responseInit) => t =
     "Response.json";
 };
 
-module Bun = {
+module Bun_ = {
   type server;
-  [@unwrap]
-  type routeHandlerForMethod =
-    | Static(Response.t)
-    | Handler((BunRequest.t, server) => Js.promise(Response.t));
-  type routeHandlerObject = {get: routeHandlerForMethod};
+
+  [@mel.obj]
+  external routeHandlerForMethod:
+    (
+      ~get:
+        [@mel.as "GET"] [@mel.unwrap] [
+          | `Static(BunRequest.t)
+          | `Handler((BunRequest.t, server) => Js.promise(Response.t))
+        ]
+    ) =>
+    Js.promise(Response.t);
 
   module WebSocket = {
     type webSocketReadyState =
@@ -68,14 +73,14 @@ module Bun = {
   module Server = {
     type t = server;
     [@mel.send] external upgrade: (t, Request.t) => option(bool) = "upgrade";
-    [@mel.send] external hostname: t => string = "hostname";
-    [@mel.send] external port: t => int = "port";
+    [@mel.get] external hostname: t => string = "hostname";
+    [@mel.get] external port: t => int = "port";
     type serveOptions('websocketDataType) = {
       development: bool,
       port: int,
       fetch: (Request.t, t) => Js.promise(Response.t),
       websocket: WebSocket.config('websocketDataType),
-      routes: Js.Dict.t(routeHandlerObject),
+      routes: Js.Dict.t(Js.Promise.t(Response.t)),
     };
 
     [@mel.scope "Bun"]
@@ -90,55 +95,53 @@ module Route = {
   };
 
   module Events = {
-    let get =
-      Bun.Handler(
-        (req: BunRequest.t, server) => {
-          switch (server->Bun.Server.upgrade(req)) {
-          | None => Js.Exn.raiseError("Error")
-          | Some(_) => Obj.magic(Js.undefined)
-          }
-        },
+    let handler =
+      Bun_.routeHandlerForMethod(
+        ~get=
+          `Handler(
+            (req: BunRequest.t, server) => {
+              switch (server->Bun_.Server.upgrade(req)) {
+              | None => Js.Exn.raiseError("Error")
+              | Some(_) => Obj.magic(Js.undefined)
+              }
+            },
+          ),
       );
-    let handler: Bun.routeHandlerObject = {get: get};
   };
 
   module Frontend = {
     let html_placeholder = "<!--app-html-->";
-    let get =
-      Bun.Handler(
-        (req: BunRequest.t, _) => {
-          let url = Webapi.Url.make(req->Request.url);
-          let headers = Js.Dict.fromArray([|("content-type", "text/html")|]);
-          let f = BunFile.make(doc_root ++ "/index.html");
-          f->BunFile.text
-          |> Js.Promise.then_(text => {
-               let rendered = EntryServer.render(url->Webapi.Url.pathname);
-               let appHtml = rendered.html;
-               let executorConfig = rendered.executorConfig;
-               let stateJson =
-                 executorConfig->Js.Json.stringifyAny->Option.get;
-               let html =
-                 text
-                 |> Js.String.replace(
-                      ~search=html_placeholder,
-                      ~replacement=appHtml,
-                    )
-                 |> Js.String.replace(
-                      ~search="</body>",
-                      ~replacement=
-                        "<script>window.__EXECUTOR_CONFIG__="
-                        ++ stateJson
-                        ++ ";</script></body>",
-                    );
-               let responseInit: Response.responseInit = {
-                 status: 200,
-                 headers,
-               };
-               Js.Promise.resolve(Response.make(html)(~options=responseInit));
-             });
-        },
-      );
-    let handler: Bun.routeHandlerObject = {get: get};
+    let get = (req: BunRequest.t, _) => {
+      let url = Webapi.Url.make(req->Request.url);
+      let headers = Js.Dict.fromArray([|("content-type", "text/html")|]);
+      let f = BunFile.make(doc_root ++ "/index.html");
+      f->BunFile.text
+      |> Js.Promise.then_(text => {
+           let rendered = EntryServer.render(url->Webapi.Url.pathname);
+           let appHtml = rendered.html;
+           let executorConfig = rendered.executorConfig;
+           let stateJson = executorConfig->Js.Json.stringifyAny->Option.get;
+           let html =
+             text
+             |> Js.String.replace(
+                  ~search=html_placeholder,
+                  ~replacement=appHtml,
+                )
+             |> Js.String.replace(
+                  ~search="</body>",
+                  ~replacement=
+                    "<script>window.__EXECUTOR_CONFIG__="
+                    ++ stateJson
+                    ++ ";</script></body>",
+                );
+           let responseInit: Response.responseInit = {
+             status: 200,
+             headers,
+           };
+           Js.Promise.resolve(Response.make(html, ~options=responseInit));
+         });
+    };
+    let handler = Bun_.routeHandlerForMethod(~get=`Handler(get));
   };
 
   module Config = {
@@ -146,58 +149,62 @@ module Route = {
       inventory: array(Config.InventoryItem.t),
       premise: Js.Nullable.t(PeriodList.Premise.t),
     };
-    let get =
-      Bun.Handler(
-        (req: BunRequest.t, _) => {
-          let headers =
-            Js.Dict.fromArray([|("content-type", "application/json")|]);
-          let premise_id: string = req->getPremiseId;
-          let premise = Premise.getPremise(premise_id);
-          let inventory = Inventory.getInventoryList(premise_id);
-          let response = {
-            "inventory": inventory,
-            "premise": premise,
-          };
-          Js.Promise.resolve(
-            Response.makeWithJsonUnsafe(response)(~options={
-              headers,
-              status: 200,
-            }),
-          );
-        },
+    let handler =
+      Bun_.routeHandlerForMethod(
+        ~get=
+          `Handler(
+            (req: BunRequest.t, _) => {
+              let headers =
+                Js.Dict.fromArray([|("content-type", "application/json")|]);
+              let premise_id: string = req->getPremiseId;
+              let premise = Premise.getPremise(premise_id);
+              let inventory = Inventory.getInventoryList(premise_id);
+              let response = {
+                "inventory": inventory,
+                "premise": premise,
+              };
+              Js.Promise.resolve(
+                Response.makeWithJsonUnsafe(
+                  response,
+                  ~options={
+                    headers,
+                    status: 200,
+                  },
+                ),
+              );
+            },
+          ),
       );
-
-    let handler: Bun.routeHandlerObject = {get: get};
   };
   /*module Inventory = {
-      let post = Bun.Handler(
+      let post = Bun_.Handler(
         (req: BunRequest.t, _) => {
           let premise_id: string = req->getPremiseId;
           MockData.createMockData(premise_id);
           Response.make("");
         },
       );
-      let handler: Bun.routeHandlerObject = {post: post};
+      let handler: Bun_.routeHandlerObject = {post: post};
     };*/
 };
 
 module SocketState = {
-  let globalThis: Js.Dict.t('a) =
+  let singleton: Js.Dict.t('a) =
     switch ([%mel.external globalThis]) {
-    | Some(globalThis) => globalThis
+    | Some(singleton) => singleton
     | None =>
       Js.Exn.raiseError(
         "globalThis doesn't exist. This should never happen in the Bun runtime.",
       )
     };
-  if (globalThis->Js.Dict.get("published_signal") == None) {
-    globalThis->Js.Dict.set(
+  if (singleton->Js.Dict.get("published_signal") == None) {
+    singleton->Js.Dict.set(
       "published_signal",
       signal(Belt.HashSet.String.make(~hintSize=1024)),
     );
   };
   let (published, setPublished) =
-    globalThis->Js.Dict.unsafeGet("published_signal");
+    singleton->Js.Dict.unsafeGet("published_signal");
   let store = Tilia.make({"published": computed(() => published->lift)});
   let getStore = () => {
     store;
@@ -232,7 +239,7 @@ let routes =
     //("/inventory/:premise_id", Route.Inventory.handler)
   |]);
 
-let config: Bun.Server.serveOptions(string) = {
+let config: Bun_.Server.serveOptions(string) = {
   development: true,
   port: 8899,
   routes,
@@ -258,7 +265,7 @@ let config: Bun.Server.serveOptions(string) = {
   fetch: (req, server) => {
     let url = Webapi.Url.make(req->Request.url);
     //if (url.pathname == Constants.event_url) {
-    //   if (server->Bun.Server.upgrade(req) == false) {
+    //   if (server->Bun_.Server.upgrade(req) == false) {
     //     JsError.throwWithMessage("Error");
     //   }
     //   ()
@@ -267,23 +274,12 @@ let config: Bun.Server.serveOptions(string) = {
     let file = BunFile.make(filePath);
     file->BunFile.exists
       ? Js.Promise.resolve(Response.makeFromFile(file))
-      : (
-        switch (Route.Frontend.get) {
-        | Bun.Handler(handler) => handler(req, server)
-        | _ =>
-          Js.Promise.resolve(
-            Response.make("")(~options={
-              status: 200,
-              headers: Js.Dict.empty(),
-            }),
-          )
-        }
-      );
+      : Route.Frontend.get(req, server);
   },
 };
-
-let server = Bun.Server.serveWithWebSocket(config);
-let port = server->Bun.Server.port->Int.to_string;
-let hostName = server->Bun.Server.hostname;
+Js.log(routes);
+let server = Bun_.Server.serveWithWebSocket(config);
+let port = server->Bun_.Server.port->Int.to_string;
+let hostName = server->Bun_.Server.hostname;
 
 Js.log("Server listening on http://" ++ hostName ++ ":" ++ port ++ "!");
