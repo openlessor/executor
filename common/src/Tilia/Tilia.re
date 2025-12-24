@@ -21,5 +21,7 @@ type deriver('p) = {
 [@mel.module "tilia"] external carve: (deriver('a) => 'a) => 'a = "carve";
 
 module React = {
+  [@mel.module "@tilia/react"]
+  external leaf: React.component('a) => React.component('a) = "leaf";
   [@mel.module "@tilia/react"] external useTilia: unit => unit = "useTilia";
 };

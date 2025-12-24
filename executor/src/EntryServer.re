@@ -25,26 +25,33 @@ let render = (url: string): Js.promise(renderResult) => {
     };
   Js.log("root route:" ++ route_root);
   Route.getMatchingPremise(route_root)
-  |> Js.Promise.then_((premise: PeriodList.Premise.t) => {
-       premise.id
-       |> Inventory.getInventoryList
-       |> Js.Promise.then_(inventory => {
-            Js.log(inventory);
-            let config: Config.t = {
-              inventory,
-              premise: Some(premise),
-            };
-            Js.Promise.resolve(
-              State.Store.makeServerStore(config, _ => {
-                {
-                  html:
-                    ReactDOMServer.renderToString(
-                      <App route_root server_url=app_url />,
-                    ),
-                  executorConfig: config,
-                }
-              }),
-            );
-          })
+  |> Js.Promise.then_((premise: option(PeriodList.Premise.t)) => {
+       switch (premise) {
+       | None =>
+         Js.Exn.raiseError(
+           "The route root " ++ route_root ++ " was not found",
+         )
+       | Some(premise) =>
+         premise.id
+         |> Inventory.getInventoryList
+         |> Js.Promise.then_(inventory => {
+              Js.log(inventory);
+              let config: Config.t = {
+                inventory,
+                premise: Some(premise),
+              };
+              Js.Promise.resolve(
+                State.Store.makeServerStore(config, _ => {
+                  {
+                    html:
+                      ReactDOMServer.renderToString(
+                        <App route_root server_url=app_url />,
+                      ),
+                    executorConfig: config,
+                  }
+                }),
+              );
+            })
+       }
      });
 };

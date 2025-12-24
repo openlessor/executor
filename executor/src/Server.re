@@ -53,13 +53,20 @@ module Bun_ = {
     Js.promise(Response.t);
 
   module WebSocket = {
+    type t('t);
+
+    [@mel.send]
+    external publish:
+      (t(_), ~topic: string, ~data: string, ~compress: bool=?) => unit =
+      "publish";
+    [@mel.send]
+    external subscribe: (t(_), ~topic: string) => unit = "subscribe";
+
     type webSocketReadyState =
       | [@mel.string 0] CONNECTING
       | [@mel.string 1] OPEN
       | [@mel.string 2] CLOSING
       | [@mel.string 3] CLOSED;
-
-    type t('t);
 
     type config('t) = {
       message: (t('t), string) => unit,
@@ -113,11 +120,12 @@ module Route = {
     let html_placeholder = "<!--app-html-->";
     let get = (req: BunRequest.t, _) => {
       let url = Webapi.Url.make(req->Request.url);
+      let pathname = url->Webapi.Url.pathname;
       let headers = Js.Dict.fromArray([|("content-type", "text/html")|]);
       let f = BunFile.make(doc_root ++ "/ui/index.html");
       f->BunFile.text
       |> Js.Promise.then_(text => {
-           EntryServer.render(url->Webapi.Url.pathname)
+           EntryServer.render(pathname)
            |> Js.Promise.then_((rendered: EntryServer.renderResult) => {
                 let appHtml = rendered.html;
                 let executorConfig = rendered.executorConfig;
@@ -216,25 +224,25 @@ module SocketState = {
   };
 };
 
-/*let subscribeTopic = (ws, premise_id) => {
-    //ws->Globals.WebSocket.subscribe(~topic=premise_id);
-    let fetchPremiseAndPublish = (premise_id: string, _payload) => {
-      let config = Premise.getConfig(premise_id);
-      //ws->Globals.WebSocket.publish(
-      //  ~topic=premise_id,
-      //  ~data=config->Js.Json.stringifyAny->Js.Option.get
-      //});
-      Js.Promise.resolve(config);
-    };
-    let store = SocketState.getStore();
-    if (store##published->Belt.HashSet.String.has(premise_id) == false) {
-      Bus.withListener(premise_id, ~onMessage=message =>
-        fetchPremiseAndPublish(message.channel, message.payload) |> ignore
-      );
-    };
-    store##published->Belt.HashSet.String.add(premise_id);
-    SocketState.setPublished(store##published);
-  };*/
+let subscribeTopic = (ws, premise_id) => {
+  ws->Bun_.WebSocket.subscribe(~topic=premise_id);
+  let fetchPremiseAndPublish = (premise_id: string, _payload) => {
+    let config = Premise.getConfig(premise_id);
+    ws->Bun_.WebSocket.publish(
+      ~topic=premise_id,
+      ~data=config->Js.Json.stringifyAny->Option.get,
+    );
+    Js.Promise.resolve(config);
+  };
+  let store = SocketState.getStore();
+  if (store##published->Belt.HashSet.String.has(premise_id) == false) {
+    Bus.withListener(premise_id, ~onMessage=message =>
+      fetchPremiseAndPublish(message.channel, message.payload) |> ignore
+    );
+  };
+  store##published->Belt.HashSet.String.add(premise_id);
+  SocketState.setPublished(store##published);
+};
 
 let routes =
   Js.Dict.fromArray([|

@@ -1,4 +1,5 @@
 open Common;
+open Tilia.React;
 
 let str = React.string;
 
@@ -64,19 +65,20 @@ module StateContext = {
 };
 
 [@react.component]
-let make = (~count) => {
-  let _cartState = React.useContext(StateContext.context);
-  let _dispatch = React.useContext(DispatchContext.context);
-  let main_store = State.Store.getStore();
-  let config: Config.t = main_store.config;
-  let _items = config.inventory;
+let make =
+  leaf((~count) => {
+    let _cartState = React.useContext(StateContext.context);
+    let _dispatch = React.useContext(DispatchContext.context);
+    let main_store = State.Store.getStore();
+    let config: Config.t = main_store.config;
+    let _items = config.inventory;
 
-  <h1 className="block font-bold align-middle text-gray-700 m-2 text-3xl">
-    <span className="m-2 align-middle text-3xl font-light">
-      <i className="light-icon-shopping-cart" />
-    </span>
-    {str("Selected equipment (")}
-    {str(Int.to_string(count))}
-    {str(")")}
-  </h1>;
-};
+    <h1 className="block font-bold align-middle text-gray-700 m-2 text-3xl">
+      <span className="m-2 align-middle text-3xl font-light">
+        <i className="light-icon-shopping-cart" />
+      </span>
+      {str("Selected equipment (")}
+      {str(Int.to_string(count))}
+      {str(")")}
+    </h1>;
+  });

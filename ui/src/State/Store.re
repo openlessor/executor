@@ -25,8 +25,6 @@ let derivePremiseId = (store: t) => {
   premise.id;
 };
 
-module StringSet = Set.Make(String);
-
 let makeStore = initialExecutorConfig =>
   carve(({derived}) => {
     {
@@ -34,17 +32,17 @@ let makeStore = initialExecutorConfig =>
       config: initialExecutorConfig,
       period_list:
         derived((store: t) => {
-          let seen_units = StringSet.empty;
+          let seen_units = Belt.Set.String.empty;
           let config = store.config;
           let inventory = config.inventory->Belt.Array.copy;
           let mapped_inventory =
             inventory->Belt.Array.flatMap(inv => {
               inv.period_list
               |> Array.map((pl: Config.Pricing.period) =>
-                   if (seen_units |> StringSet.exists(s => pl.unit === s)) {
+                   if (seen_units->Belt.Set.String.has(pl.unit)) {
                      None;
                    } else {
-                     StringSet.add(pl.unit, seen_units)->ignore;
+                     seen_units->Belt.Set.String.add(pl.unit)->ignore;
                      Some(pl);
                    }
                  )
