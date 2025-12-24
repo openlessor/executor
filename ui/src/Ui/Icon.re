@@ -1,49 +1,61 @@
 type iconProps = {
   .
-  size: int,
-  color: string,
-  strokeWidth: int,
-  absoluteStrokeWidth: bool,
-  className: string,
+  "absoluteStrokeWidth": option(bool),
+  "className": option(string),
+  "color": option(string),
+  "size": option(int),
+  "strokeWidth": option(int),
 };
 
-module type Icon = {
-  let make: React.component(iconProps);
+module Calendar = {
+  [@mel.module "lucide-react"] [@react.component]
+  external make:
+    (
+      ~absoluteStrokeWidth: bool=?,
+      ~className: string=?,
+      ~color: string=?,
+      ~size: int=?,
+      ~strokeWidth: int=?
+    ) =>
+    React.element =
+    "Calendar";
 };
-
-module Calendar: Icon = {
-  [@mel.module "lucide-react"]
-  external make: React.component(iconProps) = "Calendar";
+module Clock = {
+  [@mel.module "lucide-react"] [@react.component]
+  external make:
+    (
+      ~absoluteStrokeWidth: bool=?,
+      ~className: string=?,
+      ~color: string=?,
+      ~size: int=?,
+      ~strokeWidth: int=?
+    ) =>
+    React.element =
+    "Clock";
 };
-
-module Clock: Icon = {
-  [@mel.module "lucide-react"]
-  external make: React.component(iconProps) = "Clock";
+module MonitorCloud = {
+  [@mel.module "lucide-react"] [@react.component]
+  external make:
+    (
+      ~absoluteStrokeWidth: bool=?,
+      ~className: string=?,
+      ~color: string=?,
+      ~size: int=?,
+      ~strokeWidth: int=?
+    ) =>
+    React.element =
+    "MonitorCloud";
 };
-
-module MonitorCloud: Icon = {
-  [@mel.module "lucide-react"]
-  external make: React.component(iconProps) = "MonitorCloud";
+module SearchIcon = {
+  [@mel.module "lucide-react"] [@react.component]
+  external make:
+    (
+      ~absoluteStrokeWidth: bool=?,
+      ~className: string=?,
+      ~color: string=?,
+      ~size: int=?,
+      ~strokeWidth: int=?
+    ) =>
+    React.element =
+    "SearchIcon";
 };
-
-module Cloud: Icon = {
-  [@mel.module "lucide-react"]
-  external make: React.component(iconProps) = "Cloud";
-};
-
-module SearchIcon: Icon = {
-  [@mel.module "lucide-react"]
-  external make: React.component(iconProps) = "SearchIcon";
-};
-
-/*module IconButton = {
-    [@react.component]
-    let make = (~icon: Icon) => {
-      <button>
-        <Icon size={16} color="white" /> // This is the prop
-      </button>
-    }
-  }
-
-  let _ = <IconButton icon={module(Cloud)} />
-  */

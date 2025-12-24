@@ -78,11 +78,10 @@ let make = () => {
     <Card className="bg-slate-200/40 border-slate-200/40 border">
       <h1 className="text-xl">
         <span>
-          "<Icon.MonitorCloud
+          <Icon.MonitorCloud
             size=48
-            className=\"text-slate-400 mr-2 my-auto inline content-start\"
-          />"
-          ->str
+            className="text-slate-400 mr-2 my-auto inline content-start"
+          />
           "Cloud Hardware Rental"->str
         </span>
       </h1>
@@ -90,20 +89,18 @@ let make = () => {
     <Card
       className="grid grid-cols-[auto_1fr] bg-white/20 gap-4 place-items-start items-center">
       <span className="align-middle text-lg">
-        "<Icon.Clock
-          className=text-slate-400 mr-2 my-auto inline content-start
+        <Icon.Clock
+          className="text-slate-400 mr-2 my-auto inline content-start"
           size=48
-        />"
-        ->str
+        />
         "Select your reservation type: "->str
       </span>
       <ReservationTypeSelection />
       <div className="col-span-full grid grid-cols-subgrid relative">
-        "<Icon.Calendar
+        <Icon.Calendar
           size=48
-          className=absolute left-0 top-0 bottom-0 my-auto text-slate-400
-        />"
-        ->str
+          className="absolute left-0 top-0 bottom-0 my-auto text-slate-400"
+        />
         <span className="align-middle text-lg pl-14">
           "Select your reservation start date: "->str
         </span>
