@@ -1,0 +1,11 @@
+(melange.emit
+ (package executor)
+ (promote (until-clean))
+ (target dist)
+ (libraries tilia common)
+ (module_systems
+  (es6 mjs))
+ (preprocess
+  (pps melange.ppx)))
+
+(dirs src)

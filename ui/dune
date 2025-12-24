@@ -1,0 +1,12 @@
+(melange.emit
+ (package executor)
+ (promote (until-clean))
+ (runtime_deps src/tailwind.css)
+ (target dist)
+ (libraries ui)
+ (module_systems
+  (es6 mjs))
+ (preprocess
+  (pps melange.ppx)))
+
+(dirs "src")

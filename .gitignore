@@ -1,3 +1,8 @@
+_opam
+dune.lock
+dev-tools.locks
+bin
+_build
 lib
 executor/lib
 executor-ui/lib
@@ -117,3 +122,4 @@ dist
 
 # TernJS port file
 .tern-port
+.aider*

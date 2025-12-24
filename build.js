@@ -20,7 +20,7 @@ console.log("Building client...");
 await Bun.build({
   publicPath: `${process.env.API_BASE_URL}/`,
   plugins: [tailwind, resolveReactToRoot],
-  entrypoints: ["./executor-ui/index.html", "./executor-ui/src/Index.mjs"],
+  entrypoints: ["./ui/index.html", "./_build/default/ui/dist/node_modules/executor.ui/Index.mjs"],
   outdir: "public",
   env: "inline",
 });
@@ -29,6 +29,6 @@ console.log("Building server...");
 await Bun.build({
   target: "bun",
   plugins: [resolveReactToRoot],
-  entrypoints: ["./executor/src/Server.mjs"],
+  entrypoints: ["./_build/default/executor/dist/node_modules/executor/Server.mjs"],
   outdir: "./dist",
 });
