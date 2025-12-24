@@ -1,0 +1,3 @@
+opam list | egrep 'melange|ocaml|dune|ppxlib|reason'
+which melc
+melc -version || true
