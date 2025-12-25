@@ -3,7 +3,7 @@ Basically the goal right now is to support the following for the initial release
  - Rules in place for these periods, right now it’s simple and it’s only min amount / max amount.
 - Inventory is associated with these periods. Inventory can be: Services, Tangible Goods, etc.
 - I’ve created a concept called a “Premise” which is essentially the parent object or scope of Inventory. This can be used to do things like split responsibility (think different staff roles), use the same backend for multiple businesses, etc. The idea is that you can use some JavaScript and just pass in the Premise ID (which is a random UUIDv4) and it will pull and render everything from the backend.
-- ReactJS components to render inventory, pricing, timer / elapsed time, etc, although I want to make it so you can actually use any components that use JSX. Which is actually a possibility with ReScript. Also for example the state management library I’m using is not coupled to React.
+- ReactJS components to render inventory, pricing, timer / elapsed time, etc, although I want to make it so you can actually use any components that use JSX. Which is actually a possibility with ReasonML. Also for example the state management library I’m using is not coupled to React.
   - End goal is to have a fully customizable UI experience (the only requirement is JSX)
 - Simple admin backend 
 
@@ -24,7 +24,7 @@ Partially implemented:
 - Updating inventory from empty to non-empty for a premise
 
 TODO (Web channel is focus for now, then mobile and b&m):
-- Rewrite Postgres stored function in JavaScript compiled from ReScript and create a declarative framework for easily updating this logic
+- Rewrite Postgres stored function in JavaScript compiled from ReasonML and create a declarative framework for easily updating this logic
 - Add “Out of stock” or similar (customizable) message when no inventory available. 
 - Come up with a way to configure stock in different ways. For example, “Intangible items (infinite quantity)”, “Tangible items (finite quantity)”, etc.
 - Create “Purchase Flows” — The ability to customize the entire flow of a purchase. From simple to advanced.
@@ -34,12 +34,12 @@ TODO (Web channel is focus for now, then mobile and b&m):
    - GUI for “Configuration based customization"
 - Create fully customizable UI driver so you stay on brand.
 
-## Plans for Frontend POC (written in ReScript using ReScript React)
+## Plans for Frontend POC (written in ReasonML using ReasonML React)
 - Nearly zero configuration React components which you simply need to point to Executor endpoint URL to bootstrap
 - Styled using Tailwind CSS and packaged via Vite's SSR + client hydration pipeline
 - Frontend POC will run Vite Server, possibly deployed to CloudFlare containers
 
-## Plans for Backend POC (OpenLessor Executor; written in ReScript using rescript-bun)
+## Plans for Backend POC (OpenLessor Executor; written in ReasonML using ReasonML-bun)
 - Multiple billing period type (i.e.: seconds, minutes, days, weeks, months)
 - Configurable to call a provisioner (i.e.: hook for GET/POST URL during different phases; open source micro service for this TBD)
 - Each product subscription type will have it's own unique endpoint URL for configuring frontend React HOC

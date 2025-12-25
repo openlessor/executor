@@ -2,7 +2,7 @@
 
 ## Preamble
 
-Written using ReScript and React. This is a work in progress. In it's current state, it should not be used by anyone. Any or all of this document is subject to change. 
+Written using ReasonML and React. This is a work in progress. In it's current state, it should not be used by anyone. Any or all of this document is subject to change. 
 
 ## Who is Executor for? 
 
@@ -12,34 +12,22 @@ Some example use cases:
 - Cloud Server
 - Website Subscription
 
-## Important Note
-
-This project is currently using forked dependencies `tilia` and `@tilia/react` to work with ReScript v12. I've submitted a PR with the TiliaJS project.
-
 ## Prototype Phase
 
 This software is currently in the prototype phase and is not ready to be used in production. The software design, APIs, and database schemas may completely change by a beta release.
 
 ## Running with Bun runtime
 
-To install dependencies:
+To install dependencies (not using Bun package manager):
 
 ```bash
-bun install
-```
-
-## pgtyped-rescript
-
-Run the development tool in watch mode:
-
-```bash
-npx pgtyped-rescript -w -c pgtyped.config.json
+pnpm install
 ```
 
 ## Development server
 
 1. Install dependencies using pnpm: `pnpm install`
-2. Start the ReScript watch and Bun dev server: `pnpm dev`
+2. Start the ReasonML watch and Bun dev server: `pnpm dev`
 3. Visit `http://localhost:8899` to interact with the app rendered on the server and hydrated in the browser.
 
 ## Backend Vision
@@ -66,9 +54,9 @@ This can be applied to anything billed on a recurring model. More to come on vis
 
 OpenLessor will be an open source project for omnichannel commerce, lease management, and subscription management. It will offer multiple billing types based on time units such as minutes, days, weeks, and months. I am currently working on this in my freetime and my hope is that the project will slowly progress over time. This is the fullstack monorepository for OpenLessor. It currently runs using the Bun JavaScript runtime. Tech stack:
 
-- PostgreSQL - pgtyped-rescript
+- PostgreSQL - pgtyped-ReasonML
 - Bun JavaScript runtime
-- ReScript / rescript-bun
+- ReasonML / ReasonML-bun
 
 A key principal of OpenLessor will be performance first. That's why we adapt the latest bleeding edge technology when developing the stack.
 
