@@ -14,7 +14,7 @@ let make =
     let filterType = "all";
     let today =
       Js.Date.make()
-      |> Js.Date.setHoursMSMs(
+      |> Js.Date.setHours(
            ~hours=0.0,
            ~minutes=0.0,
            ~seconds=0.0,
