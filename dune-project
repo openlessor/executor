@@ -17,21 +17,37 @@
 
 (using melange 0.1)
 
+(pin
+ (package
+  (name reason-react)
+  (version 0.17.0))
+ (url git+https://github.com/reasonml/reason-react))
+
+(pin
+ (package
+  (name reason-react-ppx)
+  (version 0.17.0))
+ (url git+https://github.com/reasonml/reason-react))
+
 (package
  (name executor)
  (synopsis "A short synopsis")
  (description "A longer description")
  (depends
   (ocaml
-   (= "5.2.0"))
-  melange
+   (= "5.4.0"))
+  (melange
+   (>= "6.0.0"))
   ocaml-lsp-server
   ocamlformat
   reason
   melange-webapi
-  ppxlib
-  reason-react-ppx
-  reason-react)
+  (ppxlib
+   (= 0.37.0))
+  (reason-react-ppx
+   (>= 0.17.0))
+  (reason-react
+   (>= 0.17.0)))
  (allow_empty)
  (tags
   ("add topics" "to describe" your project)))

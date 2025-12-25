@@ -25,14 +25,13 @@ let make =
     let _unit = main_store.unit;
     let today =
       Js.Date.make()
-      ->Js.Date.setHoursMSMs(
-          ~hours=0.0,
-          ~minutes=0.0,
-          ~seconds=0.0,
-          ~milliseconds=0.0,
-        )
-      ->Js.Date.fromFloat;
-
+      |> Js.Date.setHours(
+           ~hours=0.0,
+           ~minutes=0.0,
+           ~seconds=0.0,
+           ~milliseconds=0.0,
+         )
+      |> Js.Date.fromFloat;
     let (openDate, setOpenDate) = React.useState(() => today);
     let (closeDate, setCloseDate) = React.useState(() => today);
 
@@ -60,8 +59,8 @@ let make =
         (state, action) => {
           let result =
             switch (action) {
-            | Cart.DispatchContext.AddToCart({id}) => addToCart(state, id)
-            | Cart.DispatchContext.RemoveFromCart({id}) =>
+            | Cart.DispatchContext.AddToCart({ id }) => addToCart(state, id)
+            | Cart.DispatchContext.RemoveFromCart({ id }) =>
               removeFromCart(state, id)
             };
           result;
