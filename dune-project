@@ -19,12 +19,19 @@
 
 (pin
  (package
-  (name reason-react))
+  (name server-reason-react))
+ (url git+https://github.com/ml-in-barcelona/server-reason-react))
+
+(pin
+ (package
+  (name reason-react)
+  (version 0.17.0))
  (url git+https://github.com/reasonml/reason-react))
 
 (pin
  (package
-  (name reason-react-ppx))
+  (name reason-react-ppx)
+  (version 0.17.0))
  (url git+https://github.com/reasonml/reason-react))
 
 (package
@@ -32,16 +39,13 @@
  (synopsis "A short synopsis")
  (description "A longer description")
  (depends
-  (ocaml
-   (= "5.4.0"))
-  (melange
-   (>= "6.0.0"))
+  ocaml
+  melange
   ocaml-lsp-server
   ocamlformat
   reason
   melange-webapi
-  (ppxlib
-   (= 0.37.0))
+  ppxlib
   (reason-react-ppx
    (>= 0.17.0))
   (reason-react

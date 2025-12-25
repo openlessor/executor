@@ -11,13 +11,13 @@ doc: "https://url/to/documentation"
 bug-reports: "https://github.com/username/reponame/issues"
 depends: [
   "dune" {>= "3.20"}
-  "ocaml" {= "5.4.0"}
-  "melange" {>= "6.0.0"}
+  "ocaml"
+  "melange"
   "ocaml-lsp-server"
   "ocamlformat"
   "reason"
   "melange-webapi"
-  "ppxlib" {= "0.37.0"}
+  "ppxlib"
   "reason-react-ppx" {>= "0.17.0"}
   "reason-react" {>= "0.17.0"}
   "odoc" {with-doc}
