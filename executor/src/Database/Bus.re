@@ -1,4 +1,4 @@
-[@mel.scope ("process", "env")] external db_url: string = "DB_URL";
+[@mel.scope ("process", "env")] external db_url: string = "DATABASE_URL";
 
 let connect = () => {
   let pgp = PgListener.PgPromise.make(.);
@@ -18,6 +18,6 @@ let withListener =
     ) => {
   let pgListener = connect();
   pgListener
-  ->PgListener.listen([|premise_id|], {onMessage: onMessage})
+  ->PgListener.listen([|premise_id|], { onMessage: onMessage })
   ->ignore;
 };
