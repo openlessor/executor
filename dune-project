@@ -22,16 +22,18 @@
  (synopsis "A short synopsis")
  (description "A longer description")
  (depends
-  (ocaml
-   (= "5.2.0"))
-  melange
+  ocaml
+  (melange
+   (>= "6.0.0"))
   ocaml-lsp-server
   ocamlformat
   reason
   melange-webapi
-  ppxlib
+  (ppxlib
+   (= 0.33))
   reason-react-ppx
-  reason-react)
+  (reason-react
+   (>= 0.16.0)))
  (allow_empty)
  (tags
   ("add topics" "to describe" your project)))
