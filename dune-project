@@ -19,14 +19,12 @@
 
 (pin
  (package
-  (name reason-react)
-  (version 0.17.0))
+  (name reason-react))
  (url git+https://github.com/reasonml/reason-react))
 
 (pin
  (package
-  (name reason-react-ppx)
-  (version 0.17.0))
+  (name reason-react-ppx))
  (url git+https://github.com/reasonml/reason-react))
 
 (package

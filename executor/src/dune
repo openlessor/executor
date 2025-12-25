@@ -5,7 +5,6 @@
  (preprocess
   (pps melange.ppx reason-react-ppx))
  (libraries
-  melange-fetch
   ui
   common
   melange.belt
