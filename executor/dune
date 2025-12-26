@@ -1,11 +1,1 @@
-(melange.emit
- (package executor)
- (promote (until-clean))
- (target dist)
- (libraries executor)
- (module_systems
-  (es6 mjs))
- (preprocess
-  (pps melange.ppx)))
-
 (dirs "src")
