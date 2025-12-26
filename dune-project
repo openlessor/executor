@@ -5,15 +5,11 @@
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github Software-Deployed/executor))
 
-(authors "Author Name <author@example.com>")
+(authors "Brian Kaplan <brian@equalslashed.net>")
 
-(maintainers "Maintainer Name <maintainer@example.com>")
-
-(license LICENSE)
-
-(documentation https://url/to/documentation)
+(license MIT)
 
 (using melange 0.1)
 
@@ -31,8 +27,8 @@
 
 (package
  (name executor)
- (synopsis "A short synopsis")
- (description "A longer description")
+ (synopsis "Realtime e-commerce platform")
+ (description "E-commerce with real time transactions and synchronization")
  (depends
   ocaml
   melange
@@ -47,6 +43,6 @@
    (>= 0.17.0)))
  (allow_empty)
  (tags
-  ("add topics" "to describe" your project)))
+  ("web" "commerce" "lease" "subscription" "cart")))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html
