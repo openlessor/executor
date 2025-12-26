@@ -19,11 +19,6 @@
 
 (pin
  (package
-  (name server-reason-react))
- (url git+https://github.com/ml-in-barcelona/server-reason-react))
-
-(pin
- (package
   (name reason-react)
   (version 0.17.0))
  (url git+https://github.com/reasonml/reason-react))
@@ -49,8 +44,7 @@
   (reason-react-ppx
    (>= 0.17.0))
   (reason-react
-   (>= 0.17.0))
-  server-reason-react)
+   (>= 0.17.0)))
  (allow_empty)
  (tags
   ("add topics" "to describe" your project)))
