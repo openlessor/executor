@@ -15,5 +15,3 @@
   (source_tree .))
  (action
   (system "bun build.js")))
-
-(dirs common executor ui \ node_modules)
