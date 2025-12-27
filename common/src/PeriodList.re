@@ -1,5 +1,3 @@
-open Tilia;
-
 module Premise = {
   type t = {
     id: string,
@@ -22,5 +20,5 @@ module Unit = {
   ];
   // XXX: This default state should come from the server
   let defaultState: t = `Month;
-  let (signal, set) = signal(defaultState);
+  let (signal, set) = Tilia.signal(defaultState);
 };
