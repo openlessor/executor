@@ -10,20 +10,16 @@
   (pps melange.ppx)))
 
 (rule
- (targets .post_build)
+ (targets melange)
  (deps
-  (source_tree lib)
-  build.js)
+  (source_tree .))
  (action
   (progn
-   (system "bun build.js")
-   (with-stdout-to .post_build
-    (system "date +%s")))))
+   (system "bun build.js"))))
 
 (alias
- (name default)
+ (name melange)
  (deps
-  (source_tree lib)
-  .post_build))
+  (source_tree lib)))
 
 (dirs common executor ui \ node_modules)
