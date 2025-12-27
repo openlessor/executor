@@ -10,7 +10,7 @@ type t = {
 };
 
 let getPremise: string => Js.promise(PeriodList.Premise.t) = [%mel.raw
-  {| async function() {
+  {| async function(premise_id) {
   return await sql`
   SELECT * FROM premise WHERE id = ${premise_id}
   ` }
