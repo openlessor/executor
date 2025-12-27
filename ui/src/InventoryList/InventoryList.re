@@ -32,22 +32,31 @@ let make =
       | _ => today
       };
     let heading =
-      if (unit != PeriodList.Unit.Hour && openDate != closeDate) {
-        // The open date and close date are at least 1 day apart
-        "Showing "
-        ++ filterType
-        ++ " equipment available from "
-        ++ Js.Date.toLocaleDateString(openDate)
-        ++ " to "
-        ++ Js.Date.toLocaleDateString(closeDate);
-      } else {
+      switch (unit, openDate == closeDate) {
+      | (`Day | `Minute | `Month | `Second | `Week | `Year, _)
+      | (`Hour, true) =>
         "Showing "
         ++ filterType
         ++ " equipment available "
         ++ (
           openDate == today ? "today" : Js.Date.toLocaleDateString(openDate)
-        );
+        )
+      | (`Hour, false) =>
+        "Showing "
+        ++ filterType
+        ++ " equipment available from "
+        ++ Js.Date.toLocaleDateString(openDate)
+        ++ " to "
+        ++ Js.Date.toLocaleDateString(closeDate)
       };
+
+    let items_by_unit =
+      items
+      |> Js.Array.filter(~f=(i: Config.InventoryItem.t) =>
+           i.period_list
+           ->Js.Array.find(~f=pl => pl.unit === PeriodList.Unit.tToJs(unit))
+           ->Belt.Option.mapWithDefault(false, _ => true)
+         );
 
     <Card
       className="m-0 p-0 bg-white/30 border-2 border-b-4 border-r-4 border-gray-200/60">
@@ -60,17 +69,10 @@ let make =
       </h1>
       <Card
         className="border-none shadow-none shadow-transparent m-0 p-0 place-content-start grid lg:grid-cols-8 grid-cols-4 gap-4">
-        {Js.Array.map(
-           ~f=
-             (item: Config.InventoryItem.t) => {
-               switch (item.period_list) {
-               /*|> Js.Array.find(~f=pl => pl.unit == unit)*/
-               | _ => <InventoryItem key={Belt.Int.toString(item.id)} item />
-               //| None => React.null
-               }
-             },
-           items,
-         )
+        {items_by_unit
+         ->Js.Array.map(~f=(item: Config.InventoryItem.t) =>
+             <InventoryItem key={Int.to_string(item.id)} item />
+           )
          ->React.array}
       </Card>
     </Card>;

@@ -23,18 +23,14 @@ let make =
                 onChange={_e => {
                   //let inputEl = e->React.Event.Form.currentTarget;
                   //if (inputEl["checked"] == true) {
-                  switch (period.unit) {
-                  | "year" => PeriodList.Unit.set(PeriodList.Unit.Year)
-                  | "month" => PeriodList.Unit.set(PeriodList.Unit.Month)
-                  | "week" => PeriodList.Unit.set(PeriodList.Unit.Week)
-                  | "day" => PeriodList.Unit.set(PeriodList.Unit.Day)
-                  | "hour" => PeriodList.Unit.set(PeriodList.Unit.Hour)
-                  | "minute" => PeriodList.Unit.set(PeriodList.Unit.Minute)
-                  | "second" => PeriodList.Unit.set(PeriodList.Unit.Second)
-                  | _ => PeriodList.Unit.set(PeriodList.Unit.defaultState)
-                  }
+                  PeriodList.Unit.set(
+                    PeriodList.Unit.tFromJs(period.unit)->Option.get,
+                  )
                 }}
-                //checked={main_store.unit == period.unit}
+                checked={
+                  main_store.unit
+                  == PeriodList.Unit.tFromJs(period.unit)->Option.get
+                }
                 autoComplete="off"
               />
               <span className="p-1 pl-0"> period.label->str </span>

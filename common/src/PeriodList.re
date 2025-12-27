@@ -10,15 +10,17 @@ module Premise = {
 };
 
 module Unit = {
-  type t =
-    | [@mel.string "second"] Second
-    | [@mel.string "minute"] Minute
-    | [@mel.string "hour"] Hour
-    | [@mel.string "day"] Day
-    | [@mel.string "week"] Week
-    | [@mel.string "month"] Month
-    | [@mel.string "year"] Year;
+  [@deriving jsConverter]
+  type t = [
+    | [@mel.as "second"] `Second
+    | [@mel.as "minute"] `Minute
+    | [@mel.as "hour"] `Hour
+    | [@mel.as "day"] `Day
+    | [@mel.as "week"] `Week
+    | [@mel.as "month"] `Month
+    | [@mel.as "year"] `Year
+  ];
   // XXX: This default state should come from the server
-  let defaultState: t = Month;
+  let defaultState: t = `Month;
   let (signal, set) = signal(defaultState);
 };
