@@ -10,7 +10,7 @@
   (pps melange.ppx)))
 
 (rule
- (alias melange)
+ (alias default)
  (deps
   (source_tree lib))
  (action
