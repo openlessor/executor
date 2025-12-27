@@ -9,21 +9,9 @@
  (preprocess
   (pps melange.ppx)))
 
-(rule
- (targets .melange_stamp)
- (deps
-  (source_tree .)
-  build.js)
- (action
-  (progn
-   (system "bun build.js")
-   (with-stdout-to .melange_stamp
-    (system "date +%s")))))
-
 (alias
  (name melange)
  (deps
-  .melange_stamp
   (source_tree lib)))
 
 (dirs common executor ui \ node_modules)
