@@ -22,6 +22,8 @@
 
 (alias
  (name default)
- (deps .post_build))
+ (deps
+  lib
+  .post_build))
 
 (dirs common executor ui \ node_modules)
