@@ -10,7 +10,6 @@
   (pps melange.ppx)))
 
 (rule
- (targets melange)
  (deps
   (source_tree .)
   build.js)
