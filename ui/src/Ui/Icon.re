@@ -33,6 +33,21 @@ module Clock = {
     React.element =
     "Clock";
 };
+
+module Cart = {
+  [@mel.module "lucide-react"] [@react.component]
+  external make:
+    (
+      ~absoluteStrokeWidth: bool=?,
+      ~className: string=?,
+      ~color: string=?,
+      ~size: int=?,
+      ~strokeWidth: int=?
+    ) =>
+    React.element =
+    "ShoppingCart";
+};
+
 module MonitorCloud = {
   [@mel.module "lucide-react"] [@react.component]
   external make:

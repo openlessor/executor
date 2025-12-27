@@ -26,37 +26,26 @@ let derivePremiseId = (store: t) => {
 };
 
 let makeStore = initialExecutorConfig =>
-  carve(({derived}) => {
+  carve(({ derived }) => {
     {
       premise_id: derived(derivePremiseId),
       config: initialExecutorConfig,
       period_list:
         derived((store: t) => {
-          let seen_units = Belt.Set.String.empty;
           let config = store.config;
           let inventory = config.inventory->Belt.Array.copy;
-          let mapped_inventory =
-            inventory->Belt.Array.flatMap(inv => {
-              inv.period_list
-              |> Array.map((pl: Config.Pricing.period) =>
-                   if (seen_units->Belt.Set.String.has(pl.unit)) {
-                     None;
-                   } else {
-                     seen_units->Belt.Set.String.add(pl.unit)->ignore;
-                     Some(pl);
-                   }
-                 )
-            });
-          Js.Array.filter(
-            ~f=
-              v =>
-                switch (v) {
-                | Some(_) => true
-                | None => false
-                },
-            mapped_inventory,
-          )
-          ->Js.Array.map(~f=v => v->Option.get);
+          let seen = Js.Set.make();
+          let periods: array(Config.Pricing.period) = [||];
+          inventory->Js.Array.forEach(~f=inv => {
+            inv.period_list
+            |> Js.Array.forEach(~f=(pl: Config.Pricing.period) =>
+                 if (seen->Js.Set.has(~value=pl.unit) === false) {
+                   periods->Js.Array.push(~value=pl) |> ignore;
+                   seen->Js.Set.add(~value=pl.unit) |> ignore;
+                 }
+               )
+          });
+          periods;
         }),
       unit: PeriodList.Unit.signal->lift,
     }
