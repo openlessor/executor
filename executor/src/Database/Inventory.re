@@ -13,15 +13,3 @@ console.log("Querying " + premise_id);
   GROUP BY i.id, i.premise_id, i.name, i.description, i.quantity
   ` } |}
 ];
-
-// XXX: This may not be needed...
-let toInventoryItem = (row: Config.InventoryItem.t): Config.InventoryItem.t => {
-  {
-    description: row.description,
-    id: row.id,
-    name: row.name,
-    quantity: row.quantity,
-    premise_id: row.premise_id,
-    period_list: row.period_list,
-  };
-};
