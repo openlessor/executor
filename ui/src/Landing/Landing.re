@@ -103,6 +103,7 @@ let make =
           <span className="align-middle text-lg pl-14">
             "Select your reservation start date: "->str
           </span>
+          <DayPicker />
           <input
             className="block align-end outline-slate-400 outline-1 px-2"
           />
