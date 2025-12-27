@@ -1,3 +1,5 @@
+[%%raw "import \"react-day-picker/style.css\""];
+
 let rootElement = ReactDOM.querySelector("#root");
 
 switch (rootElement) {

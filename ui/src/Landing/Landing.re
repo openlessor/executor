@@ -35,7 +35,7 @@ let make =
     let (openDate, setOpenDate) = React.useState(() => today);
     let (closeDate, setCloseDate) = React.useState(() => today);
 
-    let _updateOpenDate = (openDate: Js.Nullable.t(Js.Date.t)) => {
+    let updateOpenDate = (openDate: Js.Nullable.t(Js.Date.t)) => {
       setOpenDate(_prev
         =>
           switch (openDate->Js.Nullable.toOption) {
@@ -101,14 +101,14 @@ let make =
             className="absolute left-0 top-0 bottom-0 my-auto text-slate-400"
           />
           <span className="align-middle text-lg pl-14">
-            "Select your reservation start date: "->str
+            "Select your reservation start time: "->str
           </span>
-          <DayPicker />
+          <DayPicker mode="single" selected=openDate onSelect=updateOpenDate />
           <input
             className="block align-end outline-slate-400 outline-1 px-2"
           />
           <span className="align-middle text-lg pl-14">
-            "Select your reservation end date: "->str
+            "Select your reservation end time: "->str
           </span>
           <input
             className="block align-end outline-slate-400 outline-1 px-2"
