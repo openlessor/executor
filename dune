@@ -23,7 +23,7 @@
 (alias
  (name default)
  (deps
-  lib
+  (source_tree lib)
   .post_build))
 
 (dirs common executor ui \ node_modules)
