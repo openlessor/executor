@@ -9,9 +9,18 @@
  (preprocess
   (pps melange.ppx)))
 
+(rule
+ (targets melange)
+ (deps
+  (source_tree .)
+  build.js)
+ (action
+  (progn
+   (system "bun build.js"))))
+
 (alias
  (name melange)
  (deps
-  (source_tree lib)))
+  (source_tree .)))
 
 (dirs common executor ui \ node_modules)
