@@ -10,19 +10,18 @@
   (pps melange.ppx)))
 
 (rule
- (targets public/.post_build)
+ (targets .post_build)
  (deps
   (source_tree lib)
   build.js)
  (action
   (progn
-   (system "mkdir -p public")
    (system "bun build.js")
-   (with-stdout-to public/.post_build
+   (with-stdout-to .post_build
     (system "date +%s")))))
 
 (alias
  (name default)
- (deps public/.post_build))
+ (deps .post_build))
 
 (dirs common executor ui \ node_modules)
