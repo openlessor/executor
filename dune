@@ -18,7 +18,8 @@
   (progn
    (system "mkdir -p public")
    (system "bun build.js")
-   (system "touch public/.post_build"))))
+   (with-stdout-to public/.post_build
+    (system "date +%s")))))
 
 (alias
  (name default)
