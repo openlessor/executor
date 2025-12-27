@@ -10,16 +10,10 @@
   (pps melange.ppx)))
 
 (rule
+ (alias melange-post-build)
  (deps
-  (source_tree .)
-  build.js)
+  (source_tree .))
  (action
-  (progn
-   (system "bun build.js"))))
-
-(alias
- (name melange)
- (deps
-  (source_tree .)))
+  (system "bun build.js")))
 
 (dirs common executor ui \ node_modules)
