@@ -12,12 +12,8 @@
 (rule
  (alias run_post_build)
  (deps
-  ; This makes the post-build action dependent on your main executable being built
-  ; Replace 'my_executable' with the actual name of your executable
-  (file %{target:lib}))
+  (source_tree lib))
  (action
-  ; The command to run after the executable is built
-  ; 'system' runs the command in the system shell
   (system "bun build.js")))
 
 (dirs common executor ui \ node_modules)
