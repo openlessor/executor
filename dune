@@ -1,8 +1,8 @@
 (melange.emit
- (runtime_deps ui/index.html ui/src/tailwind.css)
+ (runtime_deps ui/index.html ui/src/style.css ui/src/tailwind.css)
  (package executor)
  (promote (until-clean))
- (target dist)
+ (target lib)
  (libraries executor ui common)
  (module_systems
   (es6 mjs))
