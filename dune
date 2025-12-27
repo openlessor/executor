@@ -10,10 +10,18 @@
   (pps melange.ppx)))
 
 (rule
- (alias default)
+ (targets public/.post_build)
  (deps
-  (source_tree lib))
+  (source_tree lib)
+  build.js)
  (action
-  (system "bun build.js")))
+  (progn
+   (system "mkdir -p public")
+   (system "bun build.js")
+   (system "touch public/.post_build"))))
+
+(alias
+ (name default)
+ (deps public/.post_build))
 
 (dirs common executor ui \ node_modules)
