@@ -3,20 +3,6 @@ open Ui;
 
 let str = React.string;
 
-let addToCart = (state: Cart.t, id) => {
-  {
-    ...state,
-    cart: Belt.Array.concat(state.cart, [|id|]),
-  };
-};
-
-let removeFromCart = (state: Cart.t, id) => {
-  {
-    ...state,
-    cart: Js.Array.filter(~f=compareId => {compareId != id}, state.cart),
-  };
-};
-
 [@react.component]
 let make =
   leaf(() => {
@@ -53,25 +39,6 @@ let make =
         }
       );
     };
-
-    let (state, dispatch) =
-      React.useReducer(
-        (state, action) => {
-          let result =
-            switch (action) {
-            | Cart.DispatchContext.AddToCart({ id }) => addToCart(state, id)
-            | Cart.DispatchContext.RemoveFromCart({ id }) =>
-              removeFromCart(state, id)
-            };
-          result;
-        },
-        {
-          items: [||],
-          selected_item: None,
-          cart: [||],
-        },
-      );
-    let cartCount = Array.length(state.cart);
 
     <Container>
       <Card className="bg-slate-200/40 border-slate-200/40 border">
@@ -115,12 +82,8 @@ let make =
           />
         </div>
       </Card>
-      <Cart.StateContext.Provider value=state>
-        <Cart.DispatchContext.Provider value=dispatch>
-          <InventoryList openDate closeDate />
-          <Cart count=cartCount />
-        </Cart.DispatchContext.Provider>
-      </Cart.StateContext.Provider>
+      <InventoryList openDate closeDate />
+      <Cart />
       <div className="w-full">
         <button
           className="mx-auto mt-4 bg-slate-500 hover:bg-slate-700 text-white py-2 px-4 rounded-sm">

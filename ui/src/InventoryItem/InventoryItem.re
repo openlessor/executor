@@ -14,15 +14,6 @@ let make = (~item: option(Config.InventoryItem.t)=?) => {
     };
   let image =
     "https://random.danielpetrica.com/api/random?" ++ item.id->Int.to_string;
-  //let _dispatch = React.useContext(Cart.DispatchContext.context);
-  //let cartState = React.useContext(Cart.StateContext.context);
-  //let {path} = RescriptReactRouter.useUrl();
-  let matches = [||]; // Js.Array.filter(cart_item => cart_item == item.id, cartState.cart);
-  let matchCount = Array.length(matches);
-  let _quantity =
-    matchCount > 0 ? Int.to_string(Array.length(matches)) : "0";
-  let _available = Int.to_string(item.quantity - matchCount);
-  // Find matching unit in period_list
 
   <a
     id={"item-" ++ Int.to_string(item.id)}
@@ -32,12 +23,14 @@ let make = (~item: option(Config.InventoryItem.t)=?) => {
     }}
     href={"/item/" ++ Int.to_string(item.id)}
     className="flex flex-1 flex-col grow border-2">
-    <button className="relative m-[1.5] flex flex-1 flex-col grow max-w-40">
+    <button
+      className="relative m-[1.5] flex flex-1 flex-col grow max-w-40"
+      onClick={_ => State.Store.CartStore.add_to_cart(item)}>
       <div className="rounded-sm shadow-sm m-0 p-0">
         <img
           className="p-[1.5] w-40 h-40"
           src=image
-          style={Obj.magic({"width": "100%"})}
+          style={Obj.magic({ "width": "100%" })}
         />
       </div>
       <div
