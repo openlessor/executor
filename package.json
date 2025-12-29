@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+   "dune:watch": "dune build -w",
+   "bun:watch": "bun --hot build.js",
+   "watch": "pnpm run \"/.*:watch$/\""
   },
   "keywords": [],
   "author": "",
