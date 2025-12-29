@@ -68,7 +68,7 @@ let make =
         <span className="align-middle"> heading->str </span>
       </h1>
       <Card
-        className="border-none shadow-none shadow-transparent m-0 p-0 place-content-start grid lg:grid-cols-8 grid-cols-4 gap-4">
+        className="border-none shadow-none shadow-transparent m-0 p-0 place-content-start grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-4">
         {items_by_unit
          ->Js.Array.map(~f=(item: Config.InventoryItem.t) =>
              <InventoryItem key={Int.to_string(item.id)} item />

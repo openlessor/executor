@@ -24,14 +24,10 @@ let make = (~item: option(Config.InventoryItem.t)=?) => {
     href={"/item/" ++ Int.to_string(item.id)}
     className="flex flex-1 flex-col grow border-2">
     <button
-      className="relative m-[1.5] flex flex-1 flex-col grow max-w-40"
+      className="relative m-[1.5] flex flex-1 flex-col grow"
       onClick={_ => State.Store.CartStore.add_to_cart(item)}>
       <div className="rounded-sm shadow-sm m-0 p-0">
-        <img
-          className="p-[1.5] w-40 h-40"
-          src=image
-          style={Obj.magic({ "width": "100%" })}
-        />
+        <img className="p-[1.5] w-full aspect-square" src=image />
       </div>
       <div
         className="flex flex-row justify-between w-full bg-gray-300 text-white shadow-sm">
