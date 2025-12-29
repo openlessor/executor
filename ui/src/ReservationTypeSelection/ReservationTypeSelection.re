@@ -20,12 +20,13 @@ let make =
                 name="type"
                 type_="radio"
                 value="hour"
-                onChange={_e => {
-                  //let inputEl = e->React.Event.Form.currentTarget;
-                  //if (inputEl["checked"] == true) {
-                  PeriodList.Unit.set(
-                    PeriodList.Unit.tFromJs(period.unit)->Option.get,
-                  )
+                onChange={e => {
+                  let inputEl = e->React.Event.Form.currentTarget;
+                  if (inputEl##checked == true) {
+                    PeriodList.Unit.set(
+                      PeriodList.Unit.tFromJs(period.unit)->Option.get,
+                    );
+                  };
                 }}
                 checked={
                   main_store.unit
