@@ -51,22 +51,20 @@ external makeProps:
         | `Multiple(multipleDate)
         | `Range(rangeDate)
       ],
-    /*
-     ~captionLayout: option(captionLayout)=?,
-     ~reverseYears: option(bool)=?,
-     ~navLayout: option(navLayout)=?,
-     ~disableNavigation: option(bool)=?,
-     ~hideNavigation: option(bool)=?,
-     ~animate: option(bool)=?,
-     ~fixedWeeks: option(bool)=?,
-     ~footer: option(footer)=?,
-     ~hideWeekdays: option(bool)=?,
-     ~numberOfMonths: option(int)=?,
-     ~reverseMonths: option(bool)=?,
-     ~pagedNavigation: option(bool)=?,
-     ~showOutsideDays: option(bool)=?,
-     ~showWeekNumber: option(bool)=?,
-     */
+    ~captionLayout: 'captionLayout,
+    ~reverseYears: 'reverseYears,
+    ~navLayout: 'navLayout,
+    ~disableNavigation: 'disableNavigation,
+    ~hideNavigation: 'hideNavigation,
+    ~animate: 'animate,
+    ~fixedWeeks: 'fixedWeeks,
+    ~footer: 'footer,
+    ~hideWeekdays: 'hideWeedays,
+    ~numberOfMonths: 'numberOfMonths,
+    ~reverseMonths: 'reverseMonths,
+    ~pagatedNavigation: 'pagedNavigation,
+    ~showOutsideDays: 'showOutsideDays,
+    ~showWeekNumber: 'showWeekNumber,
     ~key: string=?,
     unit
   ) =>
@@ -75,20 +73,20 @@ external makeProps:
     "mode": 'mode,
     "selected": 'selected,
     "onSelect": 'onSelect,
-    /*"captionLayout": captionLayout,
-      "reverseYears": reverseYears,
-      "navLayout": navLayout,
-      "disableNavigation": disableNavigation,
-      "hideNavigation": hideNavigation,
-      "animate": animate,
-      "fixedWeeks": fixedWeeks,
-      "footer": footer,
-      "hideWeekdays": hideWeekdays,
-      "numberOfMonths": numberOfMonths,
-      "reverseMonths": reverseMonths,
-      "pagedNavigation": pagedNavigation,
-      "showOutsideDays": showOutsideDays,
-      "showWeekNumber": showWeekNumber,*/
+    "captionLayout": 'captionLayout,
+    "reverseYears": 'reverseYears,
+    "navLayout": 'navLayout,
+    "disableNavigation": 'disableNavigation,
+    "hideNavigation": 'hideNavigation,
+    "animate": 'animate,
+    "fixedWeeks": 'fixedWeeks,
+    "footer": 'footer,
+    "hideWeekdays": 'hideWeekdays,
+    "numberOfMonths": 'numberOfMonths,
+    "reverseMonths": 'reverseMonths,
+    "pagedNavigation": 'pagedNavigation,
+    "showOutsideDays": 'showOutsideDays,
+    "showWeekNumber": 'showWeekNumber,
   };
 
 [@mel.module "react-day-picker"]
@@ -98,9 +96,19 @@ external make:
     "mode": string,
     "onSelect": rangeDate => unit,
     "selected": rangeDate,
+    "captionLayout": captionLayout,
+    "navLayout": navLayout,
+    "disableNavigation": bool,
+    "hideNavigation": bool,
+    "animate": bool,
+    "fixedWeeks": bool,
+    "footer": footer,
+    "hideWeekdays": bool,
+    "numberOfMonths": int,
+    "reverseMonths": bool,
+    "pagedNavigation": bool,
+    "showOutsideDays": bool,
+    "showWeekNumber": bool,
   } =>
   React.element =
   "DayPicker";
-
-/*
- */
