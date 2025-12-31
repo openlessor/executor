@@ -33,7 +33,7 @@ let make =
       };
     let heading =
       switch (unit, openDate == closeDate) {
-      | (`Day | `Minute | `Month | `Second | `Week | `Year, _)
+      | (`Day | `Minute | `Month | `Second | `Week | `Year, true)
       | (`Hour, true) =>
         "Showing "
         ++ filterType
@@ -41,7 +41,7 @@ let make =
         ++ (
           openDate == today ? "today" : Js.Date.toLocaleDateString(openDate)
         )
-      | (`Hour, false) =>
+      | (_, false) =>
         "Showing "
         ++ filterType
         ++ " equipment available from "
