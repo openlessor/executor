@@ -27,26 +27,80 @@ type footer =
   | FooterString(string)
   | FooterNode(React.element);
 
-[@mel.module "react-day-picker"] [@react.component]
-external make:
+type singleDate = Js.Nullable.t(Js.Date.t);
+type multipleDate = array(Js.Date.t);
+type rangeDate = {
+  from: singleDate,
+  [@mel.as "to"]
+  to_: singleDate,
+};
+
+[@mel.obj]
+external makeProps:
   (
-    ~mode: string=?,
-    ~selected: Js.Date.t=?,
-    ~onSelect: 'a => unit=?,
-    ~captionLayout: captionLayout=?,
-    ~reverseYears: bool=?,
-    ~navLayout: navLayout=?,
-    ~disableNavigation: bool=?,
-    ~hideNavigation: bool=?,
-    ~animate: bool=?,
-    ~fixedWeeks: bool=?,
-    ~footer: footer=?,
-    ~hideWeekdays: bool=?,
-    ~numberOfMonths: int=?,
-    ~reverseMonths: bool=?,
-    ~pagedNavigation: bool=?,
-    ~showOutsideDays: bool=?,
-    ~showWeekNumber: bool=?
+    ~mode: 'mode,
+    ~onSelect:
+      [@mel.unwrap] [
+        | `Single(singleDate => unit)
+        | `Multiple(multipleDate => unit)
+        | `Range(rangeDate => unit)
+      ],
+    ~selected:
+      [@mel.unwrap] [
+        | `Single(singleDate)
+        | `Multiple(multipleDate)
+        | `Range(rangeDate)
+      ],
+    /*
+     ~captionLayout: option(captionLayout)=?,
+     ~reverseYears: option(bool)=?,
+     ~navLayout: option(navLayout)=?,
+     ~disableNavigation: option(bool)=?,
+     ~hideNavigation: option(bool)=?,
+     ~animate: option(bool)=?,
+     ~fixedWeeks: option(bool)=?,
+     ~footer: option(footer)=?,
+     ~hideWeekdays: option(bool)=?,
+     ~numberOfMonths: option(int)=?,
+     ~reverseMonths: option(bool)=?,
+     ~pagedNavigation: option(bool)=?,
+     ~showOutsideDays: option(bool)=?,
+     ~showWeekNumber: option(bool)=?,
+     */
+    ~key: string=?,
+    unit
   ) =>
+  {
+    .
+    "mode": 'mode,
+    "selected": 'selected,
+    "onSelect": 'onSelect,
+    /*"captionLayout": captionLayout,
+      "reverseYears": reverseYears,
+      "navLayout": navLayout,
+      "disableNavigation": disableNavigation,
+      "hideNavigation": hideNavigation,
+      "animate": animate,
+      "fixedWeeks": fixedWeeks,
+      "footer": footer,
+      "hideWeekdays": hideWeekdays,
+      "numberOfMonths": numberOfMonths,
+      "reverseMonths": reverseMonths,
+      "pagedNavigation": pagedNavigation,
+      "showOutsideDays": showOutsideDays,
+      "showWeekNumber": showWeekNumber,*/
+  };
+
+[@mel.module "react-day-picker"]
+external make:
+  {
+    .
+    "mode": string,
+    "onSelect": rangeDate => unit,
+    "selected": rangeDate,
+  } =>
   React.element =
   "DayPicker";
+
+/*
+ */

@@ -41,23 +41,14 @@ let initialExecutorConfig =
   };
 
 let state =
-  source(.
-    initialExecutorConfig,
-    (. _prev, set) => {
-      Client.subscribe(
-        set,
-        initialExecutorConfig.premise->Option.get.id,
-        initialExecutorConfig.premise->Option.get.updated_at->Js.Date.getTime,
-      );
-
-      switch (initialExecutorConfig.premise) {
-      | Some(premise) =>
-        let {id, updated_at, _}: PeriodList.Premise.t = premise;
-        switch ([%mel.external window]) {
-        | Some(_) => set->Client.subscribe(id, updated_at->Js.Date.getTime)
-        | None => () // PremiseContainer.state is only used on the client
-        };
-      | None => ()
+  source(. initialExecutorConfig, (. _prev, set) => {
+    switch (initialExecutorConfig.premise) {
+    | Some(premise) =>
+      let { id, updated_at, _ }: PeriodList.Premise.t = premise;
+      switch ([%mel.external window]) {
+      | Some(_) => set->Client.subscribe(id, updated_at->Js.Date.getTime)
+      | None => () // PremiseContainer.state is only used on the client
       };
-    },
-  );
+    | None => ()
+    }
+  });

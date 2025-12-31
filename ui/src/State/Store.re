@@ -65,7 +65,7 @@ let getAsyncLocalStorage = () => {
 };
 
 let derivePremiseId = (store: t) => {
-  let premise = store.config.premise->Option.get;
+  let premise = store.config.premise->Belt.Option.getUnsafe;
   premise.id;
 };
 

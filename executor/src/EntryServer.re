@@ -28,9 +28,13 @@ let render = (url: string): Js.promise(renderResult) => {
   |> Js.Promise.then_((premise: option(PeriodList.Premise.t)) => {
        switch (premise) {
        | None =>
-         Js.Exn.raiseError(
-           "The route root " ++ route_root ++ " was not found",
-         )
+         Js.Promise.resolve({
+           html: ReactDOMServer.renderToString(<NotFound />),
+           executorConfig: {
+             inventory: [||],
+             premise: None,
+           },
+         })
        | Some(premise) =>
          premise.id
          |> Inventory.getInventoryList

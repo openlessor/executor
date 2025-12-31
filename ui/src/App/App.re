@@ -39,15 +39,20 @@ let make =
     // Cleanup function to unsubscribe when the component unmounts
     Some(() => ReasonReactRouter.unwatchUrl(watcher_id));
   });
-  let rootless_path =
-    switch (route_root) {
-    | Some(route_root) => getRootlessPath(route_root, url.path)
-    | None => Some([""])
+  let main_store = State.Store.getStore();
+  switch (main_store.config.premise) {
+  | None => <NotFound />
+  | Some(_) =>
+    let rootless_path =
+      switch (route_root) {
+      | Some(route_root) => getRootlessPath(route_root, url.path)
+      | None => Some([""])
+      };
+    Js.log(rootless_path);
+    switch (rootless_path) {
+    | Some(["item", _])
+    | Some([""]) => <Landing />
+    | _ => <NotFound />
     };
-  Js.log(rootless_path);
-  switch (rootless_path) {
-  | Some(["item", _])
-  | Some([""]) => <Landing />
-  | _ => <NotFound />
   };
 };

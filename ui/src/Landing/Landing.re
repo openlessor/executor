@@ -21,23 +21,11 @@ let make =
     let (openDate, setOpenDate) = React.useState(() => today);
     let (closeDate, setCloseDate) = React.useState(() => today);
 
-    let updateOpenDate = (openDate: Js.Nullable.t(Js.Date.t)) => {
-      setOpenDate(_prev
-        =>
-          switch (openDate->Js.Nullable.toOption) {
-          | Some(date) => date
-          | _ => today
-          }
-        );
-        //setCloseDate(openDate)
+    let updateOpenDate = (openDate: Js.Date.t) => {
+      setOpenDate(_prev => openDate);
     };
-    let _updateCloseDate = (closeDate: Js.Nullable.t(Js.Date.t)) => {
-      setCloseDate(_prev =>
-        switch (closeDate->Js.Nullable.toOption) {
-        | Some(date) => date
-        | _ => today
-        }
-      );
+    let updateCloseDate = (closeDate: Js.Date.t) => {
+      setCloseDate(_prev => closeDate);
     };
 
     <Container>
@@ -70,9 +58,33 @@ let make =
           <span className="align-middle text-lg pl-14">
             "Select your reservation start time: "->str
           </span>
-          <DayPicker mode="single" selected=openDate onSelect=updateOpenDate />
-          <input
-            className="block align-end outline-slate-400 outline-1 px-2"
+          <DayPicker
+            mode="range"
+            selected={
+                       `Range({
+                         from: Js.Nullable.return(openDate),
+                         to_: Js.Nullable.return(closeDate),
+                       })
+                     }
+            onSelect={
+                       `Range(
+                         dates => {
+                           Js.log(dates);
+                           let openDate =
+                             switch (dates.from->Js.Nullable.toOption) {
+                             | Some(date) => date
+                             | None => today
+                             };
+                           let closeDate =
+                             switch (dates.to_->Js.Nullable.toOption) {
+                             | Some(date) => date
+                             | None => openDate
+                             };
+                           updateOpenDate(openDate);
+                           updateCloseDate(closeDate);
+                         },
+                       )
+                     }
           />
           <span className="align-middle text-lg pl-14">
             "Select your reservation end time: "->str

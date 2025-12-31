@@ -26,11 +26,7 @@ module Response = {
     headers: Js.Dict.t(string),
   };
 
-  /* NOTE:
-     Avoid uncurried `(. ...)` + labeled args on externals; it can trigger
-     Melange internal assertion failures in some versions. */
   [@mel.new] external make: (string, ~options: responseInit) => t = "Response";
-
   [@mel.new] external makeFromFile: BunFile.t => t = "Response";
 
   external makeWithJsonUnsafe:
@@ -218,7 +214,7 @@ module SocketState = {
   };
   let (published, setPublished) =
     singleton->Js.Dict.unsafeGet("published_signal");
-  let store = Tilia.make({"published": computed(() => published->lift)});
+  let store = Tilia.make({ "published": computed(() => published->lift) });
   let getStore = () => {
     store;
   };
