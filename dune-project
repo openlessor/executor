@@ -13,18 +13,6 @@
 
 (using melange 0.1)
 
-(pin
- (package
-  (name reason-react)
-  (version 0.17.0))
- (url git+https://github.com/reasonml/reason-react))
-
-(pin
- (package
-  (name reason-react-ppx)
-  (version 0.17.0))
- (url git+https://github.com/reasonml/reason-react))
-
 (package
  (name executor)
  (synopsis "Realtime e-commerce platform")
@@ -37,10 +25,8 @@
   reason
   melange-webapi
   ppxlib
-  (reason-react-ppx
-   (>= 0.17.0))
-  (reason-react
-   (>= 0.17.0)))
+  reason-react-ppx
+  reason-react)
  (allow_empty)
  (tags
   ("web" "commerce" "lease" "subscription" "cart")))
