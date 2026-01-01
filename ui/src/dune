@@ -5,6 +5,7 @@
  (preprocess
   (pps melange.ppx reason-react-ppx))
  (libraries
+  reason-react-day-picker
   tilia
   common
   melange.belt
@@ -20,10 +21,8 @@
  ; This tells `dune` where to install the tailwind executable
  ; "sections" are predefined installation locations within a package (like `bin` for executables, `lib` for libraries, `share` for data files and `docs`)
  (section lib)
- 
  ; Replace this with your package name
  (package executor)
- 
  ; Make the tailwind CLI available as an executable called "tailwind"
  ; by copying it from node_modules to the install directory
  (files
