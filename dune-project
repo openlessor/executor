@@ -13,6 +13,11 @@
 
 (using melange 0.1)
 
+(pin
+ (url "git+https://github.com/Software-Deployed/reason-react-day-picker.git")
+ (package
+  (name reason-react-day-picker)))
+
 (package
  (name executor)
  (synopsis "Realtime e-commerce platform")
@@ -26,7 +31,8 @@
   melange-webapi
   ppxlib
   reason-react-ppx
-  reason-react)
+  reason-react
+  reason-react-day-picker)
  (allow_empty)
  (tags
   ("web" "commerce" "lease" "subscription" "cart")))
