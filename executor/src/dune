@@ -5,6 +5,7 @@
  (preprocess
   (pps melange.ppx reason-react-ppx))
  (libraries
+  reason-react-day-picker
   ui
   common
   melange.belt

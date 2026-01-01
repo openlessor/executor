@@ -1,5 +1,6 @@
 open Tilia.React;
 open Ui;
+open Reason_react_day_picker;
 
 let str = React.string;
 

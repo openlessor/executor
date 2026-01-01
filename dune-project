@@ -14,6 +14,16 @@
 (using melange 0.1)
 
 (pin
+ (url "git+https://github.com/reasonml/reason-react.git")
+ (package
+  (name reason-react)))
+
+(pin
+ (url "git+https://github.com/reasonml/reason-react.git")
+ (package
+  (name reason-react-ppx)))
+
+(pin
  (url "git+https://github.com/Software-Deployed/reason-react-day-picker.git")
  (package
   (name reason-react-day-picker)))
@@ -23,7 +33,8 @@
  (synopsis "Realtime e-commerce platform")
  (description "E-commerce with real time transactions and synchronization")
  (depends
-  ocaml
+  (ocaml
+   (= "5.4.0"))
   melange
   ocaml-lsp-server
   ocamlformat
