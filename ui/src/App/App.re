@@ -18,7 +18,7 @@ let getRootlessPath = (route_root, path) =>
 
     let rootless_path =
       switch (path->Belt.List.splitAt(root_idx)) {
-      | Some((_, rootless_path)) => rootless_path
+      | Some((rootless_path, _)) => rootless_path
       | None => [""]
       };
     Some(rootless_path);

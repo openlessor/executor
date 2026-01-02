@@ -1,6 +1,5 @@
 open Tilia.React;
 open Ui;
-open Reason_react_day_picker;
 
 let str = React.string;
 
@@ -63,14 +62,13 @@ let make =
             mode="range"
             selected={
                        `Range({
-                         from: Js.Nullable.return(openDate),
-                         to_: Js.Nullable.return(closeDate),
+                         DayPicker.from: Js.Nullable.return(openDate),
+                         DayPicker.to_: Js.Nullable.return(closeDate),
                        })
                      }
             onSelect={
                        `Range(
-                         dates => {
-                           Js.log(dates);
+                         (dates: DayPicker.rangeDate) => {
                            let openDate =
                              switch (dates.from->Js.Nullable.toOption) {
                              | Some(date) => date
